@@ -4,6 +4,8 @@ import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from "../redux/store";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
