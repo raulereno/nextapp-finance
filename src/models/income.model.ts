@@ -5,7 +5,7 @@ export interface IncomeType {
   description: String;
   category: String;
   value: Number;
-  date: Date;
+  date: Number;
 }
 
 const incomeSchema = new Schema<IncomeType, Model<IncomeType>>({
@@ -13,7 +13,12 @@ const incomeSchema = new Schema<IncomeType, Model<IncomeType>>({
   value: { type: Number, required: true },
   description: { type: String, required: false },
   category: { type: String, required: true },
-  date: { type: Date, default: Date.now() },
+  date: { type: Date },
+});
+
+incomeSchema.pre("save", function () {
+  const income = this;
+  income.date = Date.now();
 });
 
 export const Income =

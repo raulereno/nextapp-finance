@@ -1,5 +1,5 @@
 import { Income } from "@/models/income.model";
-import dbConnect from "@/utils/dbConnect";
+import { dbConnect } from "@/utils/dbConnect";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function income(
@@ -10,21 +10,16 @@ export default async function income(
 
   await dbConnect();
 
-  const incomes = await Income.find();
-
   switch (method) {
     case "GET":
+      const incomes = await Income.find();
       res.status(200).json({ message: "get", payload: incomes });
       break;
     case "POST":
-      res.status(200).json({ message: "post" });
+      const result = await Income.create(body);
+      res.status(200).json({ message: "post", result: result });
       break;
-    case "PUT":
-      res.status(200).json({ message: "put" });
-      break;
-    case "DELETE":
-      res.status(200).json({ message: "delete" });
-      break;
+
     default:
       res.status(400).json({ error: "Invalid Method" });
       break;
