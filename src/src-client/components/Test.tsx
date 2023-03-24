@@ -21,7 +21,7 @@ function Test() {
 
       <Offcanvas show={show} onHide={handleClose} className="bg-DarkBlue">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+          <Offcanvas.Title>Finance App</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Nav variant="pills" defaultActiveKey="/home" className='flex-column '>
@@ -29,10 +29,10 @@ function Test() {
               <Nav.Link href="/" eventKey='Home'>Home</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link-1">Account</Nav.Link>
+              <Nav.Link eventKey="account">Account</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="disabled">
+              <Nav.Link eventKey="settings">
                 Settings
               </Nav.Link>
             </Nav.Item>
