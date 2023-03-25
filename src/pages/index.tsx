@@ -18,8 +18,10 @@ export default function Home() {
       </Head>
       <main>
         <NavBar page="home" />
-        <Income />
-        <Expense />
+        <div className="d-flex justify-content-center gap-3 mt-5">
+          <Income />
+          <Expense />
+        </div>
       </main>
     </>
   );
