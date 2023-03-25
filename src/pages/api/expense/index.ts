@@ -16,8 +16,8 @@ export default async function income(
       res.status(200).json({ message: "get", payload: incomes });
       break;
     case "POST":
-      const result = await Expense.create(body);
-      res.status(200).json({ message: "post", result: result });
+      const result = await Expense.create(JSON.parse(body));
+      res.status(200).json({ message: "post", payload: result });
       break;
 
     default:
