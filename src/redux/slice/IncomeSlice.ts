@@ -18,6 +18,9 @@ const incomesSlice = createSlice({
     getAllIncomes: (state, action) => {
       state.incomes = action.payload;
     },
+    addIncome: (state, action) => {
+      state.incomes.push(action.payload);
+    },
   },
 });
 
@@ -27,6 +30,17 @@ export const getIncomes = () => async (dispatch: Function) => {
     .catch((err) => console.log(err));
 
   dispatch(incomesSlice.actions.getAllIncomes(payload));
+};
+
+export const addIncome = (income: IncomeType) => async (dispatch: Function) => {
+  const { payload } = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(income),
+  })
+    .then((resp) => resp.json())
+    .catch((err) => console.log(err));
+
+  dispatch(incomesSlice.actions.addIncome(payload));
 };
 
 // Action creators are generated for each case reducer function
