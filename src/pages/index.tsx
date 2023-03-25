@@ -1,9 +1,11 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import NavBar from '@/src-client/components/NavBar'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import NavBar from "@/src-client/components/NavBar";
+import { Income } from "@/src-client/components/Income";
+import { Expense } from "@/src-client/components/Expense";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
@@ -14,9 +16,13 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main >
-        <NavBar page='home'/>
+      <main>
+        <NavBar page="home" />
+        <div className="d-flex justify-content-center gap-3 mt-5">
+          <Income />
+          <Expense />
+        </div>
       </main>
     </>
-  )
+  );
 }

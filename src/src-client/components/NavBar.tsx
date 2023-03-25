@@ -1,25 +1,35 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import Nav from 'react-bootstrap/Nav';
-import Logo from '../../../assets/logo.png';
-import Image from 'next/image';
+import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import Nav from "react-bootstrap/Nav";
+import Logo from "../../../assets/logo.png";
+import Image from "next/image";
 
-interface Ipage{
+interface Ipage {
   page: string;
 }
 
-function NavBar({page}: Ipage) {
+function NavBar({ page }: Ipage) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
   return (
-    <div className='bg-LightBlue'>
-      <Button className='bg-LightBlue border-0' onClick={handleShow}>
-        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <div className="bg-LightBlue">
+      <Button className="bg-LightBlue border-0" onClick={handleShow}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="icon icon-tabler icon-tabler-menu-2"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <path d="M4 6l16 0"></path>
           <path d="M4 12l16 0"></path>
@@ -33,18 +43,41 @@ function NavBar({page}: Ipage) {
             <div>
               <Image src={Logo} alt="logo" width={150} height={80} />
             </div>
-            </Offcanvas.Title>
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <Nav variant="pills" defaultActiveKey="/home" className='flex-column '>
+          <Nav
+            variant="pills"
+            defaultActiveKey="/home"
+            className="flex-column "
+          >
             <Nav.Item>
-              <Nav.Link eventKey='home' href='/' className='active-bg-DarkBlue' active={page === 'home'} disabled={page === 'home'}>Home</Nav.Link>
+              <Nav.Link
+                eventKey="home"
+                href="/"
+                className="active-bg-DarkBlue"
+                active={page === "home"}
+                disabled={page === "home"}
+              >
+                Home
+              </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link href='/Account' eventKey="account" active={page === 'account'} disabled={page === 'account'}>Account</Nav.Link>
+              <Nav.Link
+                href="/Account"
+                eventKey="account"
+                active={page === "account"}
+                disabled={page === "account"}
+              >
+                Account
+              </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="settings" active={page === 'settings'} disabled={page === 'settings'}>
+              <Nav.Link
+                eventKey="settings"
+                active={page === "settings"}
+                disabled={page === "settings"}
+              >
                 Settings
               </Nav.Link>
             </Nav.Item>
@@ -55,5 +88,4 @@ function NavBar({page}: Ipage) {
   );
 }
 
-
-export default NavBar
+export default NavBar;

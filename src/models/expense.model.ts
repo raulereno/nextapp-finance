@@ -1,13 +1,13 @@
 import mongoose, { Model, Schema } from "mongoose";
 
-export interface IncomeType {
+export interface ExpenseType {
   type: String;
   description: String;
   category: String;
   value: number;
 }
 
-const incomeSchema = new Schema<IncomeType, Model<IncomeType>>(
+const expenseSchema = new Schema<ExpenseType, Model<ExpenseType>>(
   {
     type: { type: [String], enum: ["negocio", "personales"], required: true },
     value: { type: Number, required: true },
@@ -20,8 +20,8 @@ const incomeSchema = new Schema<IncomeType, Model<IncomeType>>(
   }
 );
 
-export const Income =
-  mongoose.models.Income || mongoose.model("Income", incomeSchema);
+export const Expense =
+  mongoose.models.Expense || mongoose.model("Expense", expenseSchema);
 
 // {
 //     type: {
