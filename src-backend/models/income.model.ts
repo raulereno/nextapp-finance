@@ -3,10 +3,10 @@ const {Schema, model, models} = require('mongoose')
 
 
 (async function () {conn()})()
-const expensesSchema = new Schema({
+const incomeSchema = new Schema({
     type: String,
     description: String,
     value: Number,
     category: String,
 })
-export default models.Expenses || model('Expenses', expensesSchema)
+export default models.Incomes || model('Incomes', incomeSchema)
