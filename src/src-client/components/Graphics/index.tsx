@@ -1,17 +1,23 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Income } from "./Income";
-import { getIncomes } from "@/redux/slice/IncomeSlice";
-import { useEffect, useState } from "react";
 import { IncomeType } from "@/models/income.model";
 import { getExpenses } from "@/redux/slice/ExpenseSlice";
-import { Expense } from "./Expense";
+import { getIncomes } from "@/redux/slice/IncomeSlice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Excess } from "./Excess";
-import { ExpenseType } from "@/models/expense.model";
+import { Expense } from "./Expense";
+import { Income } from "./Income";
+import { TableComponent } from "../Tables/TableComponent";
+
+interface ContentTable {
+  type: string;
+  slice: string;
+}
 
 const options = {
   animation: {
     animateScale: true,
   },
+
   plugins: {
     datalabels: {
       formatter: (value: any, ctx: any) => {
@@ -24,6 +30,9 @@ const options = {
         return percentage;
       },
       color: "#fff",
+      onClick: () => {
+        console.log("event");
+      },
     },
   },
 };
@@ -35,6 +44,11 @@ export const Graphics = () => {
   const totalIncomes = formatData(incomes);
   const totalExpenses = formatData(expenses);
   const totalExcess = calculateExcess(totalIncomes, totalExpenses);
+
+  const [tableContent, setTableContent] = useState({
+    type: "",
+    slice: "",
+  });
 
   const dataIncomes = {
     labels: ["Negocio", "Personal"],
@@ -78,10 +92,30 @@ export const Graphics = () => {
   }, [dispatch]);
 
   return (
-    <div className="d-flex justify-content-center gap-3 mt-5">
-      <Income options={options} data={dataIncomes} />
-      <Expense options={options} data={dataExpenses} />
-      <Excess options={options} data={dataTotal} />
+    <div className="container text-center">
+      <div className="row">
+        <Income
+          options={options}
+          data={dataIncomes}
+          setTableContent={setTableContent}
+        />
+        <Expense
+          options={options}
+          data={dataExpenses}
+          setTableContent={setTableContent}
+        />
+        <Excess
+          options={options}
+          data={dataTotal}
+          setTableContent={setTableContent}
+        />
+      </div>
+      <div className="row">
+        <TableComponent
+          content={tableContent.type === "ingresos" ? incomes : expenses}
+          filters={tableContent}
+        />
+      </div>
     </div>
   );
 };
@@ -91,7 +125,6 @@ const formatData = (data: IncomeType[]): Array<number> => {
   let totalPersonal = 0;
 
   data.forEach((element) => {
-    console.log(element);
     if (element?.type[0] === "negocio") {
       totalBusiness += element.value;
     } else if (element?.type[0] === "personales") {

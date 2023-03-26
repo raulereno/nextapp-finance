@@ -21,6 +21,10 @@ const incomesSlice = createSlice({
     addIncome: (state, action) => {
       state.incomes.push(action.payload);
     },
+    deleteIncome: (state, action) => {
+      const filter = state.incomes.filter((ele) => ele._id !== action.payload);
+      state.incomes = filter;
+    },
   },
 });
 
@@ -41,6 +45,15 @@ export const addIncome = (income: IncomeType) => async (dispatch: Function) => {
     .catch((err) => console.log(err));
 
   dispatch(incomesSlice.actions.addIncome(payload));
+};
+
+export const deleteIncome = (id: String) => async (dispatch: Function) => {
+  //TODO: Descomentar para produccion
+  // await fetch(`/api/income/${id}`, {
+  //   method: "DELETE",
+  // });
+
+  dispatch(incomesSlice.actions.deleteIncome(id));
 };
 
 // Action creators are generated for each case reducer function

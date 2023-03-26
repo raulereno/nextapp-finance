@@ -1,6 +1,7 @@
 import mongoose, { Model, Schema } from "mongoose";
 
 export interface ExpenseType {
+  _id?: String;
   type: String;
   description: String;
   category: String;

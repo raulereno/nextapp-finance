@@ -22,6 +22,10 @@ const expensesSlice = createSlice({
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);
     },
+    deleteExpenses: (state, action) => {
+      const filter = state.expenses.filter((ele) => ele._id !== action.payload);
+      state.expenses = filter;
+    },
   },
 });
 
@@ -44,6 +48,16 @@ export const addExpense =
 
     dispatch(expensesSlice.actions.addExpenses(payload));
   };
+
+export const deleteExpenses = (id: String) => async (dispatch: Function) => {
+  //TODO: Descomentar para produccion
+  // await fetch(`/api/income/${id}`, {
+  //   method: "DELETE",
+  // });
+
+  dispatch(expensesSlice.actions.deleteExpenses(id));
+};
+
 // Action creators are generated for each case reducer function
 export const { getAllExpenses } = expensesSlice.actions;
 
