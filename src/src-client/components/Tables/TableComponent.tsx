@@ -3,13 +3,12 @@ import { IncomeType } from "@/models/income.model";
 import { deleteExpenses } from "@/redux/slice/ExpenseSlice";
 import { deleteIncome } from "@/redux/slice/IncomeSlice";
 import { Table } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
 
-  console.log(filters);
   const deleteRegister = (id: String) => {
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",
@@ -52,13 +51,8 @@ export const TableComponent = ({ content, filters }: any) => {
             })
             .map((ele: IncomeType | ExpenseType) => {
               return (
-                // <tr>
-                //   <td>{income.type[0]}</td>
-                //   <td>{income.category}</td>
-                //   <td>{income.value}</td>
-                //   <td>{income.description}</td>
-                // </tr>
-                <tr key={2}>
+                //TODO:Aqui no deja agregar el id como key
+                <tr key={Math.random()}>
                   <td>{capitalize(ele.type[0])}</td>
                   <td>{capitalize(ele.category)}</td>
                   <td>${ele.value}</td>
@@ -67,7 +61,7 @@ export const TableComponent = ({ content, filters }: any) => {
                     <button>🖋️</button>
                     <button
                       onClick={() => {
-                        deleteRegister(ele._id);
+                        deleteRegister(ele._id!);
                       }}
                     >
                       🚮
