@@ -1,12 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import NavBar from "@/src-client/components/NavBar";
-import { Income } from "@/src-client/components/Graphics/Income";
-import { Expense } from "@/src-client/components/Graphics/Expense";
 import { Graphics } from "@/src-client/components/Graphics";
-
-const inter = Inter({ subsets: ["latin"] });
+import NavBar from "@/src-client/components/NavBar";
+import { TableComponent } from "@/src-client/components/Tables/TableComponent";
+import { Inter } from "next/font/google";
+import Head from "next/head";
 
 export default function Home() {
   return (

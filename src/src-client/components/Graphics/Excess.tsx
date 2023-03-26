@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 export function Excess({ options, data }: any) {
   return (
-    <div className="bg-Blue" style={{ width: "500px" }}>
+    <div className="bg-Blue col-3" style={{ width: "350px" }}>
       <h2>Excedentes</h2>
 
       <Pie
