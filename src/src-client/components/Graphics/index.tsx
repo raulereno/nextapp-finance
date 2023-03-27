@@ -56,7 +56,7 @@ export const Graphics = () => {
       {
         label: "",
         data: totalIncomes,
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
     ],
@@ -68,7 +68,7 @@ export const Graphics = () => {
       {
         label: "",
         data: totalExpenses,
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
     ],
@@ -80,7 +80,7 @@ export const Graphics = () => {
       {
         label: "",
         data: totalExcess,
-        backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)"],
+        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
     ],
@@ -92,8 +92,8 @@ export const Graphics = () => {
   }, [dispatch]);
 
   return (
-    <div className="container text-center">
-      <div className="row">
+    <div className="container text-center mt-5">
+      <div className="row d-flex justify-content-between">
         <Income
           options={options}
           data={dataIncomes}
@@ -110,7 +110,7 @@ export const Graphics = () => {
           setTableContent={setTableContent}
         />
       </div>
-      <div className="row">
+      <div className="row mt-5">
         <TableComponent
           content={tableContent.type === "ingresos" ? incomes : expenses}
           filters={tableContent}

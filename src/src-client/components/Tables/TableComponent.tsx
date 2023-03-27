@@ -5,6 +5,9 @@ import { deleteIncome } from "@/redux/slice/IncomeSlice";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
+import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
+import Image from 'next/image';
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
@@ -30,10 +33,10 @@ export const TableComponent = ({ content, filters }: any) => {
   };
 
   return (
-    <div className="col-12">
+    <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
       <Table>
-        <thead>
+        <thead className="text-white">
           <tr>
             <th>Tipo</th>
             <th>Categoria</th>
@@ -42,7 +45,7 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-white">
           {content
             .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
@@ -58,13 +61,16 @@ export const TableComponent = ({ content, filters }: any) => {
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
                   <td>
-                    <button>🖋️</button>
+                    <button className="border-0 rounded-1 m-1 text-white">
+                      <Image src={icoEditar} alt="Editar" width={30} height={30} />
+                    </button>
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
                       }}
+                      className="border-0 rounded-1 m-1 text-white"
                     >
-                      🚮
+                      <Image src={icoBorrar} alt="Borrar" width={30} height={30} />
                     </button>
                   </td>
                 </tr>
