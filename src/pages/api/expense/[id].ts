@@ -7,18 +7,28 @@ export default async function expenseID(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { method, query } = req;
+  const { method, query, body } = req;
 
   await dbConnect();
-
+  let expense;
   switch (method) {
     case "GET":
-      let income = await Expense.findOne({ _id: query.id });
+      expense = await Expense.findOne({ _id: query.id });
 
-      res.status(200).json({ message: income });
+      res.status(200).json({ message: expense });
       break;
     case "PUT":
-      res.status(200).json({ message: "update a unique income" });
+      expense = await Expense.findOneAndUpdate(
+        { _id: query.id },
+        JSON.parse(body),
+        {
+          new: true,
+        }
+      );
+
+      res
+        .status(200)
+        .json({ message: "update a unique income", payload: expense });
       break;
     case "DELETE":
       let result = await Expense.deleteOne({ _id: query.id });
