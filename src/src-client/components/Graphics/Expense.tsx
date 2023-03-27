@@ -1,7 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
-import { ModalAdd } from "../Modals/ModalAddRegister";
+import { ModalAdd } from "./ModalAdd";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -24,8 +24,8 @@ export function Expense({ options, data, setTableContent }: any) {
   };
 
   return (
-    <div className="bg-Blue col-3" style={{ width: "350px" }}>
-      <h2>Gastos:</h2>
+    <div className="bg-Blue col-3 rounded-4  text-white containerGraphicosDiv" style={{ width: "350px" }}>
+      <h2>Gastos</h2>
       <Pie
         options={optionsPlus}
         height="250"
