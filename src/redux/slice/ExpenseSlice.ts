@@ -22,6 +22,15 @@ const expensesSlice = createSlice({
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);
     },
+    updateExpense: (state, action) => {
+      let find = state.expenses.map((elem) => {
+        if (elem._id === action.payload._id) {
+          return action.payload;
+        }
+        return elem;
+      });
+      state.expenses = find;
+    },
     deleteExpenses: (state, action) => {
       const filter = state.expenses.filter((ele) => ele._id !== action.payload);
       state.expenses = filter;
@@ -47,6 +56,18 @@ export const addExpense =
       .catch((err) => console.log(err));
 
     dispatch(expensesSlice.actions.addExpenses(payload));
+  };
+
+export const updateExpense =
+  (expense: IncomeType, id: String) => async (dispatch: Function) => {
+    const { payload } = await fetch(`/api/expense/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(expense),
+    })
+      .then((resp) => resp.json())
+      .catch((err) => console.log(err));
+
+    dispatch(expensesSlice.actions.updateExpense(payload));
   };
 
 export const deleteExpenses = (id: String) => async (dispatch: Function) => {
