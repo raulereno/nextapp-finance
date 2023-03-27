@@ -1,8 +1,20 @@
-import { addExpense } from "@/redux/slice/ExpenseSlice";
-import { addIncome } from "@/redux/slice/IncomeSlice";
-import { useState } from "react";
+import { addExpense, updateExpense } from "@/redux/slice/ExpenseSlice";
+import { addIncome, updateIncome } from "@/redux/slice/IncomeSlice";
+import capitalize from "@/utils/capitalize";
+import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+
+interface PropsModal {
+  props: {
+    type: String;
+    description: String;
+    category: String;
+    value: number;
+    id: String;
+    table: String;
+  };
+}
 
 const initialStateForm = {
   type: "",
@@ -11,11 +23,21 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAdd({ props }: any) {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+export function ModalEdit({ props }: PropsModal) {
   const [form, setForm] = useState(initialStateForm);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    setForm({
+      value: props.value,
+      category: props.category.toString(),
+      description: props.description.toString(),
+      type: props.type.toString(),
+    });
+    setShow(true);
+  };
 
   const dispatch: Function = useDispatch();
 
@@ -29,23 +51,21 @@ export function ModalAdd({ props }: any) {
   };
 
   const sendForm = () => {
-    if (props.type === "expense") {
-      dispatch(addExpense(form));
+    if (props.table === "ingresos") {
+      dispatch(updateIncome(form, props.id));
     } else {
-      dispatch(addIncome(form));
+      dispatch(updateExpense(form, props.id));
     }
     handleClose();
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        {props.buttonText}
-      </Button>
+      <Button onClick={handleShow}>🖋️</Button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{props.title}</Modal.Title>
+          <Modal.Title>Editar Registro - {capitalize(props.table)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form action="" className="d-flex flex-column">
@@ -96,7 +116,7 @@ export function ModalAdd({ props }: any) {
             Cancelar
           </Button>
           <Button variant="primary" onClick={sendForm}>
-            {props.buttonText}
+            Editar registro
           </Button>
         </Modal.Footer>
       </Modal>

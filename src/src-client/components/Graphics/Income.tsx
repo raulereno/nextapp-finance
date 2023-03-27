@@ -1,7 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
-import { ModalAdd } from "./ModalAdd";
+import { ModalAdd } from "../Modals/ModalAddRegister";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
