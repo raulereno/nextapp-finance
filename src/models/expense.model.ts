@@ -23,22 +23,3 @@ const expenseSchema = new Schema<ExpenseType, Model<ExpenseType>>(
 
 export const Expense =
   mongoose.models.Expense || mongoose.model("Expense", expenseSchema);
-
-// {
-//     type: {
-//       type: DataTypes.ENUM,
-//       values: ["negocio", "personales"],
-//       allowNull: false,
-//     },
-//     value: {
-//       type: DataTypes.FLOAT,
-//       allowNull: false,
-//     },
-//     description: {
-//       type: DataTypes.STRING,
-//       allowNull: true,
-//     },
-//     category: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },
