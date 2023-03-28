@@ -3,6 +3,7 @@ import { addIncome } from "@/redux/slice/IncomeSlice";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import FormRegister from "./FormAddRegister";
 
 interface PropsModal {
   props: {
@@ -19,7 +20,7 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAdd({ props }: PropsModal) {
+export function ModalAddRegister({ props }: PropsModal) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -27,79 +28,36 @@ export function ModalAdd({ props }: PropsModal) {
 
   const dispatch: Function = useDispatch();
 
-  const handleChange = (
-    evt: React.FormEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const name = evt.currentTarget.name;
-    const value = evt.currentTarget.value;
-
-    setForm({ ...form, [name]: value });
-  };
-
   const sendForm = () => {
     if (props.type === "expense") {
       dispatch(addExpense(form));
     } else {
       dispatch(addIncome(form));
     }
+    setForm(initialStateForm);
     handleClose();
   };
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button
+        className="colorBtnAgregar text-center m-3"
+        variant="outline-light"
+        onClick={handleShow}
+      >
         {props.buttonText}
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal className="text-center" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{props.title}</Modal.Title>
+          <Modal.Title className="d-flex justify-content-center">
+            {props.title}
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <form action="" className="d-flex flex-column">
-            <label htmlFor="">
-              Tipo de ingreso:
-              <select
-                name="type"
-                id=""
-                onChange={handleChange}
-                value={form.type}
-              >
-                <option value="" disabled selected></option>
-                <option value="negocio">Negocio</option>
-                <option value="personales">Personal</option>
-              </select>
-            </label>
-            <label htmlFor="">
-              Categoria
-              <input
-                type="text"
-                value={form.category}
-                onChange={handleChange}
-                name="category"
-              />
-            </label>
-            <label htmlFor="">
-              Valor:
-              <input
-                type="number"
-                value={form.value}
-                onChange={handleChange}
-                name="value"
-              />
-            </label>
-            <label htmlFor="">
-              Descripción:
-              <input
-                type="text"
-                value={form.description}
-                onChange={handleChange}
-                name="description"
-              />
-            </label>
-          </form>
+        <Modal.Body className="d-flex justify-content-center">
+          <FormRegister setForm={setForm} form={form} />
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="d-flex justify-content-center">
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>

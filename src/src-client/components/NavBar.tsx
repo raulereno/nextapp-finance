@@ -17,8 +17,8 @@ function NavBar({ page }: Ipage) {
   const handleShow = () => setShow(true);
 
   return (
-    <div className="bg-LightBlue">
-      <Button className="bg-LightBlue border-0" onClick={handleShow}>
+    <div className="navBar-Container">
+      <Button className=" border-0" onClick={handleShow}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-menu-2"

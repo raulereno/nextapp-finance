@@ -1,9 +1,12 @@
-import { addExpense, updateExpense } from "@/redux/slice/ExpenseSlice";
-import { addIncome, updateIncome } from "@/redux/slice/IncomeSlice";
+import { updateExpense } from "@/redux/slice/ExpenseSlice";
+import { updateIncome } from "@/redux/slice/IncomeSlice";
 import capitalize from "@/utils/capitalize";
-import { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
+import Image from "next/image";
+import FormRegister from "./FormAddRegister";
 
 interface PropsModal {
   props: {
@@ -61,55 +64,19 @@ export function ModalEdit({ props }: PropsModal) {
 
   return (
     <>
-      <Button onClick={handleShow}>🖋️</Button>
+      <button
+        onClick={handleShow}
+        className="border-0 rounded-1 m-1 text-white"
+      >
+        <Image src={icoEditar} alt="Editar" width={30} height={30} />
+      </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Registro - {capitalize(props.table)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form action="" className="d-flex flex-column">
-            <label htmlFor="">
-              Tipo de ingreso:
-              <select
-                name="type"
-                id=""
-                onChange={handleChange}
-                value={form.type}
-              >
-                <option value="" disabled selected></option>
-                <option value="negocio">Negocio</option>
-                <option value="personales">Personal</option>
-              </select>
-            </label>
-            <label htmlFor="">
-              Categoria
-              <input
-                type="text"
-                value={form.category}
-                onChange={handleChange}
-                name="category"
-              />
-            </label>
-            <label htmlFor="">
-              Valor:
-              <input
-                type="number"
-                value={form.value}
-                onChange={handleChange}
-                name="value"
-              />
-            </label>
-            <label htmlFor="">
-              Descripción:
-              <input
-                type="text"
-                value={form.description}
-                onChange={handleChange}
-                name="description"
-              />
-            </label>
-          </form>
+          <FormRegister setForm={setForm} form={form} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
