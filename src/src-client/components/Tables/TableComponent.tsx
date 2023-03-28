@@ -5,9 +5,9 @@ import { deleteIncome } from "@/redux/slice/IncomeSlice";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
 import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import Image from 'next/image';
+import { ModalEdit } from "../Modals/ModalEditRegister";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
@@ -61,9 +61,14 @@ export const TableComponent = ({ content, filters }: any) => {
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
                   <td>
-                    <button className="border-0 rounded-1 m-1 text-white">
-                      <Image src={icoEditar} alt="Editar" width={30} height={30} />
-                    </button>
+                    <ModalEdit  props={{
+                        type: ele.type[0],
+                        category: ele.category,
+                        description: ele.description,
+                        value: ele.value,
+                        id: ele._id!,
+                        table: filters.type,
+                      }}/>
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
