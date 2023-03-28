@@ -5,11 +5,18 @@ import { deleteIncome } from "@/redux/slice/IncomeSlice";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
+import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
-import capitalize from "@/utils/capitalize";
+import { useEffect, useState } from "react";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
+  let total = 0;
+
+  const [tableContent, setTableContent] = useState(content);
+
+  useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -32,10 +39,10 @@ export const TableComponent = ({ content, filters }: any) => {
   };
 
   return (
-    <div className="col-12">
+    <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
       <Table>
-        <thead>
+        <thead className="text-white">
           <tr>
             <th>Tipo</th>
             <th>Categoria</th>
@@ -44,14 +51,15 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          {content
-            ?.filter((ele: IncomeType | ExpenseType) => {
+        <tbody className="text-white">
+          {tableContent!
+            .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
               }
             })
             .map((ele: IncomeType | ExpenseType) => {
+              total += ele.value;
               return (
                 //TODO:Aqui no deja agregar el id como key
                 <tr key={Math.random()}>
@@ -70,19 +78,35 @@ export const TableComponent = ({ content, filters }: any) => {
                         table: filters.type,
                       }}
                     />
+
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
                       }}
+                      className="border-0 rounded-1 m-1 text-white"
                     >
-                      🚮
+                      <Image
+                        src={icoBorrar}
+                        alt="Borrar"
+                        width={30}
+                        height={30}
+                      />
                     </button>
                   </td>
                 </tr>
               );
             })}
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style={{ fontSize: "35px" }}>Total: ${total}</td>
         </tbody>
       </Table>
     </div>
   );
+};
+
+const capitalize = (string: String) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };
