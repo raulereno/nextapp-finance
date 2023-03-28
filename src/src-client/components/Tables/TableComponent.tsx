@@ -5,8 +5,9 @@ import { deleteIncome } from "@/redux/slice/IncomeSlice";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
+import Image from 'next/image';
 import { ModalEdit } from "../Modals/ModalEditRegister";
-import capitalize from "@/utils/capitalize";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
@@ -32,10 +33,10 @@ export const TableComponent = ({ content, filters }: any) => {
   };
 
   return (
-    <div className="col-12">
+    <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
       <Table>
-        <thead>
+        <thead className="text-white">
           <tr>
             <th>Tipo</th>
             <th>Categoria</th>
@@ -44,9 +45,9 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-white">
           {content
-            ?.filter((ele: IncomeType | ExpenseType) => {
+            .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
               }
@@ -60,22 +61,21 @@ export const TableComponent = ({ content, filters }: any) => {
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
                   <td>
-                    <ModalEdit
-                      props={{
+                    <ModalEdit  props={{
                         type: ele.type[0],
                         category: ele.category,
                         description: ele.description,
                         value: ele.value,
                         id: ele._id!,
                         table: filters.type,
-                      }}
-                    />
+                      }}/>
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
                       }}
+                      className="border-0 rounded-1 m-1 text-white"
                     >
-                      🚮
+                      <Image src={icoBorrar} alt="Borrar" width={30} height={30} />
                     </button>
                   </td>
                 </tr>
@@ -85,4 +85,8 @@ export const TableComponent = ({ content, filters }: any) => {
       </Table>
     </div>
   );
+};
+
+const capitalize = (string: String) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };

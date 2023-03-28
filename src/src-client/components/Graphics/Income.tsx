@@ -1,7 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Pie } from "react-chartjs-2";
-import { ModalAdd } from "../Modals/ModalAddRegister";
+import { ModalAddRegister } from "../Modals/ModalAddRegister";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -24,7 +24,10 @@ export function Income({ options, data, setTableContent }: any) {
   };
 
   return (
-    <div className="bg-Blue col-3" style={{ width: "350px" }}>
+    <div
+      className="bg-Blue col-3 rounded-4  text-white containerGraphicosDiv"
+      style={{ width: "350px" }}
+    >
       <h2>Ingresos</h2>
 
       <Pie
@@ -34,7 +37,7 @@ export function Income({ options, data, setTableContent }: any) {
         id="income_canva"
         data={data}
       />
-      <ModalAdd props={propsModal} />
+      <ModalAddRegister props={propsModal} />
     </div>
   );
 }
