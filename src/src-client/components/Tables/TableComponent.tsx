@@ -6,11 +6,17 @@ import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
-import Image from 'next/image';
+import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
+import { useEffect, useState } from "react";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
+  let total = 0;
+
+  const [tableContent, setTableContent] = useState(content);
+
+  useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -46,13 +52,14 @@ export const TableComponent = ({ content, filters }: any) => {
           </tr>
         </thead>
         <tbody className="text-white">
-          {content
+          {tableContent!
             .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
               }
             })
             .map((ele: IncomeType | ExpenseType) => {
+              total += ele.value;
               return (
                 //TODO:Aqui no deja agregar el id como key
                 <tr key={Math.random()}>
@@ -61,26 +68,39 @@ export const TableComponent = ({ content, filters }: any) => {
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
                   <td>
-                    <ModalEdit  props={{
+                    <ModalEdit
+                      props={{
                         type: ele.type[0],
                         category: ele.category,
                         description: ele.description,
                         value: ele.value,
                         id: ele._id!,
                         table: filters.type,
-                      }}/>
+                      }}
+                    />
+
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
                       }}
                       className="border-0 rounded-1 m-1 text-white"
                     >
-                      <Image src={icoBorrar} alt="Borrar" width={30} height={30} />
+                      <Image
+                        src={icoBorrar}
+                        alt="Borrar"
+                        width={30}
+                        height={30}
+                      />
                     </button>
                   </td>
                 </tr>
               );
             })}
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td style={{ fontSize: "35px" }}>Total: ${total}</td>
         </tbody>
       </Table>
     </div>
