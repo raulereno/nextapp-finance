@@ -8,10 +8,15 @@ import Swal from "sweetalert2";
 import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
+import { useEffect, useState } from "react";
 
 export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
   let total = 0;
+
+  const [tableContent, setTableContent] = useState(content);
+
+  useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -47,7 +52,7 @@ export const TableComponent = ({ content, filters }: any) => {
           </tr>
         </thead>
         <tbody className="text-white">
-          {content
+          {tableContent!
             .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
