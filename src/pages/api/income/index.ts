@@ -14,20 +14,19 @@ export default async function income(
 
   switch (method) {
     case "GET":
-      // company = await Company.findById({ _id: query.companyId })
-      //   .populate("incomes")
-      //   .lean();
+      company = await Company.findById({ _id: query.companyId })
+        .populate("incomes")
+        .lean();
 
-      // console.log(company);
-      let incomes = await Income.find();
-
-      res.status(200).json({ message: "get", payload: incomes });
+      res.status(200).json({ message: "get", payload: company.incomes });
       break;
     case "POST":
       company = await Company.findById({ _id: query.companyId });
-      const result = await Income.create(body);
-      company.incomes.push(result);
-      company.save();
+      const result = await Income.create(JSON.parse(body));
+      await company.incomes.push(result);
+      await company.save();
+      console.log(result);
+
       res.status(200).json({ message: "post", payload: result });
       break;
 

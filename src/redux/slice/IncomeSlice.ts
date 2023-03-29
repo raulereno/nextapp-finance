@@ -43,8 +43,6 @@ export const getIncomes = () => async (dispatch: Function) => {
     .then((resp) => resp.json())
     .catch((err) => console.log(err));
 
-  console.log("Income req: " + payload);
-
   dispatch(incomesSlice.actions.getAllIncomes(payload));
 };
 

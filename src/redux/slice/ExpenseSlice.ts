@@ -44,8 +44,6 @@ export const getExpenses = () => async (dispatch: Function) => {
     .then((resp) => resp.json())
     .catch((err) => console.log(err));
 
-  console.log("Expense req: " + payload);
-
   dispatch(expensesSlice.actions.getAllExpenses(payload));
 };
 
