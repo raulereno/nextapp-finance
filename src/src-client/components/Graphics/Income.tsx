@@ -11,6 +11,7 @@ export function Income({ options, data, setTableContent }: any) {
     buttonText: "Agregar ingresos",
     type: "income",
   };
+  console.log("hola");
   const optionsPlus = {
     ...options,
     onClick: function (event: any, elements: any) {
