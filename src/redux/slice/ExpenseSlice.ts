@@ -3,7 +3,7 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-const url = "/api/expense";
+const url = "/api/expense?companyId=64238a57bfa0ac002ef68b45";
 interface Expenses {
   expenses: ExpenseType[];
 }
@@ -43,6 +43,8 @@ export const getExpenses = () => async (dispatch: Function) => {
     .then((resp) => resp.json())
     .catch((err) => console.log(err));
 
+  console.log("Expense req: " + payload);
+
   dispatch(expensesSlice.actions.getAllExpenses(payload));
 };
 
@@ -60,7 +62,7 @@ export const addExpense =
 
 export const updateExpense =
   (expense: IncomeType, id: String) => async (dispatch: Function) => {
-    const { payload } = await fetch(`/api/expense/${id}`, {
+    const payload = await fetch(`/api/expense/${id}`, {
       method: "PUT",
       body: JSON.stringify(expense),
     })

@@ -11,9 +11,9 @@ export interface CompanType {
 
 const companySchema = new Schema<CompanType, Model<CompanType>>({
   name: { type: String, required: true },
-  incomes: [{ type: Schema.Types.ObjectId, ref: "Income" }],
-  expenses: [{ type: Schema.Types.ObjectId, ref: "Expense" }],
+  incomes: [{ type: Schema.Types.ObjectId, ref: "Income", default: [] }],
+  expenses: [{ type: Schema.Types.ObjectId, ref: "Expense", default: [] }],
 });
 
 export const Company =
-  mongoose.models.Company || mongoose.model("Companey", companySchema);
+  mongoose.models.Company || mongoose.model("Company", companySchema);

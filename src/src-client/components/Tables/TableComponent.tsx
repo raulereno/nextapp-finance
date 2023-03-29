@@ -14,7 +14,7 @@ export const TableComponent = ({ content, filters }: any) => {
   const dispatch: Function = useDispatch();
   let total = 0;
 
-  const [tableContent, setTableContent] = useState(content);
+  const [tableContent, setTableContent] = useState([]);
 
   useEffect(() => setTableContent(content), [content]);
 
@@ -37,6 +37,10 @@ export const TableComponent = ({ content, filters }: any) => {
       }
     });
   };
+
+  if (!filters.type) {
+    return <></>;
+  }
 
   return (
     <div className="col-12 text-white">
@@ -96,11 +100,13 @@ export const TableComponent = ({ content, filters }: any) => {
                 </tr>
               );
             })}
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td style={{ fontSize: "35px" }}>Total: ${total}</td>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style={{ fontSize: "35px" }}>Total: ${total}</td>
+          </tr>
         </tbody>
       </Table>
     </div>
