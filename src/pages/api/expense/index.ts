@@ -11,19 +11,20 @@ export default async function income(
 
   await dbConnect();
   let company;
-
+  let expenses;
   switch (method) {
     case "GET":
       try {
-        company = await Company.findById({ _id: query.companyId });
-        await company.populate("expenses");
-
-        console.log(company.expenses);
+        // company = await Company.findById({ _id: query.companyId })
+        //   .populate("expenses")
+        //   .lean();
+        // console.log(company.expenses);
+        expenses = Expense.find();
       } catch (error) {
         res.status(400).json("erro");
       }
 
-      res.status(200).json({ message: "get", payload: company.expenses });
+      res.status(200).json({ message: "get", payload: expenses });
       break;
     case "POST":
       company = await Company.findById({ _id: query.companyId });

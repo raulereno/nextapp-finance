@@ -3,7 +3,8 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-const url = "/api/expense?companyId=64238a57bfa0ac002ef68b45";
+const url =
+  "http://localhost:3000/api/expense?companyId=64238a57bfa0ac002ef68b45";
 interface Expenses {
   expenses: ExpenseType[];
 }
