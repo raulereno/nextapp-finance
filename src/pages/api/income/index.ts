@@ -25,7 +25,6 @@ export default async function income(
       const result = await Income.create(JSON.parse(body));
       await company.incomes.push(result);
       await company.save();
-      console.log(result);
 
       res.status(200).json({ message: "post", payload: result });
       break;
