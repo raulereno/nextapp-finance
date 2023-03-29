@@ -124,13 +124,14 @@ const formatData = (data: IncomeType[]): Array<number> => {
   let totalBusiness = 0;
   let totalPersonal = 0;
 
-  data.forEach((element) => {
-    if (element?.type[0] === "negocio") {
-      totalBusiness += element.value;
-    } else if (element?.type[0] === "personales") {
-      totalPersonal += element.value;
-    }
-  });
+  data &&
+    data?.forEach((element) => {
+      if (element?.type[0] === "negocio") {
+        totalBusiness += element.value;
+      } else if (element?.type[0] === "personales") {
+        totalPersonal += element.value;
+      }
+    });
 
   return [totalBusiness, totalPersonal];
 };

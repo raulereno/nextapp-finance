@@ -2,7 +2,8 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-const url = "/api/income";
+const url =
+  "http://localhost:3000/api/income?companyId=64238a57bfa0ac002ef68b45";
 interface Incomes {
   incomes: IncomeType[];
 }
