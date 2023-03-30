@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 const url =
-  "http://localhost:3000/api/expense?companyId=64238a57bfa0ac002ef68b45";
+  "http://localhost:3000/api/expense?companyId=64257ccb28f7bffc594de664";
 interface Expenses {
   expenses: ExpenseType[];
 }
@@ -73,9 +73,11 @@ export const updateExpense =
 
 export const deleteExpenses = (id: String) => async (dispatch: Function) => {
   //TODO: Descomentar para produccion
-  // await fetch(`/api/income/${id}`, {
-  //   method: "DELETE",
-  // });
+
+  console.log(id);
+  await fetch(`/api/income/${id}`, {
+    method: "DELETE",
+  });
 
   dispatch(expensesSlice.actions.deleteExpenses(id));
 };

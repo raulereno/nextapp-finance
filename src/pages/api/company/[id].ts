@@ -6,7 +6,6 @@ export default async function companyID(
   res: NextApiResponse
 ) {
   const { method, query } = req;
-  console.log(query);
   let company;
 
   switch (method) {

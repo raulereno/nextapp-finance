@@ -23,6 +23,7 @@ export default async function income(
     case "POST":
       company = await Company.findById({ _id: query.companyId });
       const result = await Income.create(JSON.parse(body));
+
       await company.incomes.push(result);
       await company.save();
 
