@@ -11,7 +11,6 @@ export function Income({ options, data, setTableContent }: any) {
     buttonText: "Agregar ingresos",
     type: "income",
   };
-  console.log("hola");
   const optionsPlus = {
     ...options,
     onClick: function (event: any, elements: any) {
@@ -23,6 +22,7 @@ export function Income({ options, data, setTableContent }: any) {
       setTableContent(slice);
     },
   };
+  console.log(data.datasets[0].data[0]);
 
   return (
     <div
@@ -31,13 +31,17 @@ export function Income({ options, data, setTableContent }: any) {
     >
       <h2>Ingresos</h2>
 
-      <Doughnut
-        options={optionsPlus}
-        height="250"
-        width="250"
-        id="income_canva"
-        data={data}
-      />
+      {data.datasets[0].data[0] !== 0 || data.datasets[0].data[1] !== 0 ? (
+        <Doughnut
+          options={optionsPlus}
+          height="250"
+          width="250"
+          id="income_canva"
+          data={data}
+        />
+      ) : (
+        <h2>No hay registros</h2>
+      )}
       <ModalAddRegister props={propsModal} />
     </div>
   );

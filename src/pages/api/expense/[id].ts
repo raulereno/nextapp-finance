@@ -9,6 +9,7 @@ export default async function expenseID(
 ) {
   const { method, query, body } = req;
 
+  console.log(query);
   await dbConnect();
   let expense;
   switch (method) {

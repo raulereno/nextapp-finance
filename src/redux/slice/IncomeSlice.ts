@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 const url =
-  "http://localhost:3000/api/income?companyId=64238a57bfa0ac002ef68b45";
+  "http://localhost:3000/api/income?companyId=64257ccb28f7bffc594de664";
 interface Incomes {
   incomes: IncomeType[];
 }
@@ -71,9 +71,9 @@ export const updateIncome =
 
 export const deleteIncome = (id: String) => async (dispatch: Function) => {
   //TODO: Descomentar para produccion
-  // await fetch(`/api/income/${id}`, {
-  //   method: "DELETE",
-  // });
+  await fetch(`/api/income/${id}`, {
+    method: "DELETE",
+  });
 
   dispatch(incomesSlice.actions.deleteIncome(id));
 };

@@ -19,6 +19,8 @@ export const TableComponent = ({ content, filters }: any) => {
   useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
+    console.log(id);
+
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",
       showDenyButton: true,
