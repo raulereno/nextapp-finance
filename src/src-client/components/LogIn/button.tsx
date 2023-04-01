@@ -3,6 +3,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 const LogButton = () => {
   const { data: session } = useSession();
+  console.log(session);
+  
   if (session && session.user) {
     return (
       <div className="d-flex align-items-center">
@@ -18,7 +20,7 @@ const LogButton = () => {
       <span className="me-2">
         Not signed in
       </span>
-      <button className="btn btn-outline-primary" onClick={() => signIn("auth0")}>Sign in</button>
+      <button className="btn btn-outline-primary" onClick={() => signIn()}>Sign in</button>
     </div>
   );
 };
