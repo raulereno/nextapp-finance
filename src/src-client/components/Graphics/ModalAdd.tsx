@@ -20,13 +20,14 @@ export function ModalAdd({ props }: any) {
   const dispatch: Function = useDispatch();
 
   const handleChange = (
-    evt: React.FormEvent<HTMLInputElement | HTMLSelectElement>
+    evt: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const name = evt.currentTarget.name;
     const value = evt.currentTarget.value;
 
     setForm({ ...form, [name]: value });
   };
+
 
   const sendForm = () => {
     if (props.type === "expense") {
@@ -39,59 +40,85 @@ export function ModalAdd({ props }: any) {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button className="colorBtnAgregar text-center m-3" variant="outline-light" onClick={handleShow}>
         {props.buttonText}
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal className='text-center' show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{props.title}</Modal.Title>
+          <Modal.Title className="d-flex justify-content-center" >{props.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="d-flex justify-content-center">
           <form action="" className="d-flex flex-column">
-            <label htmlFor="">
-              Tipo de ingreso:
+
+            <div className="input-group mb-3 w-100">
+              <label htmlFor="type" className="input-group-text">
+                Tipo de ingreso
+              </label>
               <select
                 name="type"
                 id=""
                 onChange={handleChange}
                 value={form.type}
+                className="form-select"
+                aria-describedby="Tipo"
+                placeholder="Tipo de ingreso"
+                defaultValue=""
               >
-                <option value="" disabled selected></option>
+                <option value="" disabled></option>
                 <option value="negocio">Negocio</option>
                 <option value="personales">Personal</option>
               </select>
-            </label>
-            <label htmlFor="">
-              Categoria
+            </div>
+
+            <div className="input-group mb-3 w-100">
+              <label htmlFor="text" className="input-group-text">
+                Categoria
+              </label>
               <input
-                type="text"
+                type="category"
                 value={form.category}
                 onChange={handleChange}
                 name="category"
+                className='form-control'
+                aria-describedby='Categoria'
+                placeholder='Ingresa aca la categoria'
               />
-            </label>
-            <label htmlFor="">
-              Valor:
+            </div>
+
+            <div className="input-group mb-3 w-100">
+              <label htmlFor="value" className="input-group-text">
+                Valor
+              </label>
               <input
                 type="number"
                 value={form.value}
                 onChange={handleChange}
                 name="value"
+                className='form-control'
+                aria-describedby='Valor'
+                placeholder='Ingresa aca el valor'
               />
-            </label>
-            <label htmlFor="">
-              Descripción:
-              <input
-                type="text"
+            </div>
+
+            <div className="form-floating">
+              <textarea
+                className="form-control"
+                placeholder="Leave a comment here"
+                id="floatingTextarea"
                 value={form.description}
                 onChange={handleChange}
                 name="description"
-              />
-            </label>
+                rows={5}
+              ></textarea>
+              <label htmlFor="floatingTextarea">
+                Descripción
+              </label>
+            </div>
+
           </form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="d-flex justify-content-center">
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
