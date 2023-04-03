@@ -23,22 +23,3 @@ const incomeSchema = new Schema<IncomeType, Model<IncomeType>>(
 
 export const Income =
   mongoose.models.Income || mongoose.model("Income", incomeSchema);
-
-// {
-//     type: {
-//       type: DataTypes.ENUM,
-//       values: ["negocio", "personales"],
-//       allowNull: false,
-//     },
-//     value: {
-//       type: DataTypes.FLOAT,
-//       allowNull: false,
-//     },
-//     description: {
-//       type: DataTypes.STRING,
-//       allowNull: true,
-//     },
-//     category: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },

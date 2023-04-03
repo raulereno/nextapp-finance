@@ -4,6 +4,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import Nav from "react-bootstrap/Nav";
 import Logo from "../../../assets/logo.png";
 import Image from "next/image";
+import LogButton from "./LogIn/button";
 
 interface Ipage {
   page: string;
@@ -16,8 +17,8 @@ function NavBar({ page }: Ipage) {
   const handleShow = () => setShow(true);
 
   return (
-    <div className="bg-LightBlue">
-      <Button className="bg-LightBlue border-0" onClick={handleShow}>
+    <div className="navBar-Container">
+      <Button className=" border-0" onClick={handleShow}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-menu-2"
@@ -80,6 +81,9 @@ function NavBar({ page }: Ipage) {
               >
                 Settings
               </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <LogButton />
             </Nav.Item>
           </Nav>
         </Offcanvas.Body>
