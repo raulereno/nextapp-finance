@@ -68,5 +68,16 @@ export const authOptions: NextAuthOptions = {
     theme: {
       colorScheme: "dark",
     },
+    pages: {
+      signIn: "/auth",
+    },
+    session: {
+      strategy: "jwt",
+    },
+    jwt: {
+      secret: process.env.NEXTAUTH_JWT_SECRET,
+    },
+    secret: process.env.NEXTAUTH_SECRET,
   }
+  
   export default NextAuth(authOptions)

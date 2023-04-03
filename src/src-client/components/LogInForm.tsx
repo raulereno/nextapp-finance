@@ -5,6 +5,8 @@ import { signIn, getProviders } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import Router from "next/router";
+import { Alert } from "react-bootstrap";
+import { log } from "console";
 
 
 
@@ -29,7 +31,7 @@ const Auth: NextPage = ({ providers }: any) => {
               type="submit"
               onClick={() => {
                 signIn(provider.id, {
-                  callbackUrl: `${process.env.URL_DEV}/`,
+                  callbackUrl: `${process.env.AUTH0_BASE_URL}`,
                 });
               }}
             >
@@ -60,7 +62,9 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async () => {
+      .then(async (res) => {
+        console.log(res);
+        
         await loginUser();
         redirectToHome();
       })
