@@ -1,14 +1,18 @@
+import { calculateTotal } from "@/utils/calculateTotal";
 import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 
 const url =
   "http://localhost:3000/api/income?companyId=64257ccb28f7bffc594de664";
 interface Incomes {
   incomes: IncomeType[];
+  totalIncomes: Array<TotalRegisters>;
 }
 export const initialState: Incomes = {
   incomes: [],
+  totalIncomes: [],
 };
 
 const incomesSlice = createSlice({
@@ -18,6 +22,7 @@ const incomesSlice = createSlice({
   reducers: {
     getAllIncomes: (state, action) => {
       state.incomes = action.payload;
+      state.totalIncomes = calculateTotal(action.payload);
     },
     addIncome: (state, action) => {
       state.incomes.push(action.payload);

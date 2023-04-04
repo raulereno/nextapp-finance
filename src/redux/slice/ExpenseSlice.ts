@@ -2,14 +2,18 @@ import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { calculateTotal } from "@/utils/calculateTotal";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 
 const url =
   "http://localhost:3000/api/expense?companyId=64257ccb28f7bffc594de664";
 interface Expenses {
   expenses: ExpenseType[];
+  totalExpenses: Array<TotalRegisters>;
 }
 export const initialState: Expenses = {
   expenses: [],
+  totalExpenses: [],
 };
 
 const expensesSlice = createSlice({
@@ -19,6 +23,7 @@ const expensesSlice = createSlice({
   reducers: {
     getAllExpenses: (state, action) => {
       state.expenses = action.payload;
+      state.totalExpenses = calculateTotal(action.payload);
     },
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);

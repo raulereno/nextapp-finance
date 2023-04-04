@@ -3,10 +3,11 @@ import { updateIncome } from "@/redux/slice/IncomeSlice";
 import capitalize from "@/utils/capitalize";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
 import Image from "next/image";
 import FormRegister from "./FormAddRegister";
+import { isValidExpense } from "@/utils/isValidExpense";
 
 interface PropsModal {
   props: {
@@ -28,8 +29,14 @@ const initialStateForm = {
 
 export function ModalEdit({ props }: PropsModal) {
   const [form, setForm] = useState(initialStateForm);
-
   const [show, setShow] = useState(false);
+  const dispatch: Function = useDispatch();
+  const totalIncomes = useSelector(
+    (state: any) => state.IncomesReducer.totalIncomes
+  );
+  const totalExpenses = useSelector(
+    (state: any) => state.ExpensesReducer.totalExpenses
+  );
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -41,8 +48,6 @@ export function ModalEdit({ props }: PropsModal) {
     });
     setShow(true);
   };
-
-  const dispatch: Function = useDispatch();
 
   const handleChange = (
     evt: React.FormEvent<HTMLInputElement | HTMLSelectElement>
@@ -57,9 +62,16 @@ export function ModalEdit({ props }: PropsModal) {
     if (props.table === "ingresos") {
       dispatch(updateIncome(form, props.id));
     } else {
-      dispatch(updateExpense(form, props.id));
+      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+
+      if (validExpense) {
+        alert(validExpense);
+      } else {
+        dispatch(updateExpense(form, props.id));
+        setForm(initialStateForm);
+        handleClose();
+      }
     }
-    handleClose();
   };
 
   return (

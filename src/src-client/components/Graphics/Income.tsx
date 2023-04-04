@@ -22,7 +22,6 @@ export function Income({ options, data, setTableContent }: any) {
       setTableContent(slice);
     },
   };
-  console.log(data.datasets[0].data[0]);
 
   return (
     <div
