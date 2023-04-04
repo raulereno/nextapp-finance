@@ -11,8 +11,6 @@ export const isValidExpense = (
 
   const total = totalExpenses[index].total + form.value;
 
-  console.log(total);
-  console.log(totalIncomes[index].total);
   if (total > totalIncomes[index].total) {
     return "Tus egresos van a superar a tus ingresos";
   }

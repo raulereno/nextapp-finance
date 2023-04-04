@@ -49,15 +49,6 @@ export function ModalEdit({ props }: PropsModal) {
     setShow(true);
   };
 
-  const handleChange = (
-    evt: React.FormEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const name = evt.currentTarget.name;
-    const value = evt.currentTarget.value;
-
-    setForm({ ...form, [name]: value });
-  };
-
   const sendForm = () => {
     if (props.table === "ingresos") {
       dispatch(updateIncome(form, props.id));
