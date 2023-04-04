@@ -20,6 +20,13 @@ const userSchema = new Schema({
   image: {
     type: String,
   },
+  company:[{
+    type: Schema.Types.ObjectId,
+    ref:'Company',
+    default: []
+  }],
+  incomes: [{ type: Schema.Types.ObjectId, ref: "Income", default: [] }],
+  expenses: [{ type: Schema.Types.ObjectId, ref: "Expense", default: [] }],
 });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
