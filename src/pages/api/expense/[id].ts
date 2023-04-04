@@ -1,5 +1,4 @@
 import { Expense } from "@/models/expense.model";
-import { Income } from "@/models/income.model";
 import { dbConnect } from "@/utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 

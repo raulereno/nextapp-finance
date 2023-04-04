@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../src-backend/db";
-import User from "../../../src-backend/models/user.model";
+import conn from "../../src-backend/db";
+import User from "../../src-backend/models/user.model";
 import bcrypt from "bcrypt";
 
 interface ResponseData {
@@ -44,7 +44,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  
   if (req.method !== "POST") {
     return res
       .status(200)
