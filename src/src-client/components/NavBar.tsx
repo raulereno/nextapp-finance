@@ -75,11 +75,12 @@ function NavBar({ page }: Ipage) {
             </Nav.Item>
             <Nav.Item>
               <Nav.Link
-                eventKey="settings"
-                active={page === "settings"}
-                disabled={page === "settings"}
+                href='/company'
+                eventKey="company"
+                active={page === "company"}
+                disabled={page === "company"}
               >
-                Settings
+                Company
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
