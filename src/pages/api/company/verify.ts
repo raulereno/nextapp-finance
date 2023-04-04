@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import User from "../../../../src-backend/models/user.model";
+import User from "../../../models/user.model";
 import conn from "../../../../src-backend/db";
 import { connection } from "mongoose";
 export default async function verifyCompany(req: NextApiRequest, res: NextApiResponse){

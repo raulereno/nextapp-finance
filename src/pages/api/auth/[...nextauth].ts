@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../../../lib/mongodb"
 import conn from '../../../../src-backend/db';
-import User from '../../../../src-backend/models/user.model';
+import User from '../../../models/user.model';
 import { compare } from "bcrypt";
 config();
 
