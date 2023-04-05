@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../src-backend/db";
+import conn from "../../src-backend/db";
 import User from "../../models/user.model";
 import bcrypt from "bcrypt";
 
