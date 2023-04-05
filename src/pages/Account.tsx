@@ -17,7 +17,7 @@ const Account = () => {
             session && (
               <div className='jumbotron'>
                 <h2 className='display-4'>User information:</h2>
-                <Image src={session.user?.image ?? LogoUser.toString()} alt='session.user?.name' className='user-img rounded-circle'></Image>
+                <Image src={session.user?.image?? LogoUser.toString()} alt='session.user?.name' className='user-img rounded-circle'></Image>
                 <p className='lead mt-2'><strong>User:</strong> {session.user?.name}</p>
                 <p className='lead'><strong>Email:</strong> {session.user?.email}</p>
                 <hr className="my-4"></hr>
