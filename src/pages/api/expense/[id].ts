@@ -1,6 +1,8 @@
 import { Expense } from "@/models/expense.model";
-import { dbConnect } from "@/utils/dbConnect";
+import { Income } from "@/models/income.model";
 import { NextApiRequest, NextApiResponse } from "next";
+import conn from "../../../src-backend/db";
+import { connection } from "mongoose";
 
 export default async function expenseID(
   req: NextApiRequest,
@@ -8,13 +10,11 @@ export default async function expenseID(
 ) {
   const { method, query, body } = req;
 
-  console.log(query);
-  await dbConnect();
+  await conn();
   let expense;
   switch (method) {
     case "GET":
       expense = await Expense.findOne({ _id: query.id });
-
       res.status(200).json({ message: expense });
       break;
     case "PUT":
@@ -25,14 +25,12 @@ export default async function expenseID(
           new: true,
         }
       );
-
       res
         .status(200)
         .json({ message: "update a unique income", payload: expense });
       break;
     case "DELETE":
       let result = await Expense.deleteOne({ _id: query.id });
-
       res
         .status(200)
         .json({ message: "delete a unique income", result: result });

@@ -25,7 +25,10 @@ const incomesSlice = createSlice({
       state.totalIncomes = calculateTotal(action.payload);
     },
     addIncome: (state, action) => {
-      state.incomes.push(action.payload);
+      const oldState = state.incomes;
+      oldState.push(action.payload);
+      state.totalIncomes = calculateTotal(oldState);
+      state.incomes = oldState;
     },
     updateIncome: (state, action) => {
       let find = state.incomes.map((elem) => {
@@ -34,10 +37,12 @@ const incomesSlice = createSlice({
         }
         return elem;
       });
+      state.totalIncomes = calculateTotal(find);
       state.incomes = find;
     },
     deleteIncome: (state, action) => {
       const filter = state.incomes.filter((ele) => ele._id !== action.payload);
+      state.totalIncomes = calculateTotal(filter);
       state.incomes = filter;
     },
   },
@@ -64,6 +69,7 @@ export const addIncome = (income: IncomeType) => async (dispatch: Function) => {
 
 export const updateIncome =
   (income: IncomeType, id: String) => async (dispatch: Function) => {
+    console.log(income);
     const { payload } = await fetch(`/api/income/${id}`, {
       method: "PUT",
       body: JSON.stringify(income),

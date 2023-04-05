@@ -1,4 +1,3 @@
-import { IncomeType } from "@/models/income.model";
 import { getExpenses } from "@/redux/slice/ExpenseSlice";
 import { getIncomes } from "@/redux/slice/IncomeSlice";
 import { useEffect, useState } from "react";
@@ -42,14 +41,13 @@ const options = {
 export const Graphics = () => {
   const dispatch: Function = useDispatch();
   const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
+  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
   const totalIncomes = useSelector(
     (state: any) => state.IncomesReducer.totalIncomes
   );
   const totalExpenses = useSelector(
     (state: any) => state.ExpensesReducer.totalExpenses
   );
-
-  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
 
   const totalExcess = calculateExcess(
     totalIncomes.map((ele: TotalRegisters) => ele.total),

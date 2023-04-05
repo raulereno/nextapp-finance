@@ -53,15 +53,12 @@ export function ModalEdit({ props }: PropsModal) {
     if (props.table === "ingresos") {
       dispatch(updateIncome(form, props.id));
     } else {
-      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+      // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+      //TODO: cambiar esta logica para que te deje
 
-      if (validExpense) {
-        alert(validExpense);
-      } else {
-        dispatch(updateExpense(form, props.id));
-        setForm(initialStateForm);
-        handleClose();
-      }
+      dispatch(updateExpense(form, props.id));
+      setForm(initialStateForm);
+      handleClose();
     }
   };
 

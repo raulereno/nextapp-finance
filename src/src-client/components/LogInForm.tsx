@@ -61,15 +61,12 @@ const Auth: NextPage = ({ providers }: any) => {
         }
       )
       .then(async (res) => {
-        console.log(res);
-
         await loginUser();
         redirectToHome();
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log(res);
   };
 
   const loginUser = async () => {

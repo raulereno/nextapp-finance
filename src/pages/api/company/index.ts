@@ -1,8 +1,9 @@
 import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
-import User from "../../../src-backend/models/user.model";
-import { dbConnect } from "@/utils/dbConnect";
+import User from "../../../models/user.model";
 import type { NextApiRequest, NextApiResponse } from "next";
+import conn from "../../../src-backend/db";
+import { connection } from "mongoose";
 
 export default async function income(
   req: NextApiRequest,
@@ -10,7 +11,7 @@ export default async function income(
 ) {
   const { method, body, query } = req;
 
-  await dbConnect();
+  await conn();
   let company;
   let result;
 

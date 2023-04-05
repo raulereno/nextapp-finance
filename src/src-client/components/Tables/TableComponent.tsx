@@ -19,8 +19,6 @@ export const TableComponent = ({ content, filters }: any) => {
   useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
-    console.log(id);
-
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",
       showDenyButton: true,
@@ -59,7 +57,7 @@ export const TableComponent = ({ content, filters }: any) => {
         </thead>
         <tbody className="text-white">
           {tableContent!
-            .filter((ele: IncomeType | ExpenseType) => {
+            ?.filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
               }

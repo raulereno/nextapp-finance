@@ -5,6 +5,7 @@ import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
 import { isValidExpense } from "@/utils/isValidExpense";
+import Swal from "sweetalert2";
 
 interface PropsModal {
   props: {
@@ -41,7 +42,24 @@ export function ModalAddRegister({ props }: PropsModal) {
       const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
 
       if (validExpense) {
-        alert(validExpense);
+        Swal.fire({
+          title: validExpense,
+          text: "Estas seguro?",
+          showDenyButton: true,
+          confirmButtonText: "Aceptar",
+          denyButtonText: `Cancelar`,
+          reverseButtons: true,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            dispatch(addExpense(form));
+            setForm(initialStateForm);
+            handleClose();
+          } else if (result.isDenied) {
+            setForm(initialStateForm);
+            handleClose();
+          }
+        });
       } else {
         dispatch(addExpense(form));
         setForm(initialStateForm);
