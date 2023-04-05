@@ -1,15 +1,18 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "./../../models/income.model";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { calculateTotal } from "@/utils/calculateTotal";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 
 const url =
   "http://localhost:3000/api/expense?companyId=64257ccb28f7bffc594de664";
 interface Expenses {
   expenses: ExpenseType[];
+  totalExpenses: Array<TotalRegisters>;
 }
 export const initialState: Expenses = {
   expenses: [],
+  totalExpenses: [],
 };
 
 const expensesSlice = createSlice({
@@ -19,21 +22,27 @@ const expensesSlice = createSlice({
   reducers: {
     getAllExpenses: (state, action) => {
       state.expenses = action.payload;
+      state.totalExpenses = calculateTotal(action.payload);
     },
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);
+      state.totalExpenses = calculateTotal(state.expenses);
     },
     updateExpense: (state, action) => {
       let find = state.expenses.map((elem) => {
+        console.log(elem._id);
         if (elem._id === action.payload._id) {
           return action.payload;
         }
         return elem;
       });
+
+      state.totalExpenses = calculateTotal(find);
       state.expenses = find;
     },
     deleteExpenses: (state, action) => {
       const filter = state.expenses.filter((ele) => ele._id !== action.payload);
+      state.totalExpenses = calculateTotal(filter);
       state.expenses = filter;
     },
   },
@@ -61,7 +70,7 @@ export const addExpense =
 
 export const updateExpense =
   (expense: IncomeType, id: String) => async (dispatch: Function) => {
-    const payload = await fetch(`/api/expense/${id}`, {
+    const { payload } = await fetch(`/api/expense/${id}`, {
       method: "PUT",
       body: JSON.stringify(expense),
     })
@@ -74,7 +83,6 @@ export const updateExpense =
 export const deleteExpenses = (id: String) => async (dispatch: Function) => {
   //TODO: Descomentar para produccion
 
-  console.log(id);
   await fetch(`/api/income/${id}`, {
     method: "DELETE",
   });
