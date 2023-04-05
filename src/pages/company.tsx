@@ -15,6 +15,7 @@ const Company = () => {
       }
     }
     if(company === 'loadingCompany') verification()
+    // if(company !== 'loadingCompany' && company !== 'Not found') ACA VOY A PEDIR LOS INCOMES Y EXPENSES DE LA COMPANIA
     useEffect(() => {
       
     }, [company])
@@ -22,11 +23,9 @@ const Company = () => {
   return (
     <>
     <NavBar page='Company'/>
-    {company === 'loadingCompany' && <h1>Toy cargando culiao
-      </h1>}
-    {
-      company === 'Not found' && <h1>Not found</h1>
-    }
+    {company === 'loadingCompany' && <span className="loader"></span>}
+    {company === 'Not found' && <h1>Not found</h1>}
+    {company !== 'loadingCompany' && company !== 'Not found' && <h1>{`Perteneces a ${company}`}</h1>}
     </>
   )
 }
