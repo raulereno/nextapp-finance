@@ -1,4 +1,3 @@
-import { IncomeType } from "@/models/income.model";
 import { getExpenses } from "@/redux/slice/ExpenseSlice";
 import { getIncomes } from "@/redux/slice/IncomeSlice";
 import { useEffect, useState } from "react";
@@ -7,6 +6,8 @@ import { Excess } from "./Excess";
 import { Expense } from "./Expense";
 import { Income } from "./Income";
 import { TableComponent } from "../Tables/TableComponent";
+import { calculateExcess } from "@/utils/calculateTotal";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 
 interface ContentTable {
   type: string;
@@ -41,9 +42,17 @@ export const Graphics = () => {
   const dispatch: Function = useDispatch();
   const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
   const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
-  const totalIncomes = formatData(incomes);
-  const totalExpenses = formatData(expenses);
-  const totalExcess = calculateExcess(totalIncomes, totalExpenses);
+  const totalIncomes = useSelector(
+    (state: any) => state.IncomesReducer.totalIncomes
+  );
+  const totalExpenses = useSelector(
+    (state: any) => state.ExpensesReducer.totalExpenses
+  );
+
+  const totalExcess = calculateExcess(
+    totalIncomes.map((ele: TotalRegisters) => ele.total),
+    totalExpenses.map((ele: TotalRegisters) => ele.total)
+  );
 
   const [tableContent, setTableContent] = useState({
     type: "",
@@ -55,7 +64,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalIncomes,
+        data: totalIncomes.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -67,7 +76,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalExpenses,
+        data: totalExpenses.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -118,27 +127,4 @@ export const Graphics = () => {
       </div>
     </div>
   );
-};
-
-const formatData = (data: IncomeType[]): Array<number> => {
-  let totalBusiness = 0;
-  let totalPersonal = 0;
-
-  data &&
-    data?.forEach((element) => {
-      if (element?.type[0] === "negocio") {
-        totalBusiness += element.value;
-      } else if (element?.type[0] === "personales") {
-        totalPersonal += element.value;
-      }
-    });
-
-  return [totalBusiness, totalPersonal];
-};
-
-const calculateExcess = (
-  incomes: Array<number>,
-  expenses: Array<number>
-): Array<number> => {
-  return [incomes[0] - expenses[0], incomes[1] - expenses[1]];
 };

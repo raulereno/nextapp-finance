@@ -7,12 +7,14 @@ export interface CompanType {
   name: String;
   incomes: IncomeType[];
   expenses: ExpenseType[];
+  users:Schema.Types.ObjectId[];
 }
 
 const companySchema = new Schema<CompanType, Model<CompanType>>({
   name: { type: String, required: true },
   incomes: [{ type: Schema.Types.ObjectId, ref: "Income", default: [] }],
   expenses: [{ type: Schema.Types.ObjectId, ref: "Expense", default: [] }],
+  users:[{type: Schema.Types.ObjectId, ref: "User", default: [] }],
 });
 
 export const Company =

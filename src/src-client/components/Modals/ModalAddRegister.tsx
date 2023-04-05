@@ -2,8 +2,10 @@ import { addExpense } from "@/redux/slice/ExpenseSlice";
 import { addIncome } from "@/redux/slice/IncomeSlice";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
+import { isValidExpense } from "@/utils/isValidExpense";
+import Swal from "sweetalert2";
 
 interface PropsModal {
   props: {
@@ -26,16 +28,48 @@ export function ModalAddRegister({ props }: PropsModal) {
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
 
+  const totalIncomes = useSelector(
+    (state: any) => state.IncomesReducer.totalIncomes
+  );
+  const totalExpenses = useSelector(
+    (state: any) => state.ExpensesReducer.totalExpenses
+  );
+
   const dispatch: Function = useDispatch();
 
   const sendForm = () => {
     if (props.type === "expense") {
-      dispatch(addExpense(form));
+      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+
+      if (validExpense) {
+        Swal.fire({
+          title: validExpense,
+          text: "Estas seguro?",
+          showDenyButton: true,
+          confirmButtonText: "Aceptar",
+          denyButtonText: `Cancelar`,
+          reverseButtons: true,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            dispatch(addExpense(form));
+            setForm(initialStateForm);
+            handleClose();
+          } else if (result.isDenied) {
+            setForm(initialStateForm);
+            handleClose();
+          }
+        });
+      } else {
+        dispatch(addExpense(form));
+        setForm(initialStateForm);
+        handleClose();
+      }
     } else {
       dispatch(addIncome(form));
+      setForm(initialStateForm);
+      handleClose();
     }
-    setForm(initialStateForm);
-    handleClose();
   };
 
   return (

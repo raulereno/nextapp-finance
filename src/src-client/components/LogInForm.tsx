@@ -8,9 +8,6 @@ import Router from "next/router";
 import { Alert } from "react-bootstrap";
 import { log } from "console";
 
-
-
-
 const Auth: NextPage = ({ providers }: any) => {
   const [authType, setAuthType] = useState("Login");
   const oppAuthType: { [key: string]: string } = {
@@ -23,22 +20,23 @@ const Auth: NextPage = ({ providers }: any) => {
 
   const ProvidersButtons = ({ providers }: any) => (
     <div className="d-flex flex-column w-100%">
-      {providers && Object.values(providers).map(
-        (provider: any) =>
-          provider.name !== "Credentials" && (
-            <button
-              key={provider.name}
-              type="submit"
-              onClick={() => {
-                signIn(provider.id, {
-                  callbackUrl: `${process.env.AUTH0_BASE_URL}`,
-                });
-              }}
-            >
-              <p>Sign in with {provider.name}</p>
-            </button>
-          )
-      )}
+      {providers &&
+        Object.values(providers).map(
+          (provider: any) =>
+            provider.name !== "Credentials" && (
+              <button
+                key={provider.name}
+                type="submit"
+                onClick={() => {
+                  signIn(provider.id, {
+                    callbackUrl: `${process.env.AUTH0_BASE_URL}`,
+                  });
+                }}
+              >
+                <p>Sign in with {provider.name}</p>
+              </button>
+            )
+        )}
     </div>
   );
 
@@ -63,15 +61,12 @@ const Auth: NextPage = ({ providers }: any) => {
         }
       )
       .then(async (res) => {
-        console.log(res);
-        
         await loginUser();
         redirectToHome();
       })
       .catch((error) => {
         console.log(error);
       });
-    console.log(res);
   };
 
   const loginUser = async () => {
@@ -93,9 +88,8 @@ const Auth: NextPage = ({ providers }: any) => {
 
   return (
     <>
-      <div
-      >
-        <div className='d-flex flex-column justify-center align-center'>
+      <div>
+        <div className="d-flex flex-column justify-center align-center">
           <h2>{authType}</h2>
           <p>
             {authType === "Login"
@@ -118,11 +112,11 @@ const Auth: NextPage = ({ providers }: any) => {
           >
             {(props) => (
               <Form style={{ width: "100%" }}>
-                <div className='d-flex flex-column w-100% margin-b-4'>
+                <div className="d-flex flex-column w-100% margin-b-4">
                   {authType === "Register" && (
                     <Field name="username">
                       {() => (
-                          <>
+                        <>
                           <label htmlFor="username">Username:</label>
                           <input
                             value={username}
@@ -130,7 +124,7 @@ const Auth: NextPage = ({ providers }: any) => {
                             placeholder="Username"
                             type="text"
                           />
-                          </>  
+                        </>
                       )}
                     </Field>
                   )}
@@ -160,18 +154,14 @@ const Auth: NextPage = ({ providers }: any) => {
                       </>
                     )}
                   </Field>
-                  <button
-                    type="submit"
-                  >
-                    {authType}
-                  </button>
+                  <button type="submit">{authType}</button>
                 </div>
               </Form>
             )}
           </Formik>
         </div>
       </div>
-      </>
+    </>
   );
 };
 

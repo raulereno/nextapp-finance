@@ -1,14 +1,11 @@
-import {NextApiRequest, NextApiResponse} from 'next'
+import axios from "axios"
 
-const url = 'http://localhost:3000/api/user'
+export default async function verifyUserCompany (user: String){
+    const email = user.split('@').join('%40')
+    
+    const url = `http://localhost:3000/api/company/verify?email=${email}`
 
-const verifyUser = async (email: string) => {
-    const user = await fetch(url, {
-        method: 'GET',
-        body: JSON.stringify(email),
-    })
+    const res = await axios.get(url)
 
-    if(user){
-        return user
-    }
+    return res
 }
