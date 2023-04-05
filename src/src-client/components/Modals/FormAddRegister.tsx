@@ -1,8 +1,8 @@
-interface FormType {
+export interface FormType {
   type: string;
   description: string;
   category: string;
-  value: string | number | readonly string[] | undefined;
+  value: number;
 }
 
 interface FormProps {
@@ -19,7 +19,11 @@ export default function FormRegister({ form, setForm }: FormProps) {
     const name = evt.currentTarget.name;
     const value = evt.currentTarget.value;
 
-    setForm({ ...form, [name]: value });
+    if (name === "value") {
+      setForm({ ...form, [name]: parseInt(value) });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   return (
@@ -36,6 +40,7 @@ export default function FormRegister({ form, setForm }: FormProps) {
           className="form-select"
           aria-describedby="Tipo"
           placeholder="Tipo de ingreso"
+          required
         >
           <option value="" disabled></option>
           <option value="negocio">Negocio</option>

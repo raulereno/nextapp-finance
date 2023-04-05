@@ -29,7 +29,6 @@ export function Expense({ options, data, setTableContent }: any) {
       style={{ width: "350px" }}
     >
       <h2>Gastos</h2>
-
       {data.datasets[0].data[0] !== 0 || data.datasets[0].data[1] !== 0 ? (
         <Doughnut
           options={optionsPlus}
