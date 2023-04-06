@@ -1,8 +1,9 @@
 import { Expense } from "@/models/expense.model";
 import { Income } from "@/models/income.model";
 import { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../src-backend/db";
-import { connection } from "mongoose";
+import dbConnect from "../../../src-backend/db";
+
+dbConnect();
 
 export default async function expenseID(
   req: NextApiRequest,
@@ -10,7 +11,6 @@ export default async function expenseID(
 ) {
   const { method, query, body } = req;
 
-  await conn();
   let expense;
   switch (method) {
     case "GET":
@@ -25,6 +25,8 @@ export default async function expenseID(
           new: true,
         }
       );
+      console.log(expense);
+
       res
         .status(200)
         .json({ message: "update a unique income", payload: expense });

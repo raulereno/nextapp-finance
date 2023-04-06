@@ -1,13 +1,23 @@
-import { connect, connection } from "mongoose";
+import { connect, connection, disconnect } from "mongoose";
 import { config } from "dotenv";
 config();
 
-export async function conn() {
-  await connect(process.env.MONGO_URI!);
+const conn: any = {
+  isConnected: false,
+};
+
+export async function dbConnect() {
+  if (conn.isConnected) return;
+
+  const db = await connect(process.env.MONGO_URI!);
+  conn.isConnected = db.connections[0].readyState;
 }
 
 connection.on("connected", () => {
   console.log("Database connected");
+});
+connection.on("disconnected", () => {
+  console.log("Database disconnected");
 });
 connection.on("error", (err) => {
   console.log(err);
@@ -22,4 +32,4 @@ connection.on("error", (err) => {
 //   }
 // };
 
-export default conn;
+export default dbConnect;
