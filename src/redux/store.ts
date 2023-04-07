@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import TestSlice from "./slice/TestSlice";
 import IncomesReducer from "./slice/IncomeSlice";
 import ExpensesReducer from "./slice/ExpenseSlice";
+import CompanyReducer from "./slice/CompanySlice";
 const persistConfig = {
   key: "store",
   storage,
@@ -14,6 +15,7 @@ const myReducers = combineReducers({
   TestSlice,
   IncomesReducer,
   ExpensesReducer,
+  CompanyReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, myReducers);
