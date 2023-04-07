@@ -38,21 +38,30 @@ const options = {
   },
 };
 
-export const Graphics = () => {
-  const dispatch: Function = useDispatch();
-  const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
-  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
+interface graphsProp {
+  type: string
+}
 
-  const totalExcess = calculateExcess(
-    totalIncomes?.map((ele: TotalRegisters) => ele.total),
-    totalExpenses?.map((ele: TotalRegisters) => ele.total)
-  );
+export const Graphics = ({type} : graphsProp) => {
+  const dispatch: Function = useDispatch();
+  
+  let incomes;
+  let expenses;
+  if(type === 'company'){
+    incomes = useSelector((state: any) => state.CompanyReducer.incomes);
+    expenses = useSelector((state: any) => state.CompanyReducer.expenses);
+
+  } else {
+
+  }
+
+  let totalExcess;
+  if(expenses && incomes){
+    totalExcess = calculateExcess(
+    incomes.map((ele: TotalRegisters) => ele.total),
+    expenses.map((ele: TotalRegisters) => ele.total)
+    );
+  }
 
   const [tableContent, setTableContent] = useState({
     type: "",
@@ -64,7 +73,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalIncomes.map((ele: TotalRegisters) => ele.total),
+        data: incomes?.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -76,7 +85,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalExpenses.map((ele: TotalRegisters) => ele.total),
+        data: expenses?.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -96,13 +105,17 @@ export const Graphics = () => {
   };
 
   useEffect(() => {
-    dispatch(getIncomes());
-    dispatch(getExpenses());
-  }, [dispatch]);
+    // dispatch(getIncomes());
+    // dispatch(getExpenses());
+  }, [incomes, expenses]);
 
   return (
     <div className="container text-center mt-5">
-      <div className="row d-flex justify-content-between">
+      {!incomes || incomes.length === 0 && !expenses || expenses.length === 0 && <span className="loader" />}
+      {incomes && expenses &&
+        
+        <>
+        <div className="row d-flex justify-content-between">
         <Income
           options={options}
           data={dataIncomes}
@@ -125,6 +138,8 @@ export const Graphics = () => {
           filters={tableContent}
         />
       </div>
+      </>
+      }
     </div>
   );
 };

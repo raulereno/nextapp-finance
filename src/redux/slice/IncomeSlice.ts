@@ -3,9 +3,11 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { TotalRegisters } from "@/types/TotalRegister.type";
+import verifyUserCompany from "@/src-client/utilities/verifyCompany";
+import axios from "axios";
 
 const url =
-  "http://localhost:3000/api/income?companyId=64257ccb28f7bffc594de664";
+  "http://localhost:3000/api/income?Id=";
 interface Incomes {
   incomes: IncomeType[];
   totalIncomes: Array<TotalRegisters>;
@@ -56,16 +58,23 @@ export const getIncomes = () => async (dispatch: Function) => {
   dispatch(incomesSlice.actions.getAllIncomes(payload));
 };
 
-export const addIncome = (income: IncomeType) => async (dispatch: Function) => {
-  const { payload } = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify(income),
-  })
-    .then((resp) => resp.json())
-    .catch((err) => console.log(err));
-
-  dispatch(incomesSlice.actions.addIncome(payload));
-};
+export const addIncome = (income: IncomeType, id: string) => async (dispatch: Function) => {
+  
+  try {
+    let urlId;
+    if(income.type === 'negocio'){
+      const company = await verifyUserCompany (id)
+      urlId = company.data.msg;
+    } else {
+      urlId = id
+    }
+    const res = await axios.post(`${url}${urlId}`,income)
+    console.log(res.data.payload)
+    dispatch(incomesSlice.actions.addIncome(res.data.payload));
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 export const updateIncome =
   (income: IncomeType, id: String) => async (dispatch: Function) => {

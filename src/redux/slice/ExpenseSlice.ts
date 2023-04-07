@@ -3,9 +3,10 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice } from "@reduxjs/toolkit";
 import { calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
+import verifyUserCompany from "@/src-client/utilities/verifyCompany";
 
 const url =
-  "http://localhost:3000/api/expense?companyId=64257ccb28f7bffc594de664";
+  "http://localhost:3000/api/expense?Id=";
 interface Expenses {
   expenses: ExpenseType[];
   totalExpenses: Array<TotalRegisters>;
@@ -57,8 +58,15 @@ export const getExpenses = () => async (dispatch: Function) => {
 };
 
 export const addExpense =
-  (expense: ExpenseType) => async (dispatch: Function) => {
-    const { payload } = await fetch(url, {
+  (expense: ExpenseType, id: string) => async (dispatch: Function) => {
+    let urlId;
+    if(expense.type === 'negocio'){
+      const company = await verifyUserCompany(id)
+      urlId = company
+    } else {
+      urlId = id
+    }
+    const { payload } = await fetch(`${url}${urlId}`, {
       method: "POST",
       body: JSON.stringify(expense),
     })
