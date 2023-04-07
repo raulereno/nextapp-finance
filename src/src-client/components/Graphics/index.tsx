@@ -49,10 +49,13 @@ export const Graphics = () => {
     (state: any) => state.ExpensesReducer.totalExpenses
   );
 
-  const totalExcess = calculateExcess(
+  let totalExcess;
+  if(totalExpenses && totalIncomes){
+    totalExcess = calculateExcess(
     totalIncomes.map((ele: TotalRegisters) => ele.total),
     totalExpenses.map((ele: TotalRegisters) => ele.total)
-  );
+    );
+  }
 
   const [tableContent, setTableContent] = useState({
     type: "",
@@ -64,7 +67,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalIncomes.map((ele: TotalRegisters) => ele.total),
+        data: totalIncomes?.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -76,7 +79,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalExpenses.map((ele: TotalRegisters) => ele.total),
+        data: totalExpenses?.map((ele: TotalRegisters) => ele.total),
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -102,7 +105,11 @@ export const Graphics = () => {
 
   return (
     <div className="container text-center mt-5">
-      <div className="row d-flex justify-content-between">
+      {!totalIncomes || totalIncomes.length === 0 && !totalExpenses || totalExpenses.length === 0 && <span className="loader" />}
+      {totalIncomes && totalExpenses &&
+        
+        <>
+        <div className="row d-flex justify-content-between">
         <Income
           options={options}
           data={dataIncomes}
@@ -125,6 +132,8 @@ export const Graphics = () => {
           filters={tableContent}
         />
       </div>
+      </>
+      }
     </div>
   );
 };
