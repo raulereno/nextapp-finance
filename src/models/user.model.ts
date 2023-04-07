@@ -19,12 +19,16 @@ const userSchema = new Schema({
   },
   image: {
     type: String,
+    default:
+      "https://icon-library.com/images/generic-user-icon/generic-user-icon-18.jpg",
   },
-  company:[{
-    type: Schema.Types.ObjectId,
-    ref:'Company',
-    default: []
-  }],
+  company: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Company",
+      default: [],
+    },
+  ],
   incomes: [{ type: Schema.Types.ObjectId, ref: "Income", default: [] }],
   expenses: [{ type: Schema.Types.ObjectId, ref: "Expense", default: [] }],
 });

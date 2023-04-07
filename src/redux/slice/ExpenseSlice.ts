@@ -49,11 +49,12 @@ const expensesSlice = createSlice({
 });
 
 export const getExpenses = () => async (dispatch: Function) => {
-  const { payload } = await fetch(url)
+  const payload = await fetch(url)
     .then((resp) => resp.json())
+    .then((res) => res)
     .catch((err) => console.log(err));
 
-  dispatch(expensesSlice.actions.getAllExpenses(payload));
+  dispatch(expensesSlice.actions.getAllExpenses(payload.payload ?? []));
 };
 
 export const addExpense =

@@ -5,20 +5,39 @@ import Nav from "react-bootstrap/Nav";
 import Logo from "../../../assets/logo.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
+import Link from "next/link";
 
 interface Ipage {
   page: string;
 }
 
 function NavBar({ page }: Ipage) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
   return (
     <div className="navBar-Container">
-      <Button className=" border-0" onClick={handleShow}>
+      <nav>
+        <ul>
+          <li>
+            <Link href={"/"}>
+              <Image src={Logo} alt="logo" width={150} height={80} />
+            </Link>
+          </li>
+          <LogButton />
+          <li>
+            <Link href="/account">Cuenta</Link>
+          </li>
+          <li>
+            <Link href="/personal">Personales</Link>
+          </li>
+          <li>Compañias</li>
+        </ul>
+      </nav>
+    </div>
+  );
+}
+
+export default NavBar;
+{
+  /* <Button className=" border-0" onClick={handleShow}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-menu-2"
@@ -88,9 +107,5 @@ function NavBar({ page }: Ipage) {
             </Nav.Item>
           </Nav>
         </Offcanvas.Body>
-      </Offcanvas>
-    </div>
-  );
+      </Offcanvas> */
 }
-
-export default NavBar;

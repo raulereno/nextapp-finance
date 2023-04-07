@@ -13,14 +13,26 @@ $theme-colors: (
 //   height: 150px;
 // }
 
-main {
+#__next {
   background-color: rgb(79, 97, 197);
   min-height: 100vh;
+  display: flex;
+  main{
+    flex-grow: 1;
+  }
 }
 
 .navBar-Container {
-  background-color: rgb(39, 27, 128);
-
+  background-color: rgba(39, 27, 128, 0.316);
+  width: 18%;
+  nav{
+    display: flex;
+    flex-direction: column;
+    ul{
+      list-style: none;
+      color:white
+    }
+  }
   button {
     background-color: rgb(39, 27, 128);
 
@@ -30,10 +42,17 @@ main {
   }
 }
 
+.container-graphics{
+  flex-grow: 1;
+  padding: 5px;
+}
+
 .colorBtnAgregar {
   background-color: rgb(39, 27, 128);
   max-width: 150px;
 }
+
+
 
 .containerGraphicosDiv {
   -webkit-box-shadow: 6px 6px 4px -1px rgba(204, 204, 204, 1);

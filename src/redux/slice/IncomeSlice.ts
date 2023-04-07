@@ -49,11 +49,12 @@ const incomesSlice = createSlice({
 });
 
 export const getIncomes = () => async (dispatch: Function) => {
-  const { payload } = await fetch(url)
+  const payload = await fetch(url, { mode: "no-cors" })
     .then((resp) => resp.json())
+    .then((res) => res)
     .catch((err) => console.log(err));
 
-  dispatch(incomesSlice.actions.getAllIncomes(payload));
+  dispatch(incomesSlice.actions.getAllIncomes(payload.payload ?? []));
 };
 
 export const addIncome = (income: IncomeType) => async (dispatch: Function) => {

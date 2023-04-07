@@ -9,9 +9,9 @@ import User from "../../../models/user.model";
 import { compare } from "bcrypt";
 config();
 
-const clientId: any = process.env.CLIENT_ID;
-const clientSecret: any = process.env.CLIENT_SECRET;
-const issuer: any = process.env.DOMAIN;
+const clientId: string = process.env.CLIENT_ID || "";
+const clientSecret: string = process.env.CLIENT_SECRET || "";
+const issuer: string = process.env.DOMAIN || "";
 
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   theme: {
     colorScheme: "dark",
   },

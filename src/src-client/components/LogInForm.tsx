@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import { signIn, getProviders } from "next-auth/react";
-
 import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import Router from "next/router";

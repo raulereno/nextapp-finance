@@ -7,7 +7,7 @@ const LogButton = () => {
   if (session && session.user) {
     return (
       <div className="d-flex align-items-center">
-        <span className="me-2">Signed in as {session.user.email}</span>
+        <span className="me-2"> {session.user.email}</span>
         <button className="btn btn-primary" onClick={() => signOut()}>
           Sign out
         </button>

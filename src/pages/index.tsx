@@ -1,10 +1,18 @@
 import { Graphics } from "@/src-client/components/Graphics";
 import NavBar from "@/src-client/components/NavBar";
-import { TableComponent } from "@/src-client/components/Tables/TableComponent";
-import { Inter } from "next/font/google";
+import { useSession } from "next-auth/react";
+
 import Head from "next/head";
+import { Router, useRouter } from "next/router";
 
 export default function Home() {
+  const { data: session, status } = useSession({ required: true });
+  const router = useRouter();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <Head>
@@ -15,7 +23,8 @@ export default function Home() {
       </Head>
       <main>
         <NavBar page="home" />
-        <div>
+
+        <div className="container-graphics">
           <Graphics />
         </div>
       </main>
