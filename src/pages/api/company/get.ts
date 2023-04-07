@@ -1,6 +1,8 @@
 import { Company } from "@/models/company.model";
+import { Income } from "@/models/income.model";
 
 import dbConnect from "@/src-backend/db";
+import { Schema } from "mongoose";
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 
@@ -11,15 +13,15 @@ export default async function companyID(
 ) {
   const { method, query } = req;
   let company;
+  let incomes;
    await dbConnect();
   switch (method) {
     case "GET":
       try {
-        //64238a57bfa0ac002ef68b45
-        console.log(query);
         
         company = await Company.findOne({ _id: query.id });
-        console.log(company);
+        
+        
         res.status(200).json({ status: "success", payload: company });
       } catch (error) {
         res.status(400).json({ status: "error", payload: 'error' });

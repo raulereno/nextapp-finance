@@ -21,6 +21,7 @@ const Company = () => {
     if(companyData.name.length === 0){
       if(company === 'loadingCompany') verification()
       if(company !== 'loadingCompany' && company !== 'Not found' ) getCompany(company)
+     
     }
     
     useEffect(() => {
@@ -37,6 +38,7 @@ const Company = () => {
       <h1>{`Perteneces a ${companyData.name}`}</h1>
       <div>
         <Graphics type="company" />
+        <button onClick={() => getCompany(company)}> Apretame</button>
        </div>
     </>
     }

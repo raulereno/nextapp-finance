@@ -6,7 +6,7 @@ import { Excess } from "./Excess";
 import { Expense } from "./Expense";
 import { Income } from "./Income";
 import { TableComponent } from "../Tables/TableComponent";
-import { calculateExcess } from "@/utils/calculateTotal";
+import { calculateExcess, calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
 
 interface ContentTable {
@@ -54,13 +54,17 @@ export const Graphics = ({type} : graphsProp) => {
   } else {
 
   }
-
+  let totalIncomes;
+  let totalExpenses;
   let totalExcess;
   if(expenses && incomes){
     totalExcess = calculateExcess(
     incomes.map((ele: TotalRegisters) => ele.total),
     expenses.map((ele: TotalRegisters) => ele.total)
     );
+
+    totalIncomes = incomes.reduce((acc : number, ele : any) => acc + ele.value, 0)
+    console.log(totalIncomes)
   }
 
   const [tableContent, setTableContent] = useState({
@@ -69,12 +73,12 @@ export const Graphics = ({type} : graphsProp) => {
   });
 
   const dataIncomes = {
-    labels: ["Negocio", "Personal"],
+    labels: ["Negocio"],
     datasets: [
       {
         label: "",
-        data: incomes?.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: [totalIncomes],
+        backgroundColor: ["rgb(243,212,6)"],
         hoverOffset: 4,
       },
     ],
@@ -111,7 +115,7 @@ export const Graphics = ({type} : graphsProp) => {
 
   return (
     <div className="container text-center mt-5">
-      {!incomes || incomes.length === 0 && !expenses || expenses.length === 0 && <span className="loader" />}
+      {!incomes || incomes.length === 0  && <span className="loader" />}
       {incomes && expenses &&
         
         <>

@@ -13,17 +13,23 @@ export default async function income(
   const { method, body, query } = req;
 
   let company;
-
+  const name = query.Id?.includes('@')
+  console.log(name);
+  
   switch (method) {
     case "GET":
-      if(body.type === 'negocio'){
+      if(!name){
         company = await Company.findById({ _id: query.Id })
         .populate("incomes")
         .lean();
 
       res.status(200).json({ message: "get", payload: company.incomes });
     } else {
+      const account = await User.findOne({email: query.Id})
+      .populate("incomes")
+      .lean();
 
+      res.status(200).json({ message: "get", payload:account.incomes });
     }
       break;
     case "POST":

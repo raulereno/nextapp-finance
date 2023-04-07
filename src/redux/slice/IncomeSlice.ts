@@ -50,12 +50,10 @@ const incomesSlice = createSlice({
   },
 });
 
-export const getIncomes = () => async (dispatch: Function) => {
-  const { payload } = await fetch(url)
-    .then((resp) => resp.json())
-    .catch((err) => console.log(err));
+export const getIncomes = (id: string) => async (dispatch: Function) => {
+  const res = await axios.get(`${url}${id}`)
 
-  dispatch(incomesSlice.actions.getAllIncomes(payload));
+  dispatch(incomesSlice.actions.getAllIncomes(res.data.payload));
 };
 
 export const addIncome = (income: IncomeType, id: string) => async (dispatch: Function) => {
