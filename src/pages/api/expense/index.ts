@@ -1,8 +1,9 @@
 import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
 import type { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../src-backend/db";
-import { connection } from "mongoose";
+import dbConnect from "../../../src-backend/db";
+
+dbConnect();
 
 export default async function income(
   req: NextApiRequest,
@@ -10,18 +11,13 @@ export default async function income(
 ) {
   const { method, body, query } = req;
 
-  await conn();
   let company;
   let expenses;
   switch (method) {
     case "GET":
-      try {
-        company = await Company.findById({ _id: query.companyId })
-          .populate("expenses")
-          .lean();
-      } catch (error) {
-        res.status(400).json("erro");
-      }
+      company = await Company.findById({ _id: query.companyId })
+        .populate("expenses")
+        .lean();
 
       res.status(200).json({ message: "get", payload: company.expenses });
       break;

@@ -2,8 +2,9 @@ import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
 import User from "../../../models/user.model";
 import type { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../src-backend/db";
-import { connection } from "mongoose";
+import dbConnect from "@/src-backend/db";
+
+dbConnect();
 
 export default async function income(
   req: NextApiRequest,
@@ -11,7 +12,6 @@ export default async function income(
 ) {
   const { method, body, query } = req;
 
-  await conn();
   let company;
   let result;
 
@@ -29,7 +29,6 @@ export default async function income(
           const companyObj = await Company.create(companyBody);
           objUser.company.push(companyObj._id);
           objUser.save();
-
           res.status(200).json(companyObj);
         } else {
           res.status(400).json({ error: "Company name already exists" });
