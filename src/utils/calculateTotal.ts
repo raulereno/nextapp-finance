@@ -1,5 +1,6 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
+import income from "@/pages/api/expense";
 import { TotalRegisters } from "@/types/TotalRegister.type";
 
 export const calculateTotal = (
@@ -26,9 +27,10 @@ export const calculateTotal = (
   return [totalBusiness, totalPersonal];
 };
 
-export const calculateExcess = (
+export const calculateExcess = (  
   incomes: Array<number>,
   expenses: Array<number>
 ): Array<number> => {
-  return [incomes[0] - expenses[0], incomes[1] - expenses[1]];
+  return [incomes - expenses[0], incomes[1] - expenses[1]];
 };
+

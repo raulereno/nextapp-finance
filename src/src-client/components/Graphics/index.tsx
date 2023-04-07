@@ -50,8 +50,8 @@ export const Graphics = () => {
   );
 
   const totalExcess = calculateExcess(
-    totalIncomes.map((ele: TotalRegisters) => ele.total),
-    totalExpenses.map((ele: TotalRegisters) => ele.total)
+    totalIncomes?.map((ele: TotalRegisters) => ele.total),
+    totalExpenses?.map((ele: TotalRegisters) => ele.total)
   );
 
   const [tableContent, setTableContent] = useState({
