@@ -1,8 +1,9 @@
 import { Company } from "@/models/company.model";
 import { Income } from "@/models/income.model";
 import type { NextApiRequest, NextApiResponse } from "next";
-import conn from "../../../../src-backend/db";
-import { connection } from "mongoose";
+import dbConnect from "../../../src-backend/db";
+
+dbConnect();
 
 export default async function income(
   req: NextApiRequest,
@@ -10,7 +11,6 @@ export default async function income(
 ) {
   const { method, body, query } = req;
 
-  await conn();
   let company;
 
   switch (method) {
@@ -18,7 +18,7 @@ export default async function income(
       company = await Company.findById({ _id: query.companyId })
         .populate("incomes")
         .lean();
-      connection.close()
+
       res.status(200).json({ message: "get", payload: company.incomes });
       break;
     case "POST":
@@ -27,12 +27,10 @@ export default async function income(
 
       await company.incomes.push(result);
       await company.save();
-      connection.close()
       res.status(200).json({ message: "post", payload: result });
       break;
 
     default:
-      connection.close()
       res.status(400).json({ error: "Invalid Method" });
       break;
   }

@@ -1,6 +1,10 @@
 import { Company } from "@/models/company.model";
+import dbConnect from "@/src-backend/db";
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
+
+dbConnect();
+
 export default async function companyID(
   req: NextApiRequest,
   res: NextApiResponse
