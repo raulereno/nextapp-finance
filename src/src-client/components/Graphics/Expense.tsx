@@ -41,7 +41,7 @@ export function Expense({
       style={{ width: "350px" }}
     >
       <h2>Gastos</h2>
-      {data.datasets[0].data[0] !== 0 || data.datasets[0].data[1] !== 0 ? (
+      {data.labels.length ? (
         <Doughnut
           options={optionsPlus}
           height="250"

@@ -32,6 +32,8 @@ export function Income({ type, options, data, setTableContent }: IncomeProps) {
     },
   };
 
+  console.log(data);
+
   return (
     <div
       className="bg-Blue col-3 rounded-4  text-white containerGraphicosDiv"
@@ -39,7 +41,7 @@ export function Income({ type, options, data, setTableContent }: IncomeProps) {
     >
       <h2>Ingresos</h2>
 
-      {
+      {data.labels.length ? (
         <Doughnut
           options={optionsPlus}
           height="250"
@@ -47,7 +49,9 @@ export function Income({ type, options, data, setTableContent }: IncomeProps) {
           id="income_canva"
           data={data}
         />
-      }
+      ) : (
+        <h2>No hay registros</h2>
+      )}
       <ModalAddRegister type={type} props={propsModal} />
     </div>
   );
