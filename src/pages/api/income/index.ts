@@ -14,7 +14,6 @@ export default async function income(
 
   let company;
   const name = query.Id?.includes('@')
-  console.log(name);
   
   switch (method) {
     case "GET":

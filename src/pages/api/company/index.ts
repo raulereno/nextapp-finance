@@ -18,15 +18,17 @@ export default async function income(
   switch (method) {
     case "POST":
       try {
-        const objUser = await User.findOne({ email: body.email });
-        const verify = await Company.find({ name: body.name });
 
+        const objUser = await User.findOne({ email: body.user });
+        const verify = await Company.find({ name: body.name });
+        console.log(body)
         if (verify.length === 0) {
           const companyBody = {
             name: body.name,
             users: [objUser._id],
           };
           const companyObj = await Company.create(companyBody);
+          
           objUser.company.push(companyObj._id);
           objUser.save();
           res.status(200).json(companyObj);
