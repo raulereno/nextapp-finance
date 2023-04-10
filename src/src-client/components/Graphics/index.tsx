@@ -10,6 +10,7 @@ import { calculateExcess, calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
 import { IncomeType } from "@/models/income.model";
 import { ExpenseType } from "@/models/expense.model";
+import { totalGenerate } from "@/src-client/utilities/totalGenerate";
 
 interface ContentTable {
   type: string;
@@ -41,33 +42,19 @@ const options = {
 };
 
 interface graphsProp {
-  type: string
+  type: string,
+  incomes: number[],
+  expenses: number[],
 }
 
-export const Graphics = ({type} : graphsProp) => {
-  const dispatch: Function = useDispatch();
-  
-  let incomes;
-  let expenses;
-  if(type === 'company'){
-    incomes = useSelector((state: any) => state.CompanyReducer.incomes);
-    expenses = useSelector((state: any) => state.CompanyReducer.expenses);
-
-  } else {
-
-  }
-  let totalIncomes = []
-  let totalExpenses = []
-  let totalExcess = [];
-  if(expenses && incomes){
-    totalIncomes[0] = incomes.reduce((acc : number, ele : any) => {if(ele.type[0] === 'negocio'){ return acc + ele.value} else {return acc}}, 0)
-    totalIncomes[1] = incomes.reduce((acc : number, ele : any) => {if(ele.type[0] === 'personal'){ return acc + ele.value} else {return acc}}, 0)
-    totalExpenses[0] = expenses.reduce((acc : number, ele : any) => {if(ele.type && ele.type[0] === 'negocio'){ return acc + ele.value} else {return acc}}, 0)
-    totalExpenses[1] = expenses.reduce((acc : number, ele : any) => {if(ele.type && ele.type[0] === 'personal'){ return acc + ele.value} else {return acc}}, 0)
+export const Graphics = ({type, incomes, expenses} : graphsProp) => {
+    
+    const totalIncomes = totalGenerate(incomes)
+    const totalExpenses = totalGenerate(expenses)
+    let totalExcess = [];
     totalExcess[0]= totalIncomes[0] - totalExpenses[0]
     totalExcess[1]= totalIncomes[1] - totalExpenses[1]
-  }
-  console.log(totalExpenses, expenses)
+  
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
@@ -90,7 +77,7 @@ export const Graphics = ({type} : graphsProp) => {
     datasets: [
       {
         label: "",
-        data: totalExpenses,
+        data: [totalExpenses[0]],
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -102,7 +89,7 @@ export const Graphics = ({type} : graphsProp) => {
     datasets: [
       {
         label: "",
-        data: totalExcess,
+        data: [totalExcess[0]],
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -139,8 +126,6 @@ export const Graphics = ({type} : graphsProp) => {
           options={options}
           data={dataTotal}
           setTableContent={setTableContent}
-          totalDataIncomes = {totalIncomes}
-          totalDataExpenses = {totalExpenses}
         />
       </div>
       <div className="row mt-5">

@@ -1,6 +1,7 @@
 import { Graphics } from '@/src-client/components/Graphics'
 import NavBar from '@/src-client/components/NavBar'
 import { getCompany } from '@/src-client/utilities/getCompany'
+import { totalGenerate } from '@/src-client/utilities/totalGenerate'
 import verifyUserCompany from '@/src-client/utilities/verifyCompany'
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
@@ -21,15 +22,15 @@ const Company = () => {
     if(companyData.name.length === 0){
       if(company === 'loadingCompany') verification()
       if(company !== 'loadingCompany' && company !== 'Not found' ) getCompany(company)
-     
     }
+    
     
     useEffect(() => {
       
     }, [companyData])
     
   return (
-    <>
+    <div className='background-general'>
     <NavBar page='Company'/>
     {company === 'loadingCompany' && companyData.name === ''&& <span className="loader"></span>}
     {company === 'Not found' && <h1>Not found</h1>}
@@ -37,12 +38,11 @@ const Company = () => {
     <>
       <h1>{`Perteneces a ${companyData.name}`}</h1>
       <div>
-        <Graphics type="company" />
-        <button onClick={() => getCompany(company)}> Apretame</button>
+        <Graphics type="company" incomes={companyData.incomes} expenses={companyData.expenses} />
        </div>
     </>
     }
-    </>
+    </div>
   )
 }
 

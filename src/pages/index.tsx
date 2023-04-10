@@ -16,7 +16,7 @@ export default function Home() {
       <main>
         <NavBar page="home" />
         <div>
-          <Graphics />
+          {/* <Graphics type="personal" income/> */}
         </div>
       </main>
     </>
