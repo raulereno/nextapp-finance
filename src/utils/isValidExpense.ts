@@ -1,17 +1,19 @@
+import { ExpenseType } from "@/models/expense.model";
+import { IncomeType } from "@/models/income.model";
 import { FormType } from "@/src-client/components/Modals/FormAddRegister";
-import { TotalRegisters } from "@/types/TotalRegister.type";
 
 export const isValidExpense = (
-  totalIncomes: TotalRegisters[],
-  totalExpenses: TotalRegisters[],
+  totalIncomes: any[],
+  totalExpenses: any[],
   form: FormType
 ) => {
   //
+  console.log(totalIncomes, totalExpenses)
   const index = form.type === "negocio" ? 0 : 1;
 
-  const total = totalExpenses[index].total + form.value;
+  const total = totalExpenses[index].value + form.value;
 
-  if (total > totalIncomes[index].total) {
+  if (totalExpenses[index] > totalIncomes[index]) {
     return "Tus egresos van a superar a tus ingresos";
   }
   return false;

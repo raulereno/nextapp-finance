@@ -8,6 +8,8 @@ import { Income } from "./Income";
 import { TableComponent } from "../Tables/TableComponent";
 import { calculateExcess, calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
+import { IncomeType } from "@/models/income.model";
+import { ExpenseType } from "@/models/expense.model";
 
 interface ContentTable {
   type: string;
@@ -54,19 +56,18 @@ export const Graphics = ({type} : graphsProp) => {
   } else {
 
   }
-  let totalIncomes;
-  let totalExpenses;
-  let totalExcess;
+  let totalIncomes = []
+  let totalExpenses = []
+  let totalExcess = [];
   if(expenses && incomes){
-    totalExcess = calculateExcess(
-    incomes.map((ele: TotalRegisters) => ele.total),
-    expenses.map((ele: TotalRegisters) => ele.total)
-    );
-
-    totalIncomes = incomes.reduce((acc : number, ele : any) => acc + ele.value, 0)
-    console.log(totalIncomes)
+    totalIncomes[0] = incomes.reduce((acc : number, ele : any) => {if(ele.type[0] === 'negocio'){ return acc + ele.value} else {return acc}}, 0)
+    totalIncomes[1] = incomes.reduce((acc : number, ele : any) => {if(ele.type[0] === 'personal'){ return acc + ele.value} else {return acc}}, 0)
+    totalExpenses[0] = expenses.reduce((acc : number, ele : any) => {if(ele.type && ele.type[0] === 'negocio'){ return acc + ele.value} else {return acc}}, 0)
+    totalExpenses[1] = expenses.reduce((acc : number, ele : any) => {if(ele.type && ele.type[0] === 'personal'){ return acc + ele.value} else {return acc}}, 0)
+    totalExcess[0]= totalIncomes[0] - totalExpenses[0]
+    totalExcess[1]= totalIncomes[1] - totalExpenses[1]
   }
-
+  console.log(totalExpenses, expenses)
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
@@ -77,7 +78,7 @@ export const Graphics = ({type} : graphsProp) => {
     datasets: [
       {
         label: "",
-        data: [totalIncomes],
+        data: [totalIncomes[0]],
         backgroundColor: ["rgb(243,212,6)"],
         hoverOffset: 4,
       },
@@ -89,7 +90,7 @@ export const Graphics = ({type} : graphsProp) => {
     datasets: [
       {
         label: "",
-        data: expenses?.map((ele: TotalRegisters) => ele.total),
+        data: totalExpenses,
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -124,16 +125,22 @@ export const Graphics = ({type} : graphsProp) => {
           options={options}
           data={dataIncomes}
           setTableContent={setTableContent}
+          totalDataIncomes = {totalIncomes}
+          totalDataExpenses = {totalExpenses}
         />
         <Expense
           options={options}
           data={dataExpenses}
           setTableContent={setTableContent}
+          totalDataIncomes = {totalIncomes}
+          totalDataExpenses = {totalExpenses}
         />
         <Excess
           options={options}
           data={dataTotal}
           setTableContent={setTableContent}
+          totalDataIncomes = {totalIncomes}
+          totalDataExpenses = {totalExpenses}
         />
       </div>
       <div className="row mt-5">

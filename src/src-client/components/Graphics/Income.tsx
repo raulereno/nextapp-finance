@@ -5,7 +5,7 @@ import { ModalAddRegister } from "../Modals/ModalAddRegister";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-export function Income({ options, data, setTableContent }: any) {
+export function Income({ options, data, setTableContent, totalDataIncomes, totalDataExpenses }: any) {
   console.log(data)
   const propsModal = {
     title: "Agregar ingresos",
@@ -39,7 +39,7 @@ export function Income({ options, data, setTableContent }: any) {
           id="income_canva"
           data={data}
         />}
-      <ModalAddRegister props={propsModal} />
+      <ModalAddRegister props={propsModal} dataIncomes={totalDataIncomes} dataExpenses={totalDataExpenses} />
     </div>
   );
 }
