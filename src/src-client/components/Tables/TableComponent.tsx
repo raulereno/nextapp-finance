@@ -32,10 +32,80 @@ export const TableComponent = ({ content, filters }: any) => {
     });
   };
 
+  const searchTable = () => {
+    // Obtener el valor del input de búsqueda
+    const input = document.querySelector<HTMLInputElement>('#searchInput');
+    if (!input) return;
+    const filter = input.value.toUpperCase();
+
+    // Obtener la tabla y las filas de la tabla
+    const table = document.querySelector(".table");
+    if (!table) return;
+    const trs = table.getElementsByTagName("tr");
+
+    // Recorrer todas las filas y ocultar las que no cumplan con la búsqueda, excepto el encabezado
+    for (let i = 0; i < trs.length; i++) {
+      const tds = trs[i].getElementsByTagName("td");
+      let visible = false;
+      if (filter === '') {
+        if (trs[i].classList.contains('thead')) {
+          visible = true;
+        }
+      } else {
+        if (!trs[i].classList.contains('thead')) {
+          for (let j = 0; j < tds.length; j++) {
+            const td = tds[j];
+            if (td) {
+              const textValue = td.textContent || td.innerText;
+              if (textValue.toUpperCase().indexOf(filter) > -1) {
+                visible = true;
+              }
+            }
+          }
+        }
+      }
+      if (visible) {
+        (trs[i] as HTMLElement).style.display = "";
+      } else {
+        (trs[i] as HTMLElement).style.display = "none";
+      }
+    }
+  };
+
+  const capitalize = (string: String) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+
+
   return (
     <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
-      <Table>
+      <div className="row">
+        <div className="col-lg-12">
+
+          <form>
+
+            <div>
+
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar"
+                onKeyUp={searchTable}
+                id="searchInput"
+              >
+              </input>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+
+      <Table className="table table-hover table-active mt-3">
         <thead className="text-white">
           <tr>
             <th>Tipo</th>
@@ -61,14 +131,14 @@ export const TableComponent = ({ content, filters }: any) => {
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
                   <td>
-                    <ModalEdit  props={{
-                        type: ele.type[0],
-                        category: ele.category,
-                        description: ele.description,
-                        value: ele.value,
-                        id: ele._id!,
-                        table: filters.type,
-                      }}/>
+                    <ModalEdit props={{
+                      type: ele.type[0],
+                      category: ele.category,
+                      description: ele.description,
+                      value: ele.value,
+                      id: ele._id!,
+                      table: filters.type,
+                    }} />
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
@@ -87,6 +157,3 @@ export const TableComponent = ({ content, filters }: any) => {
   );
 };
 
-const capitalize = (string: String) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
