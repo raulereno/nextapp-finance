@@ -4,14 +4,19 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import IncomesReducer from "./slice/IncomeSlice";
 import ExpensesReducer from "./slice/ExpenseSlice";
+import CompanyReducer from "./slice/CompanySlice";
+import PersonalReducer from "./slice/PersonalSlice";
+
 const persistConfig = {
-  key: "store",
+  key: "stossdsre",
   storage,
 };
 
 const myReducers = combineReducers({
   IncomesReducer,
   ExpensesReducer,
+  CompanyReducer,
+  PersonalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, myReducers);

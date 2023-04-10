@@ -15,20 +15,22 @@ function NavBar({ page }: Ipage) {
   return (
     <div className="navBar-Container">
       <nav>
-        <ul>
+        <ul className="d-flex flex-column ">
           <li>
             <Link href={"/"}>
               <Image src={Logo} alt="logo" width={150} height={80} />
             </Link>
           </li>
-          <LogButton />
+          <li></li>
           <li>
-            <Link href="/account">Cuenta</Link>
+            <Link href="/">Personales</Link>
           </li>
           <li>
-            <Link href="/personal">Personales</Link>
+            <Link href="/company">Compañias</Link>
           </li>
-          <li>Compañias</li>
+          <li style={{ position: "absolute", bottom: "0" }}>
+            <LogButton />
+          </li>
         </ul>
       </nav>
     </div>

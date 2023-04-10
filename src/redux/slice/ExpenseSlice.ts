@@ -3,9 +3,9 @@ import { IncomeType } from "./../../models/income.model";
 import { createSlice } from "@reduxjs/toolkit";
 import { calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
+import verifyUserCompany from "@/src-client/utilities/verifyCompany";
 
-const url =
-  "http://localhost:3000/api/expense?companyId=64257ccb28f7bffc594de664";
+const url = "http://localhost:3000/api/expense?Id=";
 interface Expenses {
   expenses: ExpenseType[];
   totalExpenses: Array<TotalRegisters>;
@@ -22,11 +22,16 @@ const expensesSlice = createSlice({
   reducers: {
     getAllExpenses: (state, action) => {
       state.expenses = action.payload;
-      state.totalExpenses = calculateTotal(action.payload);
+      // state.totalExpenses = calculateTotal(action.payload);
     },
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);
-      state.totalExpenses = calculateTotal(state.expenses);
+      // state.totalExpenses = calculateTotal(state.expenses);
+      console.log(action.payload);
+      const oldState = state.expenses;
+      oldState.push(action.payload);
+      // state.totalIncomes = calculateTotal(oldState);
+      state.expenses = oldState;
     },
     updateExpense: (state, action) => {
       let find = state.expenses.map((elem) => {
@@ -37,12 +42,12 @@ const expensesSlice = createSlice({
         return elem;
       });
 
-      state.totalExpenses = calculateTotal(find);
+      // state.totalExpenses = calculateTotal(find);
       state.expenses = find;
     },
     deleteExpenses: (state, action) => {
       const filter = state.expenses.filter((ele) => ele._id !== action.payload);
-      state.totalExpenses = calculateTotal(filter);
+      // state.totalExpenses = calculateTotal(filter);
       state.expenses = filter;
     },
   },
@@ -58,14 +63,22 @@ export const getExpenses = () => async (dispatch: Function) => {
 };
 
 export const addExpense =
-  (expense: ExpenseType) => async (dispatch: Function) => {
-    const { payload } = await fetch(url, {
+  (expense: ExpenseType, id: string) => async (dispatch: Function) => {
+    let urlId;
+    if (expense.type === "negocio") {
+      const company = await verifyUserCompany(id);
+      urlId = company;
+    } else {
+      urlId = id;
+    }
+    const { payload } = await fetch(`${url}${urlId}`, {
       method: "POST",
       body: JSON.stringify(expense),
     })
       .then((resp) => resp.json())
       .catch((err) => console.log(err));
 
+    console.log(payload);
     dispatch(expensesSlice.actions.addExpenses(payload));
   };
 

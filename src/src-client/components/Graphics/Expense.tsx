@@ -5,7 +5,19 @@ import { ModalAddRegister } from "../Modals/ModalAddRegister";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-export function Expense({ options, data, setTableContent }: any) {
+interface ExpenseProps {
+  type?: string;
+  options: object;
+  data: any;
+  setTableContent: Function;
+}
+
+export function Expense({
+  type,
+  options,
+  data,
+  setTableContent,
+}: ExpenseProps) {
   const propsModal = {
     title: "Agregar egreso",
     buttonText: "Agregar egreso",
@@ -17,7 +29,7 @@ export function Expense({ options, data, setTableContent }: any) {
     onClick: function (event: any, elements: any) {
       const slice = {
         type: "gastos",
-        slice: elements[0]?.index === 0 ? "negocio" : "personales",
+        slice: "personales",
       };
       setTableContent(slice);
     },
@@ -40,7 +52,7 @@ export function Expense({ options, data, setTableContent }: any) {
       ) : (
         <h2>No hay registros</h2>
       )}
-      <ModalAddRegister props={propsModal} />
+      <ModalAddRegister type={type} props={propsModal} />
     </div>
   );
 }

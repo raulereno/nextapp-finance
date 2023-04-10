@@ -1,18 +1,10 @@
 import { Graphics } from "@/src-client/components/Graphics";
 import NavBar from "@/src-client/components/NavBar";
-import { useSession } from "next-auth/react";
 
 import Head from "next/head";
-import { Router, useRouter } from "next/router";
+import PersonalFinances from "./personal";
 
 export default function Home() {
-  const { data: session, status } = useSession({ required: true });
-  const router = useRouter();
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <Head>
@@ -22,10 +14,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <NavBar page="home" />
-
         <div className="container-graphics">
-          <Graphics />
+          <PersonalFinances />
         </div>
       </main>
     </>

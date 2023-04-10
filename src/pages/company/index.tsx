@@ -1,33 +1,48 @@
-import NavBar from '@/src-client/components/NavBar'
-import verifyUserCompany from '@/src-client/utilities/verifyCompany'
-import { useSession } from 'next-auth/react'
-import React, { useEffect, useState } from 'react'
+import { Graphics } from "@/src-client/components/Graphics";
+import NavBar from "@/src-client/components/NavBar";
+import { getCompany } from "@/src-client/utilities/getCompany";
+import verifyUserCompany from "@/src-client/utilities/verifyCompany";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Company = () => {
-    const {data: session} = useSession()
-    const [company, setCompany] = useState('loadingCompany')
-    const email = session?.user?.email
-    
-    const verification = async () => {
-      if(email){
-        const res = await verifyUserCompany(email)
-        if(company !== res.data.msg) setCompany(res.data.msg)
-      }
+  const { data: session } = useSession();
+  const [company, setCompany] = useState("loadingCompany");
+  const companyData = useSelector((state: any) => state.CompanyReducer);
+  const email = session?.user?.email;
+
+  const verification = async () => {
+    if (email) {
+      const res = await verifyUserCompany(email);
+      if (company !== res.data.msg) setCompany(res.data.msg);
     }
-    if(company === 'loadingCompany') verification()
-    // if(company !== 'loadingCompany' && company !== 'Not found') ACA VOY A PEDIR LOS INCOMES Y EXPENSES DE LA COMPANIA
-    useEffect(() => {
-      
-    }, [company])
-    
+  };
+  if (companyData.name.length === 0) {
+    if (company === "loadingCompany") verification();
+    if (company !== "loadingCompany" && company !== "Not found")
+      getCompany(company);
+  }
+
+  useEffect(() => {}, [companyData]);
+
   return (
     <>
-    <NavBar page='Company'/>
-    {company === 'loadingCompany' && <span className="loader"></span>}
-    {company === 'Not found' && <h1>Not found</h1>}
-    {company !== 'loadingCompany' && company !== 'Not found' && <h1>{`Perteneces a ${company}`}</h1>}
+      {company === "loadingCompany" && companyData.name === "" && (
+        <span className="loader"></span>
+      )}
+      {company === "Not found" && <h1>Not found</h1>}
+      {companyData.name !== "" && (
+        <>
+          <h1>{`Perteneces a ${companyData.name}`}</h1>
+          <div>
+            {/* <Graphics type="company" /> */}
+            <button onClick={() => getCompany(company)}> Apretame</button>
+          </div>
+        </>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default Company
+export default Company;

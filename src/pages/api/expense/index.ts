@@ -2,6 +2,7 @@ import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src-backend/db";
+import { User } from "@/models/user.model";
 
 dbConnect();
 
@@ -15,18 +16,30 @@ export default async function income(
   let expenses;
   switch (method) {
     case "GET":
-      company = await Company.findById({ _id: query.companyId })
-        .populate("expenses")
-        .lean();
+      if (body.type === "negocio") {
+        company = await Company.findById({ _id: query.Id })
+          .populate("expenses")
+          .lean();
 
-      res.status(200).json({ message: "get", payload: company.expenses });
+        res.status(200).json({ message: "get", payload: company.expenses });
+      } else {
+      }
       break;
     case "POST":
-      company = await Company.findById({ _id: query.companyId });
+      console.log(JSON.parse(body));
+      let result;
+      if (JSON.parse(body).type === "negocio") {
+        company = await Company.findById({ _id: query.Id });
+        result = await Expense.create(JSON.parse(body));
+        await company.expenses.push(result);
+        await company.save();
+      } else {
+        let user = await User.findOne({ email: query.Id });
+        result = await Expense.create(JSON.parse(body));
 
-      const result = await Expense.create(JSON.parse(body));
-      await company.expenses.push(result);
-      await company.save();
+        await user.expenses.push(result);
+        await user.save();
+      }
       res.status(200).json({ message: "post", payload: result });
       break;
 
