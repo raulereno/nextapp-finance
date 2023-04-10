@@ -20,8 +20,8 @@ const personalSlice = createSlice({
 
   reducers: {
     getUser: (state, action) => {
-      const expenses = action.payload.expenses;
-      const incomes = action.payload.incomes;
+      const expenses = action.payload?.expenses;
+      const incomes = action.payload?.incomes;
 
       state.user = action.payload;
       state.expenses = expenses;

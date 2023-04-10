@@ -23,10 +23,14 @@ function NavBar({ page }: Ipage) {
           </li>
           <li></li>
           <li>
-            <Link href="/">Personales</Link>
+            <Link className="btn btn-outline-info" href="/">
+              Personales
+            </Link>
           </li>
           <li>
-            <Link href="/company">Compañias</Link>
+            <Link className="btn btn-outline-info" href="/company">
+              Compañias
+            </Link>
           </li>
           <li style={{ position: "absolute", bottom: "0" }}>
             <LogButton />
