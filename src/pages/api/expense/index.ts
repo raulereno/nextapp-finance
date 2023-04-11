@@ -2,6 +2,7 @@ import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src-backend/db";
+import User from "@/models/user.model";
 
 dbConnect();
 
@@ -15,19 +16,32 @@ export default async function income(
   let expenses;
   switch (method) {
     case "GET":
-      company = await Company.findById({ _id: query.companyId })
+      if(body.type === 'negocio'){
+        company = await Company.findById({ _id: query.Id })
         .populate("expenses")
         .lean();
 
-      res.status(200).json({ message: "get", payload: company.expenses });
+      res.status(200).json({ message: "get", payload: company.expenses })
+    } else {
+
+    }
       break;
     case "POST":
-      company = await Company.findById({ _id: query.companyId });
-
-      const result = await Expense.create(JSON.parse(body));
+      let result;
+      console.log(body)
+      if(body.type === 'negocio'){
+      company = await Company.findById({ _id: query.Id });
+      result = await Expense.create(body);
       await company.expenses.push(result);
       await company.save();
-      res.status(200).json({ message: "post", payload: result });
+    } else {
+      // const account = await User.findOne({ email: query.Id })
+      // result = await Expense.create(JSON.parse(body))
+      // await account.expenses.push(result);
+      // await account.save();
+      console.log('estoy en else')
+    }
+    res.status(200).json({ message: "post", payload: result });
       break;
 
     default:

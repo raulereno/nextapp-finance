@@ -2,6 +2,7 @@ import { Company } from "@/models/company.model";
 import { Income } from "@/models/income.model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src-backend/db";
+import User from "@/models/user.model";
 
 dbConnect();
 
@@ -12,21 +13,34 @@ export default async function income(
   const { method, body, query } = req;
 
   let company;
-
+  const name = query.Id?.includes('@')
+  
   switch (method) {
     case "GET":
-      company = await Company.findById({ _id: query.companyId })
+      if(!name){
+        company = await Company.findById({ _id: query.Id })
         .populate("incomes")
         .lean();
 
       res.status(200).json({ message: "get", payload: company.incomes });
+    } else {
+      const account = await User.findOne({email: query.Id})
+      .populate("incomes")
+      .lean();
+
+      res.status(200).json({ message: "get", payload:account.incomes });
+    }
       break;
     case "POST":
-      company = await Company.findById({ _id: query.companyId });
-      const result = await Income.create(JSON.parse(body));
-
-      await company.incomes.push(result);
-      await company.save();
+      let result;
+      if(body.type === 'negocio'){
+        company = await Company.findById({ _id: query.Id });
+        result = await Income.create(body);
+  
+        await company.incomes.push(result);
+        await company.save();
+      } else {
+      }
       res.status(200).json({ message: "post", payload: result });
       break;
 

@@ -1,11 +1,14 @@
 import { addExpense } from "@/redux/slice/ExpenseSlice";
 import { addIncome } from "@/redux/slice/IncomeSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
 import { isValidExpense } from "@/utils/isValidExpense";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
+import { addCompanyExpense, addCompanyIncome } from "@/redux/slice/CompanySlice";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 
 interface PropsModal {
   props: {
@@ -22,53 +25,74 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAddRegister({ props }: PropsModal) {
+export function ModalAddRegister({ props , dataIncomes, dataExpenses } : any) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
+  const {data : session} = useSession()
+  let totalIncomes : any[] = [];
+  let totalExpenses : any[] = [];
+  if(form.type === 'negocio'){
+    totalIncomes = dataIncomes;
+    totalExpenses = dataExpenses;
+  }
 
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
 
   const dispatch: Function = useDispatch();
+  const id = session?.user?.email
 
-  const sendForm = () => {
-    if (props.type === "expense") {
-      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+  useEffect(() => {}, [totalExpenses, totalIncomes])
 
-      if (validExpense) {
-        Swal.fire({
-          title: validExpense,
-          text: "Estas seguro?",
-          showDenyButton: true,
-          confirmButtonText: "Aceptar",
-          denyButtonText: `Cancelar`,
-          reverseButtons: true,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            dispatch(addExpense(form));
+
+  const sendForm = async () => {
+    if(id && id !== null && id !== undefined){
+
+      if (props.type === "expense") {
+        const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+  
+        if (validExpense) {
+          console.log('estoy')
+          Swal.fire({
+            title: validExpense,
+            text: "Estas seguro?",
+            showDenyButton: true,
+            confirmButtonText: "Aceptar",
+            denyButtonText: `Cancelar`,
+            reverseButtons: true,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              if(form.type === 'negocio'){
+                dispatch(addCompanyExpense(form, id));
+                setForm(initialStateForm);
+                handleClose();
+              } else {
+                //aca va el personal
+              }
+            } else if (result.isDenied) {
+              setForm(initialStateForm);
+              handleClose();
+            }
+          });
+        } else {
+          if(form.type === 'negocio'){
+            dispatch(addCompanyExpense(form, id));
             setForm(initialStateForm);
             handleClose();
-          } else if (result.isDenied) {
-            setForm(initialStateForm);
-            handleClose();
+          } else {
+            //aca va el personal
           }
-        });
+        }
       } else {
-        dispatch(addExpense(form));
-        setForm(initialStateForm);
-        handleClose();
+        if(form.type === 'negocio'){
+          dispatch(addCompanyIncome(form, id));
+          setForm(initialStateForm);
+          handleClose();
+        } else {
+          //aca va el personal
+        }
       }
-    } else {
-      dispatch(addIncome(form));
-      setForm(initialStateForm);
-      handleClose();
     }
   };
 

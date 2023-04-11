@@ -17,7 +17,7 @@ export const TableComponent = ({ content, filters }: any) => {
   const [tableContent, setTableContent] = useState([]);
 
   useEffect(() => setTableContent(content), [content]);
-
+  console.log(tableContent)
   const deleteRegister = (id: String) => {
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",

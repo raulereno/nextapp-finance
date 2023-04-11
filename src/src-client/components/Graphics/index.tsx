@@ -6,8 +6,11 @@ import { Excess } from "./Excess";
 import { Expense } from "./Expense";
 import { Income } from "./Income";
 import { TableComponent } from "../Tables/TableComponent";
-import { calculateExcess } from "@/utils/calculateTotal";
+import { calculateExcess, calculateTotal } from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
+import { IncomeType } from "@/models/income.model";
+import { ExpenseType } from "@/models/expense.model";
+import { totalGenerate } from "@/src-client/utilities/totalGenerate";
 
 interface ContentTable {
   type: string;
@@ -38,37 +41,32 @@ const options = {
   },
 };
 
-export const Graphics = () => {
-  const dispatch: Function = useDispatch();
-  const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
-  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
+interface graphsProp {
+  type: string,
+  incomes: number[],
+  expenses: number[],
+}
 
-  let totalExcess;
-  if(totalExpenses && totalIncomes){
-    totalExcess = calculateExcess(
-    totalIncomes.map((ele: TotalRegisters) => ele.total),
-    totalExpenses.map((ele: TotalRegisters) => ele.total)
-    );
-  }
-
+export const Graphics = ({type, incomes, expenses} : graphsProp) => {
+    
+    const totalIncomes = totalGenerate(incomes)
+    const totalExpenses = totalGenerate(expenses)
+    let totalExcess = [];
+    totalExcess[0]= totalIncomes[0] - totalExpenses[0]
+    totalExcess[1]= totalIncomes[1] - totalExpenses[1]
+  
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
   });
 
   const dataIncomes = {
-    labels: ["Negocio", "Personal"],
+    labels: ["Negocio"],
     datasets: [
       {
         label: "",
-        data: totalIncomes?.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: [totalIncomes[0]],
+        backgroundColor: ["rgb(243,212,6)"],
         hoverOffset: 4,
       },
     ],
@@ -79,7 +77,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalExpenses?.map((ele: TotalRegisters) => ele.total),
+        data: [totalExpenses[0]],
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -91,7 +89,7 @@ export const Graphics = () => {
     datasets: [
       {
         label: "",
-        data: totalExcess,
+        data: [totalExcess[0]],
         backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
         hoverOffset: 4,
       },
@@ -99,14 +97,14 @@ export const Graphics = () => {
   };
 
   useEffect(() => {
-    dispatch(getIncomes());
-    dispatch(getExpenses());
-  }, [dispatch]);
+    // dispatch(getIncomes());
+    // dispatch(getExpenses());
+  }, [incomes, expenses]);
 
   return (
     <div className="container text-center mt-5">
-      {!totalIncomes || totalIncomes.length === 0 && !totalExpenses || totalExpenses.length === 0 && <span className="loader" />}
-      {totalIncomes && totalExpenses &&
+      {!incomes || incomes.length === 0  && <span className="loader" />}
+      {incomes && expenses &&
         
         <>
         <div className="row d-flex justify-content-between">
@@ -114,11 +112,15 @@ export const Graphics = () => {
           options={options}
           data={dataIncomes}
           setTableContent={setTableContent}
+          totalDataIncomes = {totalIncomes}
+          totalDataExpenses = {totalExpenses}
         />
         <Expense
           options={options}
           data={dataExpenses}
           setTableContent={setTableContent}
+          totalDataIncomes = {totalIncomes}
+          totalDataExpenses = {totalExpenses}
         />
         <Excess
           options={options}
