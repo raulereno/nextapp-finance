@@ -7,7 +7,7 @@ import IncomesReducer from "./slice/IncomeSlice";
 import ExpensesReducer from "./slice/ExpenseSlice";
 import CompanyReducer from "./slice/CompanySlice";
 const persistConfig = {
-  key: "stossdsre",
+  key: "stosssdssre",
   storage,
 };
 

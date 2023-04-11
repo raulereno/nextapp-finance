@@ -29,6 +29,7 @@ const companySlice = createSlice({
     initialState,
     reducers: {
         getTransactions: (state, action) => {
+            console.log(action)
             state.expenses = action.payload.expenses;
             state.incomes = action.payload.incomes;
             state.users = action.payload.users;
@@ -50,7 +51,8 @@ export const createCompany = (company: formCompany) => async (dispatch: Function
     console.log(company)
     const newCompany = await axios.post(url, company)
     const companyData = await getCompany(newCompany.data._id, dispatch)
-    dispatch(companySlice.actions.getTransactions(companyData))
+    console.log(companyData)
+    dispatch(companySlice.actions.getTransactions(companyData?.data.payload))
 }
 
 export const getTransactions = (company: CompanType) => (dispatch: Function) => {

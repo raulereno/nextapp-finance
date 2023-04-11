@@ -18,13 +18,10 @@ const Company = () => {
     const verification = async () => {
       if(email){
         const res = await verifyUserCompany(email)
-        console.log(res)
-        if(company !== res.msg) setCompany(res.msg)
+        if(company !== res.msg) setCompany(res)
       }
     }
-    
-    console.log(companyData)
-    if(companyData.name.length === 0){
+    if(companyData && companyData.name && companyData.name.length === 0){
       if(company === 'loadingCompany') verification()
       if(company !== 'loadingCompany' && company !== 'Not found' ) getCompany(company, dispatch)
     }
@@ -32,7 +29,7 @@ const Company = () => {
     
     useEffect(() => {
       
-    }, [companyData])
+    }, [company])
     
   return (
     <div className='background-general'>
