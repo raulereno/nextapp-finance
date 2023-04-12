@@ -15,7 +15,7 @@ function NavBar({ page }: Ipage) {
   return (
     <div className="navBar-Container">
       <nav>
-        <ul className="d-flex flex-column ">
+        <ul className="d-flex flex-column">
           <li>
             <Link href={"/"}>
               <Image src={Logo} alt="logo" width={150} height={80} />
@@ -23,12 +23,12 @@ function NavBar({ page }: Ipage) {
           </li>
           <li></li>
           <li>
-            <Link className="btn btn-outline-info" href="/">
+            <Link className="btn btnLogin" href="/">
               Personales
             </Link>
           </li>
           <li>
-            <Link className="btn btn-outline-info" href="/company">
+            <Link className="btn btnLogin" href="/company">
               Compañias
             </Link>
           </li>
