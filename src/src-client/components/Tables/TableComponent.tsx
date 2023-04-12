@@ -8,15 +8,12 @@ import Swal from "sweetalert2";
 import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
-import { useEffect, useState } from "react";
+import capitalize from "@/utils/capitalize";
 
 export const TableComponent = ({ content, filters }: any) => {
+  console.log(filters);
+
   const dispatch: Function = useDispatch();
-  let total = 0;
-
-  const [tableContent, setTableContent] = useState([]);
-
-  useEffect(() => setTableContent(content), [content]);
 
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -38,14 +35,69 @@ export const TableComponent = ({ content, filters }: any) => {
     });
   };
 
-  if (!filters.type) {
-    return <></>;
+  const searchTable = () => {
+    // Obtener el valor del input de búsqueda
+    const input = document.querySelector<HTMLInputElement>("#searchInput");
+    if (!input) return;
+    const filter = input.value.toUpperCase();
+
+    // Obtener la tabla y las filas de la tabla
+    const table = document.querySelector(".table");
+    if (!table) return;
+    const trs = table.getElementsByTagName("tr");
+
+    // Recorrer todas las filas y ocultar las que no cumplan con la búsqueda, excepto el encabezado
+    for (let i = 0; i < trs.length; i++) {
+      const tds = trs[i].getElementsByTagName("td");
+      let visible = false;
+      if (filter === "") {
+        if (trs[i].classList.contains("thead")) {
+          visible = true;
+        }
+      } else {
+        if (!trs[i].classList.contains("thead")) {
+          for (let j = 0; j < tds.length; j++) {
+            const td = tds[j];
+            if (td) {
+              const textValue = td.textContent || td.innerText;
+              if (textValue.toUpperCase().indexOf(filter) > -1) {
+                visible = true;
+              }
+            }
+          }
+        }
+      }
+      if (visible) {
+        (trs[i] as HTMLElement).style.display = "";
+      } else {
+        (trs[i] as HTMLElement).style.display = "none";
+      }
+    }
+  };
+  if (!filters.slice && !filters.type) {
+    return;
   }
 
   return (
     <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
-      <Table>
+      <div className="row">
+        <div className="col-lg-12">
+          <form>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar"
+                onKeyUp={searchTable}
+                id="searchInput"
+              ></input>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <Table className="table table-hover table-active mt-3">
         <thead className="text-white">
           <tr>
             <th>Tipo</th>
@@ -56,18 +108,17 @@ export const TableComponent = ({ content, filters }: any) => {
           </tr>
         </thead>
         <tbody className="text-white">
-          {tableContent!
-            ?.filter((ele: IncomeType | ExpenseType) => {
+          {content
+            .filter((ele: IncomeType | ExpenseType) => {
               if (ele.type[0] === filters.slice) {
                 return ele;
               }
             })
             .map((ele: IncomeType | ExpenseType) => {
-              total += ele.value;
               return (
                 //TODO:Aqui no deja agregar el id como key
                 <tr key={Math.random()}>
-                  <td>{capitalize(ele.type[0])}</td>
+                  <td>{capitalize(filters.type)}</td>
                   <td>{capitalize(ele.category)}</td>
                   <td>${ele.value}</td>
                   <td>{capitalize(ele.description)}</td>
@@ -82,7 +133,6 @@ export const TableComponent = ({ content, filters }: any) => {
                         table: filters.type,
                       }}
                     />
-
                     <button
                       onClick={() => {
                         deleteRegister(ele._id!);
@@ -100,19 +150,8 @@ export const TableComponent = ({ content, filters }: any) => {
                 </tr>
               );
             })}
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td style={{ fontSize: "35px" }}>Total: ${total}</td>
-          </tr>
         </tbody>
       </Table>
     </div>
   );
-};
-
-const capitalize = (string: String) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 };

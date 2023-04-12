@@ -1,8 +1,8 @@
 import { Graphics } from "@/src-client/components/Graphics";
 import NavBar from "@/src-client/components/NavBar";
-import { TableComponent } from "@/src-client/components/Tables/TableComponent";
-import { Inter } from "next/font/google";
+
 import Head from "next/head";
+import PersonalFinances from "./personal";
 
 export default function Home() {
   return (
@@ -14,9 +14,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <NavBar page="home" />
-        <div>
-          <Graphics />
+        <div className="container-graphics">
+          <PersonalFinances />
         </div>
       </main>
     </>

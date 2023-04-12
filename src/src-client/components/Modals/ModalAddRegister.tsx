@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
 import { isValidExpense } from "@/utils/isValidExpense";
 import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
+import { getUserFinance } from "@/redux/slice/PersonalSlice";
 
 interface PropsModal {
   props: {
@@ -13,6 +15,7 @@ interface PropsModal {
     buttonText: string;
     type: string;
   };
+  type?: string;
 }
 
 const initialStateForm = {
@@ -22,53 +25,56 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAddRegister({ props }: PropsModal) {
+export function ModalAddRegister({ props, type }: PropsModal) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
-
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
+  const { data: session } = useSession();
+  // const totalIncomes = useSelector(
+  //   (state: any) => state.IncomesReducer.totalIncomes
+  // );
+  // const totalExpenses = useSelector(
+  //   (state: any) => state.ExpensesReducer.totalExpenses
+  // );
 
   const dispatch: Function = useDispatch();
+  const id = session?.user?.email;
 
-  const sendForm = () => {
-    if (props.type === "expense") {
-      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+  const sendForm = async () => {
+    if (id && id !== null && id !== undefined) {
+      if (props.type === "expense") {
+        // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
 
-      if (validExpense) {
-        Swal.fire({
-          title: validExpense,
-          text: "Estas seguro?",
-          showDenyButton: true,
-          confirmButtonText: "Aceptar",
-          denyButtonText: `Cancelar`,
-          reverseButtons: true,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            dispatch(addExpense(form));
-            setForm(initialStateForm);
-            handleClose();
-          } else if (result.isDenied) {
-            setForm(initialStateForm);
-            handleClose();
-          }
-        });
+        // if (validExpense) {
+        //   Swal.fire({
+        //     title: validExpense,
+        //     text: "Estas seguro?",
+        //     showDenyButton: true,
+        //     confirmButtonText: "Aceptar",
+        //     denyButtonText: `Cancelar`,
+        //     reverseButtons: true,
+        //   }).then((result) => {
+        //     /* Read more about isConfirmed, isDenied below */
+        //     if (result.isConfirmed) {
+        //       dispatch(addExpense(form, id));
+        //       setForm(initialStateForm);
+        //       handleClose();
+        //     } else if (result.isDenied) {
+        //       setForm(initialStateForm);
+        //       handleClose();
+        //     }
+        //   });
+        // }
+        await dispatch(addExpense({ ...form, type: type! }, id));
+        setForm(initialStateForm);
+        handleClose();
       } else {
-        dispatch(addExpense(form));
+        await dispatch(addIncome({ ...form, type: type! }, id));
         setForm(initialStateForm);
         handleClose();
       }
-    } else {
-      dispatch(addIncome(form));
-      setForm(initialStateForm);
-      handleClose();
+      await dispatch(getUserFinance(session?.user?.email!));
     }
   };
 
@@ -85,7 +91,7 @@ export function ModalAddRegister({ props }: PropsModal) {
       <Modal className="text-center" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className="d-flex justify-content-center">
-            {props.title}
+            {props.title} {type}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center">

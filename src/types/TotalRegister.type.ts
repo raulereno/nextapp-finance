@@ -1,4 +1,4 @@
 export interface TotalRegisters {
-  type: string;
-  total: number;
+  category: string;
+  total?: number;
 }

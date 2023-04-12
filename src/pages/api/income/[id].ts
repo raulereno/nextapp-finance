@@ -37,24 +37,22 @@ export default async function expenseID(
           }
         );
       } catch (error) {
-        connection.close();
         res.status(400).json({ status: "error", message: error });
       }
-      connection.close();
       res.status(200).json({ status: "sucess", payload: income });
       break;
     case "DELETE":
       try {
         result = await Income.deleteOne({ _id: query.id });
+
+        console.log(result);
+        console.log(query.id);
       } catch (error) {
-        connection.close();
         res.status(400).json({ status: "error", message: error });
       }
-      connection.close();
       res.status(200).json({ message: "sucess", result: result });
       break;
     default:
-      connection.close();
       res.status(400).json({ error: "Invalid Method" });
       break;
   }

@@ -25,7 +25,6 @@ export default async function expenseID(
           new: true,
         }
       );
-      console.log(expense);
 
       res
         .status(200)

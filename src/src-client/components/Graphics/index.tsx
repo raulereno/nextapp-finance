@@ -1,61 +1,60 @@
-import { getExpenses } from "@/redux/slice/ExpenseSlice";
-import { getIncomes } from "@/redux/slice/IncomeSlice";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Excess } from "./Excess";
-import { Expense } from "./Expense";
-import { Income } from "./Income";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { ExpenseType } from "@/models/expense.model";
+import { IncomeType } from "@/models/income.model";
+import colors from "@/utils/colors";
+import { useState } from "react";
 import { TableComponent } from "../Tables/TableComponent";
-import { calculateExcess } from "@/utils/calculateTotal";
-import { TotalRegisters } from "@/types/TotalRegister.type";
+import { Income } from "./Income";
+import { Expense } from "./Expense";
+import {
+  calculateExcess,
+  calculateTotalPerCategory,
+} from "@/utils/calculateTotal";
+import { Excess } from "./Excess";
+import { options } from "@/src-client/utilities/graphicsOptions";
+import capitalize from "@/utils/capitalize";
 
 interface ContentTable {
   type: string;
   slice: string;
 }
 
-const options = {
-  animation: {
-    animateScale: true,
-  },
+interface graphsProp {
+  type?: string;
+  incomes: [IncomeType];
+  expenses: [ExpenseType];
+}
 
-  plugins: {
-    datalabels: {
-      formatter: (value: any, ctx: any) => {
-        let sum = 0;
-        let dataArr = ctx.chart.data.datasets[0].data;
-        dataArr.map((data: any) => {
-          sum += data;
-        });
-        let percentage = ((value * 100) / sum).toFixed(2) + "%";
-        return percentage;
-      },
-      color: "#fff",
-      onClick: () => {
-        console.log("event");
-      },
-    },
-  },
-};
+export const Graphics = ({ type, expenses, incomes }: graphsProp) => {
+  let totalIncomes = calculateTotalPerCategory(incomes);
+  let totalExpenses = calculateTotalPerCategory(expenses);
+  let totalExcess = calculateExcess(totalIncomes, totalExpenses);
+  // const dispatch: Function = useDispatch();
 
-export const Graphics = () => {
-  const dispatch: Function = useDispatch();
-  const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
-  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
+  // let incomes;
+  // let expenses;
 
-  let totalExcess;
-  if(totalExpenses && totalIncomes){
-    totalExcess = calculateExcess(
-    totalIncomes.map((ele: TotalRegisters) => ele.total),
-    totalExpenses.map((ele: TotalRegisters) => ele.total)
-    );
-  }
+  // if (type === "company") {
+  //   incomes = useSelector((state: any) => state.CompanyReducer.incomes);
+  //   expenses = useSelector((state: any) => state.CompanyReducer.expenses);
+  // } else {
+  //   //
+  //   incomes = [];
+  //   expenses = [];
+  // }
+
+  // if (expenses && incomes) {
+  //   totalExcess = calculateExcess(
+  //     incomes.map((ele: TotalRegisters) => ele.total),
+  //     expenses.map((ele: TotalRegisters) => ele.total)
+  //   );
+
+  //   totalIncomes = incomes.reduce(
+  //     (acc: number, ele: any) => acc + ele.value,
+  //     0
+  //   );
+  //   console.log(totalIncomes);
+  // }
 
   const [tableContent, setTableContent] = useState({
     type: "",
@@ -63,77 +62,82 @@ export const Graphics = () => {
   });
 
   const dataIncomes = {
-    labels: ["Negocio", "Personal"],
+    labels: calculateTotalPerCategory(incomes).map((element) =>
+      capitalize(element.category)
+    ),
     datasets: [
       {
         label: "",
-        data: totalIncomes?.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: totalIncomes.map((element) => element.total),
+        backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExpenses = {
-    labels: ["Negocio", "Personales"],
+    labels: calculateTotalPerCategory(expenses).map((element) =>
+      capitalize(element.category)
+    ),
     datasets: [
       {
         label: "",
-        data: totalExpenses?.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: totalExpenses.map((element) => element.total),
+        backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
 
-  const dataTotal = {
-    labels: ["Negocio", "Personales"],
+  const dataExcess = {
+    labels: totalExcess.map((elem) => capitalize(elem.category)),
     datasets: [
       {
         label: "",
-        data: totalExcess,
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: totalExcess.map((elem) => elem.total),
+        backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
 
-  useEffect(() => {
-    dispatch(getIncomes());
-    dispatch(getExpenses());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // dispatch(getIncomes("64257ccb28f7bffc594de664"));
+  //   // dispatch(getExpenses());
+  // }, [dispatch, incomes, expenses]);
 
   return (
     <div className="container text-center mt-5">
-      {!totalIncomes || totalIncomes.length === 0 && !totalExpenses || totalExpenses.length === 0 && <span className="loader" />}
-      {totalIncomes && totalExpenses &&
-        
+      {!incomes && <span className="loader" />}
+      {incomes && expenses && (
         <>
-        <div className="row d-flex justify-content-between">
-        <Income
-          options={options}
-          data={dataIncomes}
-          setTableContent={setTableContent}
-        />
-        <Expense
-          options={options}
-          data={dataExpenses}
-          setTableContent={setTableContent}
-        />
-        <Excess
-          options={options}
-          data={dataTotal}
-          setTableContent={setTableContent}
-        />
-      </div>
-      <div className="row mt-5">
-        <TableComponent
-          content={tableContent.type === "ingresos" ? incomes : expenses}
-          filters={tableContent}
-        />
-      </div>
-      </>
-      }
+          <div className="row d-flex justify-content-between">
+            <Income
+              type={type}
+              options={options}
+              data={dataIncomes}
+              setTableContent={setTableContent}
+            />
+            <Expense
+              type={type}
+              options={options}
+              data={dataExpenses}
+              setTableContent={setTableContent}
+            />
+            <Excess
+              options={options}
+              data={dataExcess}
+              setTableContent={setTableContent}
+            />
+          </div>
+          <div className="row mt-5">
+            <TableComponent
+              content={tableContent.type === "ingresos" ? incomes : expenses}
+              filters={tableContent}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { Company } from "@/models/company.model";
 import { Expense } from "@/models/expense.model";
-import User from "../../../models/user.model";
+import { User } from "../../../models/user.model";
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/src-backend/db";
 

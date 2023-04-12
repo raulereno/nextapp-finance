@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import User from "../../../models/user.model";
+import { User } from "../../../models/user.model";
 import dbConnect from "../../../src-backend/db";
 
 dbConnect();
