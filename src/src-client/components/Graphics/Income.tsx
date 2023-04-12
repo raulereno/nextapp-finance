@@ -11,8 +11,15 @@ interface IncomeProps {
   data: any;
   setTableContent: Function;
 }
-
-export function Income({ type, options, data, setTableContent }: IncomeProps) {
+export function Income({
+  type,
+  options,
+  data,
+  setTableContent,
+  totalDataIncomes,
+  totalDataExpenses,
+}: any) {
+  console.log(data);
   const propsModal = {
     title: "Agregar ingresos",
     buttonText: "Agregar ingresos",
@@ -52,7 +59,12 @@ export function Income({ type, options, data, setTableContent }: IncomeProps) {
       ) : (
         <h2>No hay registros</h2>
       )}
-      <ModalAddRegister type={type} props={propsModal} />
+      <ModalAddRegister
+        type={type}
+        props={propsModal}
+        dataIncomes={totalDataIncomes}
+        dataExpenses={totalDataExpenses}
+      />
     </div>
   );
 }

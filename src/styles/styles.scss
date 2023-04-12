@@ -22,7 +22,9 @@ $theme-colors: (
     flex-grow: 1;
   }
 }
-
+.background-general {
+  background-color: rgb(79, 97, 197);
+}
 .navBar-Container {
   background-color: rgba(39, 27, 128, 0.316);
   width: 18%;
