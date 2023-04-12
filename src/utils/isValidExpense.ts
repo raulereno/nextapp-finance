@@ -10,7 +10,16 @@ export const isValidExpense = (
   //
   console.log(totalIncomes, totalExpenses)
   const index = form.type === "negocio" ? 0 : 1;
+  
+  if(index === 0){
+    const totalExp = totalExpenses.reduce((acc, ele) => acc + ele, 0)
+    const totalInc = totalIncomes.reduce((acc, ele) => acc + ele, 0);
+    if (totalExp > totalInc) {
+      return "Tus egresos van a superar a tus ingresos";
+    }
+    return false;
 
+  }
   const total = totalExpenses[index].value + form.value;
 
   if (totalExpenses[index] > totalIncomes[index]) {

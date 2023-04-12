@@ -49,36 +49,34 @@ interface graphsProp {
 
 export const Graphics = ({type, incomes, expenses} : graphsProp) => {
     
-    const totalIncomes = totalGenerate(incomes)
-    const totalExpenses = totalGenerate(expenses)
-    let totalExcess = [];
-    totalExcess[0]= totalIncomes[0] - totalExpenses[0]
-    totalExcess[1]= totalIncomes[1] - totalExpenses[1]
-  
+    const {IncomesResult, ExpensesResult} = totalGenerate(incomes, expenses)
+    console.log(IncomesResult)
+    const totalExcess = IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) - ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0)
+    const ExcessColor = totalExcess < 0 ? '#FF0000' : "#00FF00" 
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
   });
 
   const dataIncomes = {
-    labels: ["Negocio"],
+    labels: IncomesResult.categories,
     datasets: [
       {
         label: "",
-        data: [totalIncomes[0]],
-        backgroundColor: ["rgb(243,212,6)"],
+        data: IncomesResult.totals,
+        backgroundColor: IncomesResult.colors,
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExpenses = {
-    labels: ["Negocio", "Personales"],
+    labels: ExpensesResult.categories,
     datasets: [
       {
         label: "",
-        data: [totalExpenses[0]],
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: ExpensesResult.totals ,
+        backgroundColor: ExpensesResult.colors,
         hoverOffset: 4,
       },
     ],
@@ -89,8 +87,8 @@ export const Graphics = ({type, incomes, expenses} : graphsProp) => {
     datasets: [
       {
         label: "",
-        data: [totalExcess[0]],
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: [totalExcess],
+        backgroundColor: [ExcessColor],
         hoverOffset: 4,
       },
     ],
@@ -103,7 +101,7 @@ export const Graphics = ({type, incomes, expenses} : graphsProp) => {
 
   return (
     <div className="container text-center mt-5">
-      {!incomes || incomes.length === 0  && <span className="loader" />}
+      {!incomes || !expenses  && <span className="loader" />}
       {incomes && expenses &&
         
         <>
@@ -112,15 +110,15 @@ export const Graphics = ({type, incomes, expenses} : graphsProp) => {
           options={options}
           data={dataIncomes}
           setTableContent={setTableContent}
-          totalDataIncomes = {totalIncomes}
-          totalDataExpenses = {totalExpenses}
+          totalDataIncomes = {IncomesResult.totals}
+          totalDataExpenses = {ExpensesResult.totals}
         />
         <Expense
           options={options}
           data={dataExpenses}
           setTableContent={setTableContent}
-          totalDataIncomes = {totalIncomes}
-          totalDataExpenses = {totalExpenses}
+          totalDataIncomes = {IncomesResult.totals}
+          totalDataExpenses = {ExpensesResult.totals}
         />
         <Excess
           options={options}

@@ -21,7 +21,7 @@ const Company = () => {
         if(company !== res.msg) setCompany(res)
       }
     }
-    if(companyData && companyData.name && companyData.name.length === 0){
+    if(companyData.name.length === 0 || company === 'loadingCompany'){
       if(company === 'loadingCompany') verification()
       if(company !== 'loadingCompany' && company !== 'Not found' ) getCompany(company, dispatch)
     }
@@ -34,8 +34,8 @@ const Company = () => {
   return (
     <div className='background-general'>
     <NavBar page='Company'/>
-    {company === 'loadingCompany' && companyData.name === ''&& <span className="loader"></span>}
-    {company === 'Not found' && 
+    {company === 'loadingCompany' && companyData.name !== '' && <span className="loader"></span>}
+    {company === 'Not found' && companyData.name === '' && 
     <>
     <h1>No hemos encontrado tu compañía</h1>
     <ModalRegister />
