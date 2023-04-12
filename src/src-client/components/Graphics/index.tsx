@@ -4,15 +4,19 @@ import { IncomeType } from "@/models/income.model";
 import colors from "@/utils/colors";
 import { useState } from "react";
 import { TableComponent } from "../Tables/TableComponent";
-import { Income } from "./Income";
-import { Expense } from "./Expense";
 import {
   calculateExcess,
+  calculateTotal,
   calculateTotalPerCategory,
 } from "@/utils/calculateTotal";
+import { TotalRegisters } from "@/types/TotalRegister.type";
+import { Income } from "./Income";
+import { Expense } from "./Expense";
+import { totalGenerate } from "@/src-client/utilities/totalGenerate";
 import { Excess } from "./Excess";
 import { options } from "@/src-client/utilities/graphicsOptions";
 import capitalize from "@/utils/capitalize";
+import { useDispatch, useSelector } from "react-redux";
 
 interface ContentTable {
   type: string;
@@ -20,29 +24,31 @@ interface ContentTable {
 }
 
 interface graphsProp {
-  type?: string;
-  incomes: [IncomeType];
-  expenses: [ExpenseType];
+  type: string;
+  incomes: [];
+  expenses: [];
 }
 
-export const Graphics = ({ type, expenses, incomes }: graphsProp) => {
-  let totalIncomes = calculateTotalPerCategory(incomes);
-  let totalExpenses = calculateTotalPerCategory(expenses);
-  let totalExcess = calculateExcess(totalIncomes, totalExpenses);
-  // const dispatch: Function = useDispatch();
+export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
+  const dispatch: Function = useDispatch();
+
+  const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
+  console.log(IncomesResult);
+  const totalExcess =
+    IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) -
+    ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
+  const ExcessColor = totalExcess < 0 ? "#FF0000" : "#00FF00";
 
   // let incomes;
   // let expenses;
-
   // if (type === "company") {
   //   incomes = useSelector((state: any) => state.CompanyReducer.incomes);
   //   expenses = useSelector((state: any) => state.CompanyReducer.expenses);
   // } else {
-  //   //
-  //   incomes = [];
-  //   expenses = [];
   // }
-
+  // let totalIncomes;
+  // let totalExpenses;
+  // let totalExcess;
   // if (expenses && incomes) {
   //   totalExcess = calculateExcess(
   //     incomes.map((ele: TotalRegisters) => ele.total),
@@ -62,40 +68,51 @@ export const Graphics = ({ type, expenses, incomes }: graphsProp) => {
   });
 
   const dataIncomes = {
-    labels: calculateTotalPerCategory(incomes).map((element) =>
-      capitalize(element.category)
-    ),
+    labels: IncomesResult.categories,
+    // labels: calculateTotalPerCategory(incomes).map((element) =>
+    //   capitalize(element.category)
+    // ),
     datasets: [
       {
         label: "",
-        data: totalIncomes.map((element) => element.total),
-        backgroundColor: colors.map((elm) => elm.codigo),
+        data: IncomesResult.totals,
+        // data: totalIncomes.map((element) => element.total),
+        // backgroundColor: colors.map((elm) => elm.codigo),
+        backgroundColor: IncomesResult.colors,
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExpenses = {
-    labels: calculateTotalPerCategory(expenses).map((element) =>
-      capitalize(element.category)
-    ),
+    labels: ExpensesResult.categories,
+    // labels: calculateTotalPerCategory(expenses).map((element) =>
+    //   capitalize(element.category)
+    // ),
     datasets: [
       {
         label: "",
-        data: totalExpenses.map((element) => element.total),
-        backgroundColor: colors.map((elm) => elm.codigo),
+        data: ExpensesResult.totals,
+        backgroundColor: ExpensesResult.colors,
+
+        // data: totalExpenses.map((element) => element.total),
+        // backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExcess = {
-    labels: totalExcess.map((elem) => capitalize(elem.category)),
+    // labels: totalExcess.map((elem) => capitalize(elem.category)),
+    labels: ["Negocio", "Personales"],
+
     datasets: [
       {
         label: "",
-        data: totalExcess.map((elem) => elem.total),
-        backgroundColor: colors.map((elm) => elm.codigo),
+        data: [totalExcess],
+        backgroundColor: [ExcessColor],
+        // data: totalExcess.map((elem) => elem.total),
+        // backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
@@ -108,7 +125,7 @@ export const Graphics = ({ type, expenses, incomes }: graphsProp) => {
 
   return (
     <div className="container text-center mt-5">
-      {!incomes && <span className="loader" />}
+      {!incomes || (!expenses && <span className="loader" />)}
       {incomes && expenses && (
         <>
           <div className="row d-flex justify-content-between">
@@ -117,12 +134,16 @@ export const Graphics = ({ type, expenses, incomes }: graphsProp) => {
               options={options}
               data={dataIncomes}
               setTableContent={setTableContent}
+              totalDataIncomes={IncomesResult.totals}
+              totalDataExpenses={ExpensesResult.totals}
             />
             <Expense
               type={type}
               options={options}
               data={dataExpenses}
               setTableContent={setTableContent}
+              totalDataIncomes={IncomesResult.totals}
+              totalDataExpenses={ExpensesResult.totals}
             />
             <Excess
               options={options}

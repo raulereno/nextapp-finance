@@ -11,13 +11,14 @@ interface ExpenseProps {
   data: any;
   setTableContent: Function;
 }
-
 export function Expense({
-  type,
   options,
   data,
+  type,
   setTableContent,
-}: ExpenseProps) {
+  totalDataIncomes,
+  totalDataExpenses,
+}: any) {
   const propsModal = {
     title: "Agregar egreso",
     buttonText: "Agregar egreso",
@@ -52,7 +53,12 @@ export function Expense({
       ) : (
         <h2>No hay registros</h2>
       )}
-      <ModalAddRegister type={type} props={propsModal} />
+      <ModalAddRegister
+        type={type}
+        props={propsModal}
+        dataIncomes={totalDataIncomes}
+        dataExpenses={totalDataExpenses}
+      />
     </div>
   );
 }

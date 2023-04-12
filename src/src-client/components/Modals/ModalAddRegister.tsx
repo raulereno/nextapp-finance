@@ -1,12 +1,17 @@
 import { addExpense } from "@/redux/slice/ExpenseSlice";
 import { addIncome } from "@/redux/slice/IncomeSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
 import { isValidExpense } from "@/utils/isValidExpense";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
+import {
+  addCompanyExpense,
+  addCompanyIncome,
+} from "@/redux/slice/CompanySlice";
+import { TotalRegisters } from "@/types/TotalRegister.type";
 import { getUserFinance } from "@/redux/slice/PersonalSlice";
 
 interface PropsModal {
@@ -25,18 +30,23 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAddRegister({ props, type }: PropsModal) {
+export function ModalAddRegister({
+  props,
+  type,
+  dataIncomes,
+  dataExpenses,
+}: any) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
   const { data: session } = useSession();
-  // const totalIncomes = useSelector(
-  //   (state: any) => state.IncomesReducer.totalIncomes
-  // );
-  // const totalExpenses = useSelector(
-  //   (state: any) => state.ExpensesReducer.totalExpenses
-  // );
+  const totalIncomes = useSelector(
+    (state: any) => state.IncomesReducer.totalIncomes
+  );
+  const totalExpenses = useSelector(
+    (state: any) => state.ExpensesReducer.totalExpenses
+  );
 
   const dispatch: Function = useDispatch();
   const id = session?.user?.email;
@@ -44,35 +54,61 @@ export function ModalAddRegister({ props, type }: PropsModal) {
   const sendForm = async () => {
     if (id && id !== null && id !== undefined) {
       if (props.type === "expense") {
-        // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+        const validExpense = isValidExpense(
+          totalIncomes,
+          totalExpenses,
+          form,
+          type
+        );
 
-        // if (validExpense) {
-        //   Swal.fire({
-        //     title: validExpense,
-        //     text: "Estas seguro?",
-        //     showDenyButton: true,
-        //     confirmButtonText: "Aceptar",
-        //     denyButtonText: `Cancelar`,
-        //     reverseButtons: true,
-        //   }).then((result) => {
-        //     /* Read more about isConfirmed, isDenied below */
-        //     if (result.isConfirmed) {
-        //       dispatch(addExpense(form, id));
-        //       setForm(initialStateForm);
-        //       handleClose();
-        //     } else if (result.isDenied) {
-        //       setForm(initialStateForm);
-        //       handleClose();
-        //     }
-        //   });
-        // }
-        await dispatch(addExpense({ ...form, type: type! }, id));
-        setForm(initialStateForm);
-        handleClose();
+        if (validExpense) {
+          Swal.fire({
+            title: validExpense,
+            text: "Estas seguro?",
+            showDenyButton: true,
+            confirmButtonText: "Aceptar",
+            denyButtonText: `Cancelar`,
+            reverseButtons: true,
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              if (type === "negocio") {
+                dispatch(addCompanyExpense({ ...form, type: type! }, id));
+                setForm(initialStateForm);
+                handleClose();
+              } else {
+                dispatch(addExpense({ ...form, type: type! }, id));
+                setForm(initialStateForm);
+                handleClose();
+              }
+            } else if (result.isDenied) {
+              setForm(initialStateForm);
+              handleClose();
+            }
+          });
+        } else {
+          if (type === "negocio") {
+            dispatch(addCompanyExpense({ ...form, type: type! }, id));
+            setForm(initialStateForm);
+            handleClose();
+          } else {
+            dispatch(addExpense({ ...form, type: type! }, id));
+            setForm(initialStateForm);
+            handleClose();
+          }
+        }
       } else {
-        await dispatch(addIncome({ ...form, type: type! }, id));
-        setForm(initialStateForm);
-        handleClose();
+        if (type === "negocio") {
+          dispatch(addCompanyIncome({ ...form, type: type! }, id));
+          setForm(initialStateForm);
+          handleClose();
+        } else {
+          console.log("asd");
+
+          await dispatch(addIncome({ ...form, type: type! }, id));
+          setForm(initialStateForm);
+          handleClose();
+        }
       }
       await dispatch(getUserFinance(session?.user?.email!));
     }

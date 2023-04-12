@@ -11,10 +11,7 @@ import { ModalEdit } from "../Modals/ModalEditRegister";
 import capitalize from "@/utils/capitalize";
 
 export const TableComponent = ({ content, filters }: any) => {
-  console.log(filters);
-
   const dispatch: Function = useDispatch();
-
   const deleteRegister = (id: String) => {
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",

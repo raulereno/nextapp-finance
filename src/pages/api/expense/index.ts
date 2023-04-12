@@ -26,11 +26,10 @@ export default async function income(
       }
       break;
     case "POST":
-      console.log(JSON.parse(body));
       let result;
-      if (JSON.parse(body).type === "negocio") {
+      if (body.type === "negocio") {
         company = await Company.findById({ _id: query.Id });
-        result = await Expense.create(JSON.parse(body));
+        result = await Expense.create(body);
         await company.expenses.push(result);
         await company.save();
       } else {
