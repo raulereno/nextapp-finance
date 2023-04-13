@@ -11,6 +11,7 @@ import { ModalEdit } from "../Modals/ModalEditRegister";
 import capitalize from "@/utils/capitalize";
 
 export const TableComponent = ({ content, filters }: any) => {
+  console.log(filters)
   const dispatch: Function = useDispatch();
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -23,6 +24,7 @@ export const TableComponent = ({ content, filters }: any) => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (filters.type === "ingresos") {
+
           dispatch(deleteIncome(id));
         } else {
           dispatch(deleteExpenses(id));

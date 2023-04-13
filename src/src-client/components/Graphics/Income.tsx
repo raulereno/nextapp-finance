@@ -19,7 +19,7 @@ export function Income({
   totalDataIncomes,
   totalDataExpenses,
 }: any) {
-  console.log(data);
+  
   const propsModal = {
     title: "Agregar ingresos",
     buttonText: "Agregar ingresos",
@@ -32,7 +32,7 @@ export function Income({
 
       const slice = {
         type: "ingresos",
-        slice: "personales",
+        slice: type,
       };
 
       setTableContent(slice);
