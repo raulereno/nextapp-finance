@@ -8,6 +8,10 @@ import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
 import Image from "next/image";
 import FormRegister from "./FormAddRegister";
 import { isValidExpense } from "@/utils/isValidExpense";
+import {
+  updatePersonalExpense,
+  updatePersonalIncome,
+} from "@/redux/slice/PersonalSlice";
 
 interface PropsModal {
   props: {
@@ -51,12 +55,14 @@ export function ModalEdit({ props }: PropsModal) {
 
   const sendForm = () => {
     if (props.table === "ingresos") {
-      dispatch(updateIncome(form, props.id));
+      dispatch(updatePersonalIncome(form, props.id));
+      setForm(initialStateForm);
+      handleClose();
     } else {
       // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
       //TODO: cambiar esta logica para que te deje
 
-      dispatch(updateExpense(form, props.id));
+      dispatch(updatePersonalExpense(form, props.id));
       setForm(initialStateForm);
       handleClose();
     }

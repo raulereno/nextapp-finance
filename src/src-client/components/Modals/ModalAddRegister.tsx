@@ -12,7 +12,11 @@ import {
   addCompanyIncome,
 } from "@/redux/slice/CompanySlice";
 import { TotalRegisters } from "@/types/TotalRegister.type";
-import { getUserFinance } from "@/redux/slice/PersonalSlice";
+import {
+  addPersonalExpense,
+  addPersonalIncome,
+  getUserFinance,
+} from "@/redux/slice/PersonalSlice";
 
 interface PropsModal {
   props: {
@@ -49,68 +53,68 @@ export function ModalAddRegister({
   );
 
   const dispatch: Function = useDispatch();
-  const id = session?.user?.email;
+  const email = session?.user?.email;
 
   const sendForm = async () => {
-    if (id && id !== null && id !== undefined) {
+    if (email && email !== null && email !== undefined) {
       if (props.type === "expense") {
-        const validExpense = isValidExpense(
-          totalIncomes,
-          totalExpenses,
-          form,
-          type
-        );
+        // const validExpense = isValidExpense(
+        //   totalIncomes,
+        //   totalExpenses,
+        //   form,
+        //   type
+        // );
 
-        if (validExpense) {
-          Swal.fire({
-            title: validExpense,
-            text: "Estas seguro?",
-            showDenyButton: true,
-            confirmButtonText: "Aceptar",
-            denyButtonText: `Cancelar`,
-            reverseButtons: true,
-          }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-              if (type === "negocio") {
-                dispatch(addCompanyExpense({ ...form, type: type! }, id));
-                setForm(initialStateForm);
-                handleClose();
-              } else {
-                dispatch(addExpense({ ...form, type: type! }, id));
-                setForm(initialStateForm);
-                handleClose();
-              }
-            } else if (result.isDenied) {
-              setForm(initialStateForm);
-              handleClose();
-            }
-          });
+        // if (validExpense) {
+        //   Swal.fire({
+        //     title: validExpense,
+        //     text: "Estas seguro?",
+        //     showDenyButton: true,
+        //     confirmButtonText: "Aceptar",
+        //     denyButtonText: `Cancelar`,
+        //     reverseButtons: true,
+        //   }).then((result) => {
+        //     /* Read more about isConfirmed, isDenied below */
+        //     if (result.isConfirmed) {
+        //       if (type === "negocio") {
+        //         dispatch(addCompanyExpense({ ...form, type: type! }, email));
+        //         setForm(initialStateForm);
+        //         handleClose();
+        //       } else {
+        //         dispatch(addExpense({ ...form, type: type! }, email));
+        //         setForm(initialStateForm);
+        //         handleClose();
+        //       }
+        //     } else if (result.isDenied) {
+        //       setForm(initialStateForm);
+        //       handleClose();
+        //     }
+        //   });
+        // } else {
+        if (type === "negocio") {
+          dispatch(addCompanyExpense({ ...form, type: type! }, email));
+          setForm(initialStateForm);
+          handleClose();
         } else {
-          if (type === "negocio") {
-            dispatch(addCompanyExpense({ ...form, type: type! }, id));
-            setForm(initialStateForm);
-            handleClose();
-          } else {
-            dispatch(addExpense({ ...form, type: type! }, id));
-            setForm(initialStateForm);
-            handleClose();
-          }
+          dispatch(addPersonalExpense({ ...form, type: type! }, email));
+          setForm(initialStateForm);
+          handleClose();
         }
+        // }
       } else {
         if (type === "negocio") {
-          dispatch(addCompanyIncome({ ...form, type: type! }, id));
+          dispatch(addCompanyIncome({ ...form, type: type! }, email));
           setForm(initialStateForm);
           handleClose();
         } else {
           console.log("asd");
 
-          await dispatch(addIncome({ ...form, type: type! }, id));
+          await dispatch(addPersonalIncome(email, { ...form, type: type! }));
           setForm(initialStateForm);
           handleClose();
         }
       }
-      await dispatch(getUserFinance(session?.user?.email!));
+      // await dispatch(getUserFinance(session?.user?.email!));
     }
   };
 
