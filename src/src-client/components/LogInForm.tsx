@@ -87,18 +87,23 @@ const Auth: NextPage = ({ providers }: any) => {
   };
 
   return (
-    <>
-      <div>
-        <div className="d-flex flex-column justify-center align-center">
-          <h2>{authType}</h2>
+    <div className="align-items-lg-center m-3">
+      <div className="container text-end">
           <p>
             {authType === "Login"
-              ? "Not registered yet? "
+              ? <b>"Not registered yet? "</b>
               : "Already have an account? "}
-            <button onClick={() => setAuthType(oppAuthType[authType])}>
+            <button 
+              className="btn btn-primary p-1"
+              onClick={() => setAuthType(oppAuthType[authType])}>
               <p>{oppAuthType[authType]}</p>
             </button>
           </p>
+          </div>
+      <div className="container">
+        <div className="container mb-5">
+          <h2>{authType}</h2>         
+          </div>
 
           <ProvidersButtons providers={providers} />
 
@@ -111,57 +116,74 @@ const Auth: NextPage = ({ providers }: any) => {
             }}
           >
             {(props) => (
+              <div className="">
               <Form style={{ width: "100%" }}>
-                <div className="d-flex flex-column w-100% margin-b-4">
+                <article className="col-12 col-lg-6">
                   {authType === "Register" && (
                     <Field name="username">
                       {() => (
-                        <>
-                          <label htmlFor="username">Username:</label>
+                        <div className="mb-3">
+                          <label 
+                          className="form-label"
+                          htmlFor="username">Username:</label>
                           <input
+                            className="form-control"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Username"
                             type="text"
                           />
-                        </>
+                        </div>
                       )}
                     </Field>
                   )}
                   <Field name="email">
                     {() => (
-                      <>
-                        <label htmlFor="email">Email:</label>
+                      <div className="mb-3">
+                        <label 
+                        className="form-label"
+                        htmlFor="email">Email:</label>
                         <input
+                          className="form-control"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Email Address"
                           type="email"
                         />
-                      </>
+                      </div>
                     )}
                   </Field>
                   <Field name="password">
                     {() => (
-                      <>
-                        <label htmlFor="password">Password</label>
+                      <div className="mb-3">
+                        <label 
+                        className="form-label"
+                        htmlFor="password">Password</label>
                         <input
+                          className="form-control"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           type="password"
                           placeholder="Password"
                         />
-                      </>
+                      </div>
                     )}
                   </Field>
-                  <button type="submit">{authType}</button>
-                </div>
+                  <div className="mb-3">
+                    <button 
+                      className="btn btn-success"
+                      type="submit">{authType}
+                    </button>
+                  </div>
+                </article>
+                
               </Form>
+              </div>
             )}
           </Formik>
-        </div>
+        
       </div>
-    </>
+    </div>
   );
 };
 

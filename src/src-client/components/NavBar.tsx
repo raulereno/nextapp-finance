@@ -36,6 +36,7 @@ function NavBar({ page }: Ipage) {
           <path d="M4 12l16 0"></path>
           <path d="M4 18l16 0"></path>
         </svg>
+        
       </Button>
 
       <Offcanvas show={show} onHide={handleClose} className="bg-LightBlue">

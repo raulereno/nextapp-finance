@@ -31,6 +31,6 @@ export const calculateExcess = (
   incomes: Array<number>,
   expenses: Array<number>
 ): Array<number> => {
-  return [incomes - expenses[0], incomes[1] - expenses[1]];
+  return [incomes[0] - expenses[0], incomes[1] - expenses[1]];
 };
 

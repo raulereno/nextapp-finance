@@ -11,6 +11,7 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.3.1",
     "@next-auth/mongodb-adapter": "^1.1.1",
+    "@nextui-org/react": "^1.0.0-beta.12",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/bcrypt": "^5.0.0",
     "@types/node": "18.15.5",
@@ -36,12 +37,17 @@
     "react-bootstrap": "^2.7.2",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "react-redux": "^8.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "sass": "^1.60.0",
+    "styled-components": "^5.3.9",
     "sweetalert2": "^11.7.3",
     "typescript": "5.0.2"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.26"
   }
 }
