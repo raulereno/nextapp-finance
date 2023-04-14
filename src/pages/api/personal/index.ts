@@ -30,7 +30,6 @@ export default async function personal(
 
       break;
     default:
-      console.log("entra aca");
       res.status(400).json({ error: "Invalid Method" });
       break;
   }
