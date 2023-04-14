@@ -3,8 +3,6 @@ import { IncomeType } from "@/models/income.model";
 import { TotalRegisters } from "@/types/TotalRegister.type";
 
 export const calculateTotal = (data: IncomeType[] | ExpenseType[]): number => {
-  console.log(data);
-
   let sum = 0;
 
   data?.forEach((element) => (sum += element.value));
