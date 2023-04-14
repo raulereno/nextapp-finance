@@ -29,8 +29,6 @@ export default async function personalIncomeID(
       break;
     case "PUT":
       try {
-        console.log(query.id);
-        console.log(body);
         income = await Income.findOneAndUpdate({ _id: query.id }, body, {
           new: true,
         });
@@ -42,7 +40,6 @@ export default async function personalIncomeID(
     case "DELETE":
       try {
         result = await Income.deleteOne({ _id: query.id });
-        console.log(result);
         res.status(200).json({ message: "sucess", result: result });
       } catch (error) {
         res.status(400).json({ status: "error", message: error });
