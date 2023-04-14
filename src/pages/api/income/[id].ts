@@ -44,9 +44,6 @@ export default async function expenseID(
     case "DELETE":
       try {
         result = await Income.deleteOne({ _id: query.id });
-
-        console.log(result);
-        console.log(query.id);
       } catch (error) {
         res.status(400).json({ status: "error", message: error });
       }
