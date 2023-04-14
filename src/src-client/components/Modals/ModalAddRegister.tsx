@@ -107,8 +107,6 @@ export function ModalAddRegister({
           setForm(initialStateForm);
           handleClose();
         } else {
-          console.log("asd");
-
           await dispatch(addPersonalIncome(email, { ...form, type: type! }));
           setForm(initialStateForm);
           handleClose();
