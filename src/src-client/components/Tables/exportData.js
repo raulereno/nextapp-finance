@@ -8,6 +8,14 @@ export function exportData(data) {
 
   const sheet = utils.json_to_sheet(formatedData);
 
+  sheet["!cols"] = [
+    { wch: 20 },
+    { wch: 20 },
+    { wch: 10 },
+    { wch: 50 },
+    { wch: 20 },
+  ];
+
   utils.book_append_sheet(workbook, sheet, "Datos");
 
   const blob = write(workbook, { bookType: "xlsx", type: "binary" });
