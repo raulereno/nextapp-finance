@@ -46,7 +46,7 @@ const personalSlice = createSlice({
     addPersonalIncome: (state, action) => {
       const oldState = state.incomes;
       oldState.push(action.payload);
-      // // state.totalIncomes = calculateTotal(oldState);
+      state.totalIncomes = calculateTotal(oldState);
       state.incomes = oldState;
     },
 
@@ -57,18 +57,18 @@ const personalSlice = createSlice({
         }
         return elem;
       });
-      // state.totalIncomes = calculateTotal(find);
+      state.totalIncomes = calculateTotal(find);
       state.incomes = find;
     },
     deletePersonalIncome: (state, action) => {
       const filter = state.incomes.filter((ele) => ele._id !== action.payload);
-      // state.totalIncomes = calculateTotal(filter);
+      state.totalIncomes = calculateTotal(filter);
       state.incomes = filter;
     },
     addPersonalExpense: (state, action) => {
       const oldState = state.expenses;
       oldState.push(action.payload);
-      // // state.totalIncomes = calculateTotal(oldState);
+      state.totalIncomes = calculateTotal(oldState);
       state.expenses = oldState;
     },
     updatePersonalExpense: (state, action) => {
@@ -78,19 +78,18 @@ const personalSlice = createSlice({
         }
         return elem;
       });
-      // state.totalIncomes = calculateTotal(find);
+      state.totalIncomes = calculateTotal(find);
       state.expenses = find;
     },
     deletePersonalExpense: (state, action) => {
       const filter = state.expenses.filter((ele) => ele._id !== action.payload);
-      // state.totalIncomes = calculateTotal(filter);
+      state.totalIncomes = calculateTotal(filter);
       state.expenses = filter;
     },
   },
 });
 
 export const getUserFinance = (email: string) => async (dispatch: Function) => {
-  console.log(BASE_URL);
   const res = await axios.get(BASE_URL + "?email=" + email);
 
   dispatch(personalSlice.actions.getUser(res.data.payload));
@@ -102,8 +101,6 @@ export const getUserFinance = (email: string) => async (dispatch: Function) => {
 export const addPersonalIncome =
   (email: string, income: IncomeType) => async (dispatch: Function) => {
     const res = await axios.post(BASE_URL + "/income?email=" + email, income);
-
-    console.log(res);
 
     dispatch(personalSlice.actions.addPersonalIncome(res.data.payload));
   };
@@ -145,7 +142,6 @@ export const updatePersonalExpense =
 //DELETE
 export const deletePersonalExpense =
   (email: string, id: String) => async (dispatch: Function) => {
-    console.log("pasa por aca");
     const res = await axios.delete(BASE_URL + "/expense/" + id);
     if (res.data.result.deletedCount) {
       dispatch(personalSlice.actions.deletePersonalExpense(id));
