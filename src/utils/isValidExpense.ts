@@ -9,7 +9,6 @@ export const isValidExpense = (
   type: string
 ) => {
   //
-  console.log(totalIncomes, totalExpenses);
   const index = type === "negocio" ? 0 : 1;
 
   if (index === 0) {
