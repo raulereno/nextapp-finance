@@ -23,12 +23,12 @@ function NavBar({ page }: Ipage) {
           </li>
           <li></li>
           <li>
-            <Link className="btn btnLogin" href="/">
+            <Link className="btn-general mt-3" href="/">
               Personales
             </Link>
           </li>
           <li>
-            <Link className="btn btnLogin" href="/company">
+            <Link className="btn-general mt-3" href="/company">
               Compañias
             </Link>
           </li>

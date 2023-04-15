@@ -8,11 +8,11 @@ const Schema = mongoose.Schema;
 export interface UserType {
   name: String;
   email: String;
-  hashedPassword: String;
+  hashedPassword?: String;
   image: String;
-  company: [CompanType];
-  incomes: [IncomeType];
-  expenses: [ExpenseType];
+  company?: [CompanType];
+  incomes?: [IncomeType];
+  expenses?: [ExpenseType];
 }
 
 const userSchema = new Schema<UserType, Model<UserType>>(

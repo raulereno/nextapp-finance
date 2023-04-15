@@ -27,7 +27,6 @@ const expensesSlice = createSlice({
     addExpenses: (state, action) => {
       state.expenses.push(action.payload);
       // state.totalExpenses = calculateTotal(state.expenses);
-      console.log(action.payload);
       const oldState = state.expenses;
       oldState.push(action.payload);
       // state.totalIncomes = calculateTotal(oldState);
@@ -78,7 +77,6 @@ export const addExpense =
       .then((resp) => resp.json())
       .catch((err) => console.log(err));
 
-    console.log(payload);
     dispatch(expensesSlice.actions.addExpenses(payload));
   };
 

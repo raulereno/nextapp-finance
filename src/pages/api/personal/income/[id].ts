@@ -1,6 +1,6 @@
+import { dbConnect } from "@/src-backend/db";
 import { Income } from "@/models/income.model";
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src-backend/db";
 import { connection } from "mongoose";
 
 dbConnect();
@@ -9,7 +9,7 @@ interface IncomeApi {
   description: string;
 }
 
-export default async function expenseID(
+export default async function personalIncomeID(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -22,32 +22,28 @@ export default async function expenseID(
     case "GET":
       try {
         income = await Income.findOne({ _id: query.id });
+        res.status(200).json({ status: "sucess", payload: income });
       } catch (error) {
         res.status(400).json({ message: income });
       }
-      res.status(200).json({ status: "sucess", payload: income });
       break;
     case "PUT":
       try {
-        income = await Income.findOneAndUpdate(
-          { _id: query.id },
-          JSON.parse(body),
-          {
-            new: true,
-          }
-        );
+        income = await Income.findOneAndUpdate({ _id: query.id }, body, {
+          new: true,
+        });
+        res.status(200).json({ status: "sucess", payload: income });
       } catch (error) {
         res.status(400).json({ status: "error", message: error });
       }
-      res.status(200).json({ status: "sucess", payload: income });
       break;
     case "DELETE":
       try {
         result = await Income.deleteOne({ _id: query.id });
+        res.status(200).json({ message: "sucess", result: result });
       } catch (error) {
         res.status(400).json({ status: "error", message: error });
       }
-      res.status(200).json({ message: "sucess", result: result });
       break;
     default:
       res.status(400).json({ error: "Invalid Method" });

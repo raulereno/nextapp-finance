@@ -19,7 +19,7 @@ export function Income({
   totalDataIncomes,
   totalDataExpenses,
 }: any) {
-  
+
   const propsModal = {
     title: "Agregar ingresos",
     buttonText: "Agregar ingresos",
@@ -28,8 +28,6 @@ export function Income({
   const optionsPlus = {
     ...options,
     onClick: function (event: any, elements: any) {
-      console.log(elements);
-
       const slice = {
         type: "ingresos",
         slice: type,
@@ -38,8 +36,6 @@ export function Income({
       setTableContent(slice);
     },
   };
-
-  console.log(data);
 
   return (
     <div

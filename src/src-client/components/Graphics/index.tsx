@@ -32,7 +32,6 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
   const dispatch: Function = useDispatch();
 
   const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
-  console.log(IncomesResult);
   const totalExcess =
     IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) -
     ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);

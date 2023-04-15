@@ -1,16 +1,23 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
-import { deleteExpenses } from "@/redux/slice/ExpenseSlice";
-import { deleteIncome } from "@/redux/slice/IncomeSlice";
+import {
+  deletePersonalExpense,
+  deletePersonalIncome,
+} from "@/redux/slice/PersonalSlice";
+import capitalize from "@/utils/capitalize";
+import Image from "next/image";
 import { Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
-import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
+
 import capitalize from "@/utils/capitalize";
 import { deleteCompanyExpense, deleteCompanyIncome } from "@/redux/slice/CompanySlice";
 import { useSession } from "next-auth/react";
+
+import { exportData } from "./exportData";
+
 
 export const TableComponent = ({ content, filters }: any) => {
   console.log(filters)
@@ -27,14 +34,16 @@ export const TableComponent = ({ content, filters }: any) => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
+
         if (filters.type === "ingresos") {
           filters.slice === 'negocio' ?
           dispatch(deleteCompanyIncome(id, idUser)) :
-          dispatch(deleteIncome(id));
+          dispatch(deletePersonalIncome("email", id));
         } else {
           filters.slice === 'negocio' ?
           dispatch(deleteCompanyExpense(id, idUser)) :
-          dispatch(deleteExpenses(id));
+          dispatch(deletePersonalExpense("email", id));
+
         }
         Swal.fire("Borrado!", "", "success");
       }
@@ -80,8 +89,17 @@ export const TableComponent = ({ content, filters }: any) => {
       }
     }
   };
+
+  const dowloadCvs = () => {
+    const data = content.filter((ele: IncomeType | ExpenseType) => {
+      if (ele.type[0] === filters.slice) {
+        return ele;
+      }
+    });
+    exportData(data);
+  };
   if (!filters.slice && !filters.type) {
-    return;
+    return <></>;
   }
 
   return (
@@ -100,10 +118,11 @@ export const TableComponent = ({ content, filters }: any) => {
               ></input>
             </div>
           </form>
+          <button onClick={dowloadCvs}>Descargar excel</button>
         </div>
       </div>
 
-      <Table className="table table-hover table-active mt-3">
+      <Table className="table table-hover table-active mt-3" id="tableRegister">
         <thead className="text-white">
           <tr>
             <th>Tipo</th>

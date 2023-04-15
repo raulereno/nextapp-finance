@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function PersonalFinances() {
   const { data: session } = useSession({ required: true });
   const dispatch: Function = useDispatch();
-  const user = useSelector((state: any) => state.PersonalReducer.user);
+  const incomes = useSelector((state: any) => state.PersonalReducer.incomes);
+  const expenses = useSelector((state: any) => state.PersonalReducer.expenses);
 
   useEffect(() => {
     dispatch(getUserFinance(session?.user?.email!));
@@ -17,8 +18,8 @@ export default function PersonalFinances() {
     <>
       <Graphics
         type="personales"
-        incomes={user?.incomes ?? []}
-        expenses={user?.expenses ?? []}
+        incomes={incomes ?? []}
+        expenses={expenses ?? []}
       />
     </>
   );
