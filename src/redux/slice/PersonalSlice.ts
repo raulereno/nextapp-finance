@@ -1,10 +1,9 @@
+import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
-import { addIncome } from "./IncomeSlice";
-import { User, UserType } from "@/models/user.model";
+import { UserType } from "@/models/user.model";
 import { calculateTotal } from "@/utils/calculateTotal";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { ExpenseType } from "@/models/expense.model";
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}api/personal`;
 
