@@ -1,24 +1,19 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
-import { deleteExpenses } from "@/redux/slice/ExpenseSlice";
-import { deleteIncome } from "@/redux/slice/IncomeSlice";
-import { Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
-import Image from "next/image";
-import { ModalEdit } from "../Modals/ModalEditRegister";
-import capitalize from "@/utils/capitalize";
 import {
   deletePersonalExpense,
   deletePersonalIncome,
 } from "@/redux/slice/PersonalSlice";
+import capitalize from "@/utils/capitalize";
+import Image from "next/image";
+import { Table } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
+import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
+import { ModalEdit } from "../Modals/ModalEditRegister";
+import { exportData } from "./exportData";
 
 export const TableComponent = ({ content, filters }: any) => {
-  console.log(content);
-
-  console.log(filters);
-
   const dispatch: Function = useDispatch();
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -83,8 +78,17 @@ export const TableComponent = ({ content, filters }: any) => {
       }
     }
   };
+
+  const dowloadCvs = () => {
+    const data = content.filter((ele: IncomeType | ExpenseType) => {
+      if (ele.type[0] === filters.slice) {
+        return ele;
+      }
+    });
+    exportData(data);
+  };
   if (!filters.slice && !filters.type) {
-    return;
+    return <></>;
   }
 
   return (
@@ -103,10 +107,11 @@ export const TableComponent = ({ content, filters }: any) => {
               ></input>
             </div>
           </form>
+          <button onClick={dowloadCvs}>Descargar excel</button>
         </div>
       </div>
 
-      <Table className="table table-hover table-active mt-3">
+      <Table className="table table-hover table-active mt-3" id="tableRegister">
         <thead className="text-white">
           <tr>
             <th>Tipo</th>
