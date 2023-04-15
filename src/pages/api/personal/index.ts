@@ -29,15 +29,8 @@ export default async function personal(
       res.status(200).json({ payload: user });
 
       break;
-    case "POST":
-      user = await User.findOne({ email: query.email }).select(
-        "-hashedPassword"
-      );
-
-      user.save();
-      res.send("hola wey");
-
     default:
+      res.status(400).json({ error: "Invalid Method" });
       break;
   }
 }

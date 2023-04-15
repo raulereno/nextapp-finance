@@ -10,6 +10,9 @@ const nextConfig = {
         pathname: '/images/generic-user-icon/generic-user-icon-18.jpg',
       },
     ],
+  },
+  env:{
+    BASE_URL: process.env.BASE_URL,
   }
 }
 

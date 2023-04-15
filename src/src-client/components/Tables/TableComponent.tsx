@@ -9,8 +9,16 @@ import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
 import capitalize from "@/utils/capitalize";
+import {
+  deletePersonalExpense,
+  deletePersonalIncome,
+} from "@/redux/slice/PersonalSlice";
 
 export const TableComponent = ({ content, filters }: any) => {
+  console.log(content);
+
+  console.log(filters);
+
   const dispatch: Function = useDispatch();
   const deleteRegister = (id: String) => {
     Swal.fire({
@@ -22,10 +30,14 @@ export const TableComponent = ({ content, filters }: any) => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        if (filters.type === "ingresos") {
-          dispatch(deleteIncome(id));
+        if (filters.slice === "personales") {
+          if (filters.type === "ingresos") {
+            dispatch(deletePersonalIncome("email", id));
+          } else {
+            dispatch(deletePersonalExpense("email", id));
+          }
         } else {
-          dispatch(deleteExpenses(id));
+          //TODO: aca va el de compañia
         }
         Swal.fire("Borrado!", "", "success");
       }

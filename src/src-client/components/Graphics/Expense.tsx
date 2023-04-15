@@ -30,7 +30,7 @@ export function Expense({
     onClick: function (event: any, elements: any) {
       const slice = {
         type: "gastos",
-        slice: "personales",
+        slice: type,
       };
       setTableContent(slice);
     },

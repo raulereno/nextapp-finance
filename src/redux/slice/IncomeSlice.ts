@@ -66,7 +66,6 @@ export const addIncome =
         urlId = id;
       }
       const res = await axios.post(`${url}${urlId}`, income);
-      console.log(res.data.payload);
       dispatch(incomesSlice.actions.addIncome(res.data.payload));
     } catch (err) {
       console.log(err);
