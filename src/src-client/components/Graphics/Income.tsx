@@ -19,6 +19,7 @@ export function Income({
   totalDataIncomes,
   totalDataExpenses,
 }: any) {
+
   const propsModal = {
     title: "Agregar ingresos",
     buttonText: "Agregar ingresos",

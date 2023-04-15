@@ -2,7 +2,7 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
 import colors from "@/utils/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TableComponent } from "../Tables/TableComponent";
 import {
   calculateExcess,
@@ -17,7 +17,6 @@ import { Excess } from "./Excess";
 import { options } from "@/src-client/utilities/graphicsOptions";
 import capitalize from "@/utils/capitalize";
 import { useDispatch, useSelector } from "react-redux";
-
 interface ContentTable {
   type: string;
   slice: string;
@@ -117,10 +116,10 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
     ],
   };
 
-  // useEffect(() => {
-  //   // dispatch(getIncomes("64257ccb28f7bffc594de664"));
-  //   // dispatch(getExpenses());
-  // }, [dispatch, incomes, expenses]);
+  useEffect(() => {
+    // dispatch(getIncomes("64257ccb28f7bffc594de664"));
+    // dispatch(getExpenses());
+  }, [incomes, expenses]);
 
   return (
     <div className="container text-center mt-5">
