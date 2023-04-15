@@ -9,10 +9,14 @@ import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import Image from "next/image";
 import { ModalEdit } from "../Modals/ModalEditRegister";
 import capitalize from "@/utils/capitalize";
+import { deleteCompanyExpense, deleteCompanyIncome } from "@/redux/slice/CompanySlice";
+import { useSession } from "next-auth/react";
 
 export const TableComponent = ({ content, filters }: any) => {
   console.log(filters)
   const dispatch: Function = useDispatch();
+  const {data : session} = useSession()
+  const idUser = session?.user?.email
   const deleteRegister = (id: String) => {
     Swal.fire({
       title: "Esta seguro que desea borrar el registro?",
@@ -24,9 +28,12 @@ export const TableComponent = ({ content, filters }: any) => {
     }).then((result) => {
       if (result.isConfirmed) {
         if (filters.type === "ingresos") {
-
+          filters.slice === 'negocio' ?
+          dispatch(deleteCompanyIncome(id, idUser)) :
           dispatch(deleteIncome(id));
         } else {
+          filters.slice === 'negocio' ?
+          dispatch(deleteCompanyExpense(id, idUser)) :
           dispatch(deleteExpenses(id));
         }
         Swal.fire("Borrado!", "", "success");

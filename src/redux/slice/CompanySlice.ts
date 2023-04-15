@@ -23,13 +23,11 @@ const initialState : Company = {
     users: [],
     name: '',
 }
-
 const companySlice = createSlice({
     name: 'company',
     initialState,
     reducers: {
         getTransactions: (state, action) => {
-            console.log(action)
             state.expenses = action.payload.expenses;
             state.incomes = action.payload.incomes;
             state.users = action.payload.users;
@@ -41,10 +39,41 @@ const companySlice = createSlice({
         addCompanyExpense: (state, action) => {
             state.expenses.includes(action.payload)? state.expenses : state.expenses.push(action.payload);
         },
-        updateCompanyExpense: (state, action) => {},
-        updateCompanyIncome: (state, action) => {},
-        deleteCompanyExpense: (state, action) => {},
-        deleteCompanyIncome: (state, action) => {},
+        updateCompanyExpense: (state, action) => {
+            const update = state.expenses.map(exp => {
+                if(exp._id === action.payload._id){ 
+                    return action.payload
+                } else {
+                    return exp
+
+                }
+            })
+            state.expenses = update
+        },
+        updateCompanyIncome: (state, action) => {
+            const update = state.incomes.map(inc => {
+                if(inc._id === action.payload._id){ 
+                    return action.payload
+                } else {
+                    return inc
+
+                }
+            })
+            console.log(update, 'income')
+            state.incomes = update
+        },
+        deleteCompanyExpense: (state, action) => {
+            const update = state.expenses.filter(exp => {
+                if(exp._id !== action.payload) return exp
+            })
+            state.expenses = update
+        },
+        deleteCompanyIncome: (state, action) => {
+            const update = state.incomes.filter(inc => {
+                if(inc._id !== action.payload) return inc
+            })
+            state.incomes = update
+        },
     }
 
 })
@@ -52,10 +81,8 @@ const companySlice = createSlice({
 
 export const createCompany = (company: formCompany) => async (dispatch: Function) => {
     const url = `http://localhost:3000/api/company`
-    console.log(company)
     const newCompany = await axios.post(url, company)
     const companyData = await getCompany(newCompany.data._id, dispatch)
-    console.log(companyData)
     dispatch(companySlice.actions.getTransactions(companyData?.data.payload))
 }
 
@@ -76,12 +103,31 @@ export const addCompanyExpense = (expense: ExpenseType, id: string) => async (di
     dispatch(companySlice.actions.addCompanyExpense(newExpense.data.payload))
 }
 
-export const updateCompanyExpense = (expense: any, id: String) => async (dispatch: Function) => {
-    const company = await verifyUserCompany(id)
-    const url = `http://localhost:3000/api/company/expense?id=${expense.id}&company=${company}`
+export const updateCompanyExpense = (expense: any, id: any) => async (dispatch: Function) => {
+    const url = `http://localhost:3000/api/company/expense?id=${id}`
+    const newExpense = await axios.put(url, expense)
+    dispatch(companySlice.actions.updateCompanyExpense(newExpense.data.payload))
 }
-export const updateCompanyIncome = (income: any, company: String) => async (dispatch: Function) => {}
-export const deleteCompanyExpense = (expense: any, company: string) => async (dispatch: Function) => {}
-export const deleteCompanyIncome = (income: any, company: string) => async (dispatch: Function) => {}
+export const updateCompanyIncome = (income: any, id: String) => async (dispatch: Function) => {
+    const url = `http://localhost:3000/api/company/expense?id=${id}`
+    const newIncome = await axios.put(url, income)
+    dispatch(companySlice.actions.updateCompanyExpense(newIncome.data.payload))
+}
+export const deleteCompanyExpense = (id: any, idUser: any) => async (dispatch: Function) => {
+    const company = await verifyUserCompany(idUser)
+    const url = `http://localhost:3000/api/company/expense?id=${id}&company=${company}`
+   try{ 
+    const deletedExpense = await axios.delete(url)
+    dispatch(companySlice.actions.deleteCompanyExpense(deletedExpense.data.id))}
+    catch(e){ console.log(e) }
+}
+export const deleteCompanyIncome = (id: any, idUser: any) => async (dispatch: Function) => {
+    const company = await verifyUserCompany(idUser)
+    const url = `http://localhost:3000/api/company/income?id=${id}&company=${company}`
+   try{ 
+    const deletedExpense = await axios.delete(url)
+    dispatch(companySlice.actions.deleteCompanyIncome(deletedExpense.data.id))}
+    catch(e){ console.log(e) }
+}
 
 export default companySlice.reducer;

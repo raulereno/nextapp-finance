@@ -53,7 +53,7 @@ export default async function companyExpense(
         await company.save(); 
         res
           .status(200)
-          .json({ message: "delete a unique income", result: result, company: company });
+          .json({ message: "delete a unique income", result: result, id: query.id});
         break;
         
     default:
