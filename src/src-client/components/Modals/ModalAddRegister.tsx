@@ -1,22 +1,16 @@
-import { addExpense } from "@/redux/slice/ExpenseSlice";
-import { addIncome } from "@/redux/slice/IncomeSlice";
-import { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import FormRegister from "./FormAddRegister";
-import { isValidExpense } from "@/utils/isValidExpense";
-import Swal from "sweetalert2";
-import { useSession } from "next-auth/react";
 import {
   addCompanyExpense,
   addCompanyIncome,
 } from "@/redux/slice/CompanySlice";
-import { TotalRegisters } from "@/types/TotalRegister.type";
 import {
   addPersonalExpense,
   addPersonalIncome,
-  getUserFinance,
 } from "@/redux/slice/PersonalSlice";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import FormRegister from "./FormAddRegister";
 
 interface PropsModal {
   props: {
@@ -45,12 +39,6 @@ export function ModalAddRegister({
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
   const { data: session } = useSession();
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
 
   const dispatch: Function = useDispatch();
   const email = session?.user?.email;
@@ -112,7 +100,6 @@ export function ModalAddRegister({
           handleClose();
         }
       }
-      // await dispatch(getUserFinance(session?.user?.email!));
     }
   };
 
