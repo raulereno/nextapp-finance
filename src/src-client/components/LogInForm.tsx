@@ -88,35 +88,110 @@ const Auth: NextPage = ({ providers }: any) => {
 
   return (
     <>
-      <div className="container">
-        <div className="cardLogin">
-          <h4 className="titleLogin">{authType}</h4>
-          <form>
-            <div className="fieldLogin">
-              <svg className="input-iconLogin" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                <path d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"></path></svg>
-              <input autoComplete="off" id="logemail" placeholder="Email" className="input-fieldLogin" name="logemail" type="email" />
-            </div>
-            <div className="fieldLogin">
-              <svg className="input-iconLogin" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                <path d="M80 192V144C80 64.47 144.5 0 224 0C303.5 0 368 64.47 368 144V192H384C419.3 192 448 220.7 448 256V448C448 483.3 419.3 512 384 512H64C28.65 512 0 483.3 0 448V256C0 220.7 28.65 192 64 192H80zM144 192H304V144C304 99.82 268.2 64 224 64C179.8 64 144 99.82 144 144V192z"></path></svg>
-              <input autoComplete="off" id="logpass" placeholder="Password" className="input-fieldLogin" name="logpass" type="password" />
-            </div>
-            <button className="btn-Login" type="submit">Login</button>
-            <p>
-              {authType === "Login"
-                ? "Not registered yet? "
-                : "Already have an account? "}
-              <button className="btn-Login" onClick={() => setAuthType(oppAuthType[authType])}>
-                <p>{oppAuthType[authType]}</p>
-              </button>
-            </p>
-            {/* <a href="#" className="btn-linkLogin">Forgot your password?</a> */}
-          </form>
+      <div className="container d-flex justify-content-center custom-container">
+        <div className="form-container">
+          <p className="title">{authType}</p>
+          <Formik
+            initialValues={{}} // { email: "", password: "" }
+            validateOnChange={false}
+            validateOnBlur={false}
+            onSubmit={(_, actions) => {
+              formSubmit(actions);
+            }}
+          >
+
+            {(props) => (
+              <Form className="form" style={{ width: "100%" }}>
+                <div className="d-flex flex-column w-100% margin-b-4 input-group">
+                  {authType === "Register" && (
+                    <Field name="username">
+                      {() => (
+                        <>
+                          <label htmlFor="username">Username:</label>
+                          <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Username"
+                            type="text"
+                          />
+                        </>
+                      )}
+                    </Field>
+                  )}
+                  <Field name="email">
+                    {() => (
+                      <>
+                        <label htmlFor="email">Email</label>
+                        <input
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Email Address"
+                          type="email"
+                        />
+                      </>
+                    )}
+                  </Field>
+                  <Field name="password">
+                    {() => (
+                      <>
+                        <label htmlFor="password">Password</label>
+                        <input
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          type="password"
+                          placeholder="Password"
+                        />
+                      </>
+                    )}
+                  </Field>
+                  {/* <div className="forgot">
+                    <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
+                  </div> */}
+                  <button type="submit" className="btn-general mt-3">{authType}</button>
+                </div>
+              </Form>
+            )}
+
+          </Formik>
+          <div className="social-message">
+            <div className="line"></div>
+            <p className="message">Login with social accounts</p>
+            <div className="line"></div>
+          </div>
+          <div className="social-icons">
+            <button aria-label="Log in with Google" className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
+              </svg>
+            </button>
+            <button aria-label="Log in with Twitter" className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                <path d="M31.937 6.093c-1.177 0.516-2.437 0.871-3.765 1.032 1.355-0.813 2.391-2.099 2.885-3.631-1.271 0.74-2.677 1.276-4.172 1.579-1.192-1.276-2.896-2.079-4.787-2.079-3.625 0-6.563 2.937-6.563 6.557 0 0.521 0.063 1.021 0.172 1.495-5.453-0.255-10.287-2.875-13.52-6.833-0.568 0.964-0.891 2.084-0.891 3.303 0 2.281 1.161 4.281 2.916 5.457-1.073-0.031-2.083-0.328-2.968-0.817v0.079c0 3.181 2.26 5.833 5.26 6.437-0.547 0.145-1.131 0.229-1.724 0.229-0.421 0-0.823-0.041-1.224-0.115 0.844 2.604 3.26 4.5 6.14 4.557-2.239 1.755-5.077 2.801-8.135 2.801-0.521 0-1.041-0.025-1.563-0.088 2.917 1.86 6.36 2.948 10.079 2.948 12.067 0 18.661-9.995 18.661-18.651 0-0.276 0-0.557-0.021-0.839 1.287-0.917 2.401-2.079 3.281-3.396z"></path>
+              </svg>
+            </button>
+            <button aria-label="Log in with GitHub" className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 fill-current">
+                <path d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <p className="signup">
+            {authType === "Login"
+              ? "Don't have an account? "
+              : "Already have an account? "}
+            <a
+              href="#"
+              onClick={() => setAuthType(oppAuthType[authType])}
+              className=""
+            >
+              {oppAuthType[authType]}
+            </a>
+          </p>
+
         </div>
 
-
-
+        {/* 
         <div className="d-flex flex-column justify-content-center  align-content-center">
           <h1 className="display-3">{authType}</h1>
           <p>
@@ -187,7 +262,7 @@ const Auth: NextPage = ({ providers }: any) => {
               </Form>
             )}
           </Formik>
-        </div>
+        </div> */}
       </div>
     </>
   );
