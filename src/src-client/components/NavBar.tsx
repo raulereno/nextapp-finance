@@ -1,17 +1,24 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import Nav from "react-bootstrap/Nav";
+import { useEffect, useState } from "react";
+import {useSession} from 'next-auth/react'
 import Logo from "../../../assets/logo.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
 import Link from "next/link";
+import { getRole } from "../utilities/getRole";
 
 interface Ipage {
   page: string;
 }
 
 function NavBar({ page }: Ipage) {
+  const {data : session} = useSession()
+  const [admin, setAdmin] = useState(false)
+  const email = session?.user?.email
+  
+  useEffect(() => {
+    if(!admin && session && session.user ) getRole(email, setAdmin)
+  }, [admin, session])
+
   return (
     <div className="navBar-Container">
       <nav>
@@ -32,6 +39,13 @@ function NavBar({ page }: Ipage) {
               Compañias
             </Link>
           </li>
+          {admin && 
+            <li>
+              <Link className="btn-general mt-3" href="/admin">
+                Admin
+              </Link>
+            </li>
+            }
           <li style={{ position: "absolute", bottom: "0" }}>
             <LogButton />
           </li>

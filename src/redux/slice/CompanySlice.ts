@@ -7,6 +7,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Schema } from "mongoose";
 
+
+const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company`
 interface Company {
     expenses: ExpenseType[],
     incomes: IncomeType[],
@@ -80,7 +82,7 @@ const companySlice = createSlice({
 
 
 export const createCompany = (company: formCompany) => async (dispatch: Function) => {
-    const url = `http://localhost:3000/api/company`
+    
     const newCompany = await axios.post(url, company)
     const companyData = await getCompany(newCompany.data._id, dispatch)
     dispatch(companySlice.actions.getTransactions(companyData?.data.payload))
@@ -91,41 +93,41 @@ export const getTransactions = (company: CompanType) => (dispatch: Function) => 
 }
 export const addCompanyIncome = (income: IncomeType, id: string) => async (dispatch: Function) => {
     const company = await verifyUserCompany(id)
-    const url = `http://localhost:3000/api/income?Id=${company}`
-    const newIncome = await axios.post(url, income)
+    const urlIncome = `${url}/income?Id=${company}`
+    const newIncome = await axios.post(urlIncome, income)
     dispatch(companySlice.actions.addCompanyIncome(newIncome.data.payload))
 }
 
 export const addCompanyExpense = (expense: ExpenseType, id: string) => async (dispatch: Function) => {
     const company = await verifyUserCompany(id)
-    const url = `http://localhost:3000/api/expense?Id=${company}`
-    const newExpense = await axios.post(url, expense)
+    const urlExpense = `${url}/expense?Id=${company}`
+    const newExpense = await axios.post(urlExpense, expense)
     dispatch(companySlice.actions.addCompanyExpense(newExpense.data.payload))
 }
 
 export const updateCompanyExpense = (expense: any, id: any) => async (dispatch: Function) => {
-    const url = `http://localhost:3000/api/company/expense?id=${id}`
-    const newExpense = await axios.put(url, expense)
+    const urlExpense = `${url}/expense?id=${id}`
+    const newExpense = await axios.put(urlExpense, expense)
     dispatch(companySlice.actions.updateCompanyExpense(newExpense.data.payload))
 }
 export const updateCompanyIncome = (income: any, id: String) => async (dispatch: Function) => {
-    const url = `http://localhost:3000/api/company/expense?id=${id}`
-    const newIncome = await axios.put(url, income)
+    const urlIncome = `${url}/expense?id=${id}`
+    const newIncome = await axios.put(urlIncome, income)
     dispatch(companySlice.actions.updateCompanyExpense(newIncome.data.payload))
 }
 export const deleteCompanyExpense = (id: any, idUser: any) => async (dispatch: Function) => {
     const company = await verifyUserCompany(idUser)
-    const url = `http://localhost:3000/api/company/expense?id=${id}&company=${company}`
+    const urlExpense = `${url}/expense?id=${id}&company=${company}`
    try{ 
-    const deletedExpense = await axios.delete(url)
+    const deletedExpense = await axios.delete(urlExpense)
     dispatch(companySlice.actions.deleteCompanyExpense(deletedExpense.data.id))}
     catch(e){ console.log(e) }
 }
 export const deleteCompanyIncome = (id: any, idUser: any) => async (dispatch: Function) => {
     const company = await verifyUserCompany(idUser)
-    const url = `http://localhost:3000/api/company/income?id=${id}&company=${company}`
+    const urlIncome = `${url}/income?id=${id}&company=${company}`
    try{ 
-    const deletedExpense = await axios.delete(url)
+    const deletedExpense = await axios.delete(urlIncome)
     dispatch(companySlice.actions.deleteCompanyIncome(deletedExpense.data.id))}
     catch(e){ console.log(e) }
 }

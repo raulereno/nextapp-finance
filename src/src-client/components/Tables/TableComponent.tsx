@@ -1,96 +1,31 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
-import {
-  deletePersonalExpense,
-  deletePersonalIncome,
-} from "@/redux/slice/PersonalSlice";
 import capitalize from "@/utils/capitalize";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
 import { ModalEdit } from "../Modals/ModalEditRegister";
-
-import capitalize from "@/utils/capitalize";
-import { deleteCompanyExpense, deleteCompanyIncome } from "@/redux/slice/CompanySlice";
-import { useSession } from "next-auth/react";
-
+import DeleteRegister from "./DeleteRegister/DeleteRegister";
 import { exportData } from "./exportData";
-
+import { searchTable } from "./searchTable";
 
 export const TableComponent = ({ content, filters }: any) => {
-  console.log(filters)
-  const dispatch: Function = useDispatch();
-  const {data : session} = useSession()
-  const idUser = session?.user?.email
-  const deleteRegister = (id: String) => {
-    Swal.fire({
-      title: "Esta seguro que desea borrar el registro?",
-      showDenyButton: true,
+  const [tableContent, setTableContent] = useState<
+    IncomeType[] | ExpenseType[]
+  >([]);
 
-      denyButtonText: `Cancelar`,
-      confirmButtonText: "Borrar",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        if (filters.type === "ingresos") {
-          filters.slice === 'negocio' ?
-          dispatch(deleteCompanyIncome(id, idUser)) :
-          dispatch(deletePersonalIncome("email", id));
-        } else {
-          filters.slice === 'negocio' ?
-          dispatch(deleteCompanyExpense(id, idUser)) :
-          dispatch(deletePersonalExpense("email", id));
-
+  useEffect(() => {
+    const filterData = (content: IncomeType[] | ExpenseType[]) => {
+      const aux = content.filter((ele: IncomeType | ExpenseType) => {
+        if (ele.type[0] === filters.slice) {
+          return ele;
         }
-        Swal.fire("Borrado!", "", "success");
-      }
-    });
-  };
+      });
+      setTableContent(aux);
+    };
+    filterData(content);
+  }, [content, filters]);
 
-  const searchTable = () => {
-    // Obtener el valor del input de búsqueda
-    const input = document.querySelector<HTMLInputElement>("#searchInput");
-    if (!input) return;
-    const filter = input.value.toUpperCase();
-
-    // Obtener la tabla y las filas de la tabla
-    const table = document.querySelector(".table");
-    if (!table) return;
-    const trs = table.getElementsByTagName("tr");
-
-    // Recorrer todas las filas y ocultar las que no cumplan con la búsqueda, excepto el encabezado
-    for (let i = 0; i < trs.length; i++) {
-      const tds = trs[i].getElementsByTagName("td");
-      let visible = false;
-      if (filter === "") {
-        if (trs[i].classList.contains("thead")) {
-          visible = true;
-        }
-      } else {
-        if (!trs[i].classList.contains("thead")) {
-          for (let j = 0; j < tds.length; j++) {
-            const td = tds[j];
-            if (td) {
-              const textValue = td.textContent || td.innerText;
-              if (textValue.toUpperCase().indexOf(filter) > -1) {
-                visible = true;
-              }
-            }
-          }
-        }
-      }
-      if (visible) {
-        (trs[i] as HTMLElement).style.display = "";
-      } else {
-        (trs[i] as HTMLElement).style.display = "none";
-      }
-    }
-  };
-
-  const dowloadCvs = () => {
+  const downloadExcel = () => {
     const data = content.filter((ele: IncomeType | ExpenseType) => {
       if (ele.type[0] === filters.slice) {
         return ele;
@@ -98,7 +33,8 @@ export const TableComponent = ({ content, filters }: any) => {
     });
     exportData(data);
   };
-  if (!filters.slice && !filters.type) {
+
+  if ((!filters.slice && !filters.type) || !content.length) {
     return <></>;
   }
 
@@ -118,13 +54,13 @@ export const TableComponent = ({ content, filters }: any) => {
               ></input>
             </div>
           </form>
-          <button onClick={dowloadCvs}>Descargar excel</button>
+          <button onClick={downloadExcel}>Descargar excel</button>
         </div>
       </div>
 
       <Table className="table table-hover table-active mt-3" id="tableRegister">
-        <thead className="text-white">
-          <tr>
+        <thead className="table-head text-white">
+          <tr className="table-head-row">
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Value</th>
@@ -132,49 +68,31 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody className="text-white">
-          {content
-            .filter((ele: IncomeType | ExpenseType) => {
-              if (ele.type[0] === filters.slice) {
-                return ele;
-              }
-            })
-            .map((ele: IncomeType | ExpenseType) => {
-              return (
-                //TODO:Aqui no deja agregar el id como key
-                <tr key={Math.random()}>
-                  <td>{capitalize(filters.type)}</td>
-                  <td>{capitalize(ele.category)}</td>
-                  <td>${ele.value}</td>
-                  <td>{capitalize(ele.description)}</td>
-                  <td>
-                    <ModalEdit
-                      props={{
-                        type: ele.type[0],
-                        category: ele.category,
-                        description: ele.description,
-                        value: ele.value,
-                        id: ele._id!,
-                        table: filters.type,
-                      }}
-                    />
-                    <button
-                      onClick={() => {
-                        deleteRegister(ele._id!);
-                      }}
-                      className="border-0 rounded-1 m-1 text-white"
-                    >
-                      <Image
-                        src={icoBorrar}
-                        alt="Borrar"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+        <tbody className="text-white table-body">
+          {tableContent.map((ele: IncomeType | ExpenseType) => {
+            return (
+              //TODO:Aqui no deja agregar el id como key
+              <tr key={Math.random()}>
+                <td>{capitalize(filters.type)}</td>
+                <td>{capitalize(ele.category)}</td>
+                <td>${ele.value}</td>
+                <td>{capitalize(ele.description)}</td>
+                <td>
+                  <ModalEdit
+                    props={{
+                      type: ele.type[0],
+                      category: ele.category,
+                      description: ele.description,
+                      value: ele.value,
+                      id: ele._id!,
+                      table: filters.type,
+                    }}
+                  />
+                  <DeleteRegister id={ele._id} filters={filters} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </div>
