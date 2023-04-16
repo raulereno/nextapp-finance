@@ -1,12 +1,9 @@
-import { useState } from "react";
-import type { NextPage } from "next";
-import { signIn, getProviders } from "next-auth/react";
-import { Field, Form, Formik } from "formik";
 import axios from "axios";
+import { Field, Form, Formik } from "formik";
+import type { NextPage } from "next";
+import { getProviders, signIn } from "next-auth/react";
 import Router from "next/router";
-import { Alert } from "react-bootstrap";
-import { log } from "console";
-
+import { useState } from "react";
 
 const Auth: NextPage = ({ providers }: any) => {
   const [authType, setAuthType] = useState("Login");
@@ -17,28 +14,6 @@ const Auth: NextPage = ({ providers }: any) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const ProvidersButtons = ({ providers }: any) => (
-    <div className="d-flex flex-column w-100%">
-      {providers &&
-        Object.values(providers).map(
-          (provider: any) =>
-            provider.name !== "Credentials" && (
-              <button
-                key={provider.name}
-                type="submit"
-                onClick={() => {
-                  signIn(provider.id, {
-                    callbackUrl: `${process.env.AUTH0_BASE_URL}`,
-                  });
-                }}
-              >
-                <p>Sign in with {provider.name}</p>
-              </button>
-            )
-        )}
-    </div>
-  );
 
   const redirectToHome = () => {
     const { pathname } = Router;
@@ -52,7 +27,7 @@ const Auth: NextPage = ({ providers }: any) => {
     const res = await axios
       .post(
         "/api/register",
-        { username, email, password, role: 'user' },
+        { username, email, password, role: "user" },
         {
           headers: {
             Accept: "application/json",
@@ -60,11 +35,11 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async (res : any) => {
+      .then(async (res: any) => {
         await loginUser();
         redirectToHome();
       })
-      .catch(( error : any) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -99,7 +74,6 @@ const Auth: NextPage = ({ providers }: any) => {
               formSubmit(actions);
             }}
           >
-
             {(props) => (
               <Form className="form" style={{ width: "100%" }}>
                 <div className="d-flex flex-column w-100% margin-b-4 input-group">
@@ -147,13 +121,14 @@ const Auth: NextPage = ({ providers }: any) => {
                   {/* <div className="forgot">
                     <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                   </div> */}
-                  <button type="submit" className="btn-general mt-3">{authType}</button>
+                  <button type="submit" className="btn-general mt-3">
+                    {authType}
+                  </button>
                 </div>
               </Form>
             )}
-
           </Formik>
-          <div className="social-message">
+          {/* <div className="social-message">
             <div className="line"></div>
             <p className="message">Login with social accounts</p>
             <div className="line"></div>
@@ -174,12 +149,12 @@ const Auth: NextPage = ({ providers }: any) => {
                 <path d="M16 0.396c-8.839 0-16 7.167-16 16 0 7.073 4.584 13.068 10.937 15.183 0.803 0.151 1.093-0.344 1.093-0.772 0-0.38-0.009-1.385-0.015-2.719-4.453 0.964-5.391-2.151-5.391-2.151-0.729-1.844-1.781-2.339-1.781-2.339-1.448-0.989 0.115-0.968 0.115-0.968 1.604 0.109 2.448 1.645 2.448 1.645 1.427 2.448 3.744 1.74 4.661 1.328 0.14-1.031 0.557-1.74 1.011-2.135-3.552-0.401-7.287-1.776-7.287-7.907 0-1.751 0.62-3.177 1.645-4.297-0.177-0.401-0.719-2.031 0.141-4.235 0 0 1.339-0.427 4.4 1.641 1.281-0.355 2.641-0.532 4-0.541 1.36 0.009 2.719 0.187 4 0.541 3.043-2.068 4.381-1.641 4.381-1.641 0.859 2.204 0.317 3.833 0.161 4.235 1.015 1.12 1.635 2.547 1.635 4.297 0 6.145-3.74 7.5-7.296 7.891 0.556 0.479 1.077 1.464 1.077 2.959 0 2.14-0.020 3.864-0.020 4.385 0 0.416 0.28 0.916 1.104 0.755 6.4-2.093 10.979-8.093 10.979-15.156 0-8.833-7.161-16-16-16z"></path>
               </svg>
             </button>
-          </div>
+          </div> */}
 
           <p className="signup">
             {authType === "Login"
-              ? "Don't have an account? "
-              : "Already have an account? "}
+              ? "¿No tienes una cuenta? "
+              : "¿Ya tienes una cuenta? "}
             <a
               href="#"
               onClick={() => setAuthType(oppAuthType[authType])}
@@ -188,81 +163,7 @@ const Auth: NextPage = ({ providers }: any) => {
               {oppAuthType[authType]}
             </a>
           </p>
-
         </div>
-
-        {/* 
-        <div className="d-flex flex-column justify-content-center  align-content-center">
-          <h1 className="display-3">{authType}</h1>
-          <p>
-            {authType === "Login"
-              ? "Not registered yet? "
-              : "Already have an account? "}
-            <button onClick={() => setAuthType(oppAuthType[authType])}>
-              <p>{oppAuthType[authType]}</p>
-            </button>
-          </p>
-
-          <ProvidersButtons providers={providers} />
-
-          <Formik
-            initialValues={{}} // { email: "", password: "" }
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={(_, actions) => {
-              formSubmit(actions);
-            }}
-          >
-            {(props) => (
-              <Form style={{ width: "100%" }}>
-                <div className="d-flex flex-column w-100% margin-b-4">
-                  {authType === "Register" && (
-                    <Field name="username">
-                      {() => (
-                        <>
-                          <label htmlFor="username">Username:</label>
-                          <input
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </>
-                      )}
-                    </Field>
-                  )}
-                  <Field name="email">
-                    {() => (
-                      <>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Email Address"
-                          type="email"
-                        />
-                      </>
-                    )}
-                  </Field>
-                  <Field name="password">
-                    {() => (
-                      <>
-                        <label htmlFor="password">Password</label>
-                        <input
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          type="password"
-                          placeholder="Password"
-                        />
-                      </>
-                    )}
-                  </Field>
-                  <button type="submit">{authType}</button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div> */}
       </div>
     </>
   );

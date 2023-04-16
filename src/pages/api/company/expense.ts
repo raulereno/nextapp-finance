@@ -44,7 +44,6 @@ export default async function companyExpense(
           .json({ message: "update a unique income", payload: expenses });
         break;
       case "DELETE":
-        console.log(query.company)
         company = await Company.findOne({ _id: query.company });
         let result = await Expense.deleteOne({ _id: query.id });
         company.expenses = await company.expenses.filter((c : Schema.Types.ObjectId)=> {

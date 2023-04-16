@@ -29,37 +29,12 @@ interface graphsProp {
 }
 
 export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
-  const dispatch: Function = useDispatch();
-
   const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
+
   const totalExcess =
     IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) -
     ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
   const ExcessColor = totalExcess < 0 ? "#FF0000" : "#00FF00";
-
-  // let incomes;
-  // let expenses;
-  // if (type === "company") {
-  //   incomes = useSelector((state: any) => state.CompanyReducer.incomes);
-  //   expenses = useSelector((state: any) => state.CompanyReducer.expenses);
-  // } else {
-  // }
-  // let totalIncomes;
-  // let totalExpenses;
-  // let totalExcess;
-  // if (expenses && incomes) {
-  //   totalExcess = calculateExcess(
-  //     incomes.map((ele: TotalRegisters) => ele.total),
-  //     expenses.map((ele: TotalRegisters) => ele.total)
-  //   );
-
-  //   totalIncomes = incomes.reduce(
-  //     (acc: number, ele: any) => acc + ele.value,
-  //     0
-  //   );
-  //   console.log(totalIncomes);
-  // }
-
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
@@ -67,15 +42,10 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
 
   const dataIncomes = {
     labels: IncomesResult.categories,
-    // labels: calculateTotalPerCategory(incomes).map((element) =>
-    //   capitalize(element.category)
-    // ),
     datasets: [
       {
         label: "",
         data: IncomesResult.totals,
-        // data: totalIncomes.map((element) => element.total),
-        // backgroundColor: colors.map((elm) => elm.codigo),
         backgroundColor: IncomesResult.colors,
         hoverOffset: 4,
       },
@@ -84,42 +54,27 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
 
   const dataExpenses = {
     labels: ExpensesResult.categories,
-    // labels: calculateTotalPerCategory(expenses).map((element) =>
-    //   capitalize(element.category)
-    // ),
     datasets: [
       {
         label: "",
         data: ExpensesResult.totals,
         backgroundColor: ExpensesResult.colors,
-
-        // data: totalExpenses.map((element) => element.total),
-        // backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExcess = {
-    // labels: totalExcess.map((elem) => capitalize(elem.category)),
-    labels: ["Negocio", "Personales"],
-
+    labels: [capitalize(type)],
     datasets: [
       {
         label: "",
         data: [totalExcess],
         backgroundColor: [ExcessColor],
-        // data: totalExcess.map((elem) => elem.total),
-        // backgroundColor: colors.map((elm) => elm.codigo),
         hoverOffset: 4,
       },
     ],
   };
-
-  useEffect(() => {
-    // dispatch(getIncomes("64257ccb28f7bffc594de664"));
-    // dispatch(getExpenses());
-  }, [incomes, expenses]);
 
   return (
     <div className="container text-center mt-5">
