@@ -52,7 +52,7 @@ const Auth: NextPage = ({ providers }: any) => {
     const res = await axios
       .post(
         "/api/register",
-        { username, email, password },
+        { username, email, password, role: 'user' },
         {
           headers: {
             Accept: "application/json",
@@ -60,11 +60,11 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async (res) => {
+      .then(async (res : any) => {
         await loginUser();
         redirectToHome();
       })
-      .catch((error) => {
+      .catch(( error : any) => {
         console.log(error);
       });
   };
