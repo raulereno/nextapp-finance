@@ -6,6 +6,7 @@ import axios from "axios";
 import Router from "next/router";
 import { Alert } from "react-bootstrap";
 import { log } from "console";
+import RegistrationForm from "./RegistroForm";
 
 
 const Auth: NextPage = ({ providers }: any) => {
