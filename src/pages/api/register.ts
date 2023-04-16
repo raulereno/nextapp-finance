@@ -51,7 +51,7 @@ export default async function handler(
   }
 
   // traer y validar el body
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   const errorMessage = await validateForm(username, email, password);
   if (errorMessage) {
@@ -66,6 +66,7 @@ export default async function handler(
     name: username,
     email,
     hashedPassword,
+    role,
   });
 
   newUser

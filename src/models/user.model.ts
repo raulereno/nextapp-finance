@@ -13,6 +13,7 @@ export interface UserType {
   company?: [CompanType];
   incomes?: [IncomeType];
   expenses?: [ExpenseType];
+  role: String;
 }
 
 const userSchema = new Schema<UserType, Model<UserType>>(
@@ -35,6 +36,10 @@ const userSchema = new Schema<UserType, Model<UserType>>(
       type: String,
       default:
         "https://icon-library.com/images/generic-user-icon/generic-user-icon-18.jpg",
+    },
+    role:{
+      type: String,
+      default: 'User'
     },
     company: [
       {

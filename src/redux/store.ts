@@ -6,7 +6,7 @@ import CompanyReducer from "./slice/CompanySlice";
 import PersonalReducer from "./slice/PersonalSlice";
 
 const persistConfig = {
-  key: "stossssdssre",
+  key: "store",
   storage,
 };
 
