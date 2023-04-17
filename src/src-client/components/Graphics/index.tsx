@@ -1,130 +1,117 @@
-import { getExpenses } from "@/redux/slice/ExpenseSlice";
-import { getIncomes } from "@/redux/slice/IncomeSlice";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { ExpenseType } from "@/models/expense.model";
+import { IncomeType } from "@/models/income.model";
+import colors from "@/utils/colors";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Excess } from "./Excess";
-import { Expense } from "./Expense";
-import { Income } from "./Income";
 import { TableComponent } from "../Tables/TableComponent";
-import { calculateExcess } from "@/utils/calculateTotal";
+import {
+  calculateExcess,
+  calculateTotal,
+  calculateTotalPerCategory,
+} from "@/utils/calculateTotal";
 import { TotalRegisters } from "@/types/TotalRegister.type";
-
+import { Income } from "./Income";
+import { Expense } from "./Expense";
+import { totalGenerate } from "@/src-client/utilities/totalGenerate";
+import { Excess } from "./Excess";
+import { options } from "@/src-client/utilities/graphicsOptions";
+import capitalize from "@/utils/capitalize";
+import { useDispatch, useSelector } from "react-redux";
 interface ContentTable {
   type: string;
   slice: string;
 }
 
-const options = {
-  animation: {
-    animateScale: true,
-  },
+interface graphsProp {
+  type: string;
+  incomes: [];
+  expenses: [];
+}
 
-  plugins: {
-    datalabels: {
-      formatter: (value: any, ctx: any) => {
-        let sum = 0;
-        let dataArr = ctx.chart.data.datasets[0].data;
-        dataArr.map((data: any) => {
-          sum += data;
-        });
-        let percentage = ((value * 100) / sum).toFixed(2) + "%";
-        return percentage;
-      },
-      color: "#fff",
-      onClick: () => {
-        console.log("event");
-      },
-    },
-  },
-};
+export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
+  const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
 
-export const Graphics = () => {
-  const dispatch: Function = useDispatch();
-  const incomes = useSelector((state: any) => state.IncomesReducer.incomes);
-  const expenses = useSelector((state: any) => state.ExpensesReducer.expenses);
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
-
-  const totalExcess = calculateExcess(
-    totalIncomes.map((ele: TotalRegisters) => ele.total),
-    totalExpenses.map((ele: TotalRegisters) => ele.total)
-  );
-
+  const totalExcess =
+    IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) -
+    ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
+  const ExcessColor = totalExcess < 0 ? "#FF0000" : "#00FF00";
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
   });
 
   const dataIncomes = {
-    labels: ["Negocio", "Personal"],
+    labels: IncomesResult.categories,
     datasets: [
       {
         label: "",
-        data: totalIncomes.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: IncomesResult.totals,
+        backgroundColor: IncomesResult.colors,
         hoverOffset: 4,
       },
     ],
   };
 
   const dataExpenses = {
-    labels: ["Negocio", "Personales"],
+    labels: ExpensesResult.categories,
     datasets: [
       {
         label: "",
-        data: totalExpenses.map((ele: TotalRegisters) => ele.total),
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: ExpensesResult.totals,
+        backgroundColor: ExpensesResult.colors,
         hoverOffset: 4,
       },
     ],
   };
 
-  const dataTotal = {
-    labels: ["Negocio", "Personales"],
+  const dataExcess = {
+    labels: [capitalize(type)],
     datasets: [
       {
         label: "",
-        data: totalExcess,
-        backgroundColor: ["rgb(243,212,6)", "rgb(61,132,60)"],
+        data: [totalExcess],
+        backgroundColor: [ExcessColor],
         hoverOffset: 4,
       },
     ],
   };
-
-  useEffect(() => {
-    dispatch(getIncomes());
-    dispatch(getExpenses());
-  }, [dispatch]);
 
   return (
     <div className="container text-center mt-5">
-      <div className="row d-flex justify-content-between">
-        <Income
-          options={options}
-          data={dataIncomes}
-          setTableContent={setTableContent}
-        />
-        <Expense
-          options={options}
-          data={dataExpenses}
-          setTableContent={setTableContent}
-        />
-        <Excess
-          options={options}
-          data={dataTotal}
-          setTableContent={setTableContent}
-        />
-      </div>
-      <div className="row mt-5">
-        <TableComponent
-          content={tableContent.type === "ingresos" ? incomes : expenses}
-          filters={tableContent}
-        />
-      </div>
+      {!incomes || (!expenses && <span className="loader" />)}
+      {incomes && expenses && (
+        <>
+          <div className="row d-flex justify-content-between">
+            <Income
+              type={type}
+              options={options}
+              data={dataIncomes}
+              setTableContent={setTableContent}
+              totalDataIncomes={IncomesResult.totals}
+              totalDataExpenses={ExpensesResult.totals}
+            />
+            <Expense
+              type={type}
+              options={options}
+              data={dataExpenses}
+              setTableContent={setTableContent}
+              totalDataIncomes={IncomesResult.totals}
+              totalDataExpenses={ExpensesResult.totals}
+            />
+            <Excess
+              options={options}
+              data={dataExcess}
+              setTableContent={setTableContent}
+            />
+          </div>
+          <div className="row mt-5">
+            <TableComponent
+              content={tableContent.type === "ingresos" ? incomes : expenses}
+              filters={tableContent}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -5,7 +5,21 @@ import { ModalAddRegister } from "../Modals/ModalAddRegister";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-export function Income({ options, data, setTableContent }: any) {
+interface IncomeProps {
+  type?: string;
+  options: object;
+  data: any;
+  setTableContent: Function;
+}
+export function Income({
+  type,
+  options,
+  data,
+  setTableContent,
+  totalDataIncomes,
+  totalDataExpenses,
+}: any) {
+
   const propsModal = {
     title: "Agregar ingresos",
     buttonText: "Agregar ingresos",
@@ -16,7 +30,7 @@ export function Income({ options, data, setTableContent }: any) {
     onClick: function (event: any, elements: any) {
       const slice = {
         type: "ingresos",
-        slice: elements[0]?.index === 0 ? "negocio" : "personales",
+        slice: type,
       };
 
       setTableContent(slice);
@@ -30,7 +44,7 @@ export function Income({ options, data, setTableContent }: any) {
     >
       <h2>Ingresos</h2>
 
-      {data.datasets[0].data[0] !== 0 || data.datasets[0].data[1] !== 0 ? (
+      {data.labels.length ? (
         <Doughnut
           options={optionsPlus}
           height="250"
@@ -41,7 +55,12 @@ export function Income({ options, data, setTableContent }: any) {
       ) : (
         <h2>No hay registros</h2>
       )}
-      <ModalAddRegister props={propsModal} />
+      <ModalAddRegister
+        type={type}
+        props={propsModal}
+        dataIncomes={totalDataIncomes}
+        dataExpenses={totalDataExpenses}
+      />
     </div>
   );
 }

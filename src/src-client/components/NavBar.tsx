@@ -1,24 +1,63 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import Nav from "react-bootstrap/Nav";
+import { useEffect, useState } from "react";
+import {useSession} from 'next-auth/react'
 import Logo from "../../../assets/logo.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
+import Link from "next/link";
+import { getRole } from "../utilities/getRole";
 
 interface Ipage {
   page: string;
 }
 
 function NavBar({ page }: Ipage) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const {data : session} = useSession()
+  const [admin, setAdmin] = useState(false)
+  const email = session?.user?.email
+  
+  useEffect(() => {
+    if(!admin && session && session.user ) getRole(email, setAdmin)
+  }, [admin, session])
 
   return (
     <div className="navBar-Container">
-      <Button className=" border-0" onClick={handleShow}>
+      <nav>
+        <ul className="d-flex flex-column">
+          <li>
+            <Link href={"/"}>
+              <Image src={Logo} alt="logo" width={150} height={80} />
+            </Link>
+          </li>
+          <li></li>
+          <li>
+            <Link className="btn-general mt-3" href="/">
+              Personales
+            </Link>
+          </li>
+          <li>
+            <Link className="btn-general mt-3" href="/company">
+              Compañias
+            </Link>
+          </li>
+          {admin && 
+            <li>
+              <Link className="btn-general mt-3" href="/admin">
+                Admin
+              </Link>
+            </li>
+            }
+          <li style={{ position: "absolute", bottom: "0" }}>
+            <LogButton />
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+}
+
+export default NavBar;
+{
+  /* <Button className=" border-0" onClick={handleShow}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-menu-2"
@@ -88,9 +127,5 @@ function NavBar({ page }: Ipage) {
             </Nav.Item>
           </Nav>
         </Offcanvas.Body>
-      </Offcanvas>
-    </div>
-  );
+      </Offcanvas> */
 }
-
-export default NavBar;

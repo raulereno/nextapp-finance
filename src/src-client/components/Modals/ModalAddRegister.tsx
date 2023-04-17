@@ -1,11 +1,16 @@
-import { addExpense } from "@/redux/slice/ExpenseSlice";
-import { addIncome } from "@/redux/slice/IncomeSlice";
+import {
+  addCompanyExpense,
+  addCompanyIncome,
+} from "@/redux/slice/CompanySlice";
+import {
+  addPersonalExpense,
+  addPersonalIncome,
+} from "@/redux/slice/PersonalSlice";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import FormRegister from "./FormAddRegister";
-import { isValidExpense } from "@/utils/isValidExpense";
-import Swal from "sweetalert2";
 
 interface PropsModal {
   props: {
@@ -13,6 +18,7 @@ interface PropsModal {
     buttonText: string;
     type: string;
   };
+  type?: string;
 }
 
 const initialStateForm = {
@@ -22,53 +28,78 @@ const initialStateForm = {
   value: 0,
 };
 
-export function ModalAddRegister({ props }: PropsModal) {
+export function ModalAddRegister({
+  props,
+  type,
+  dataIncomes,
+  dataExpenses,
+}: any) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
-
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
+  const { data: session } = useSession();
 
   const dispatch: Function = useDispatch();
+  const email = session?.user?.email;
 
-  const sendForm = () => {
-    if (props.type === "expense") {
-      const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
+  const sendForm = async () => {
+    if (email && email !== null && email !== undefined) {
+      if (props.type === "expense") {
+        // const validExpense = isValidExpense(
+        //   totalIncomes,
+        //   totalExpenses,
+        //   form,
+        //   type
+        // );
 
-      if (validExpense) {
-        Swal.fire({
-          title: validExpense,
-          text: "Estas seguro?",
-          showDenyButton: true,
-          confirmButtonText: "Aceptar",
-          denyButtonText: `Cancelar`,
-          reverseButtons: true,
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            dispatch(addExpense(form));
-            setForm(initialStateForm);
-            handleClose();
-          } else if (result.isDenied) {
-            setForm(initialStateForm);
-            handleClose();
-          }
-        });
+        // if (validExpense) {
+        //   Swal.fire({
+        //     title: validExpense,
+        //     text: "Estas seguro?",
+        //     showDenyButton: true,
+        //     confirmButtonText: "Aceptar",
+        //     denyButtonText: `Cancelar`,
+        //     reverseButtons: true,
+        //   }).then((result) => {
+        //     /* Read more about isConfirmed, isDenied below */
+        //     if (result.isConfirmed) {
+        //       if (type === "negocio") {
+        //         dispatch(addCompanyExpense({ ...form, type: type! }, email));
+        //         setForm(initialStateForm);
+        //         handleClose();
+        //       } else {
+        //         dispatch(addExpense({ ...form, type: type! }, email));
+        //         setForm(initialStateForm);
+        //         handleClose();
+        //       }
+        //     } else if (result.isDenied) {
+        //       setForm(initialStateForm);
+        //       handleClose();
+        //     }
+        //   });
+        // } else {
+        if (type === "negocio") {
+          dispatch(addCompanyExpense({ ...form, type: type! }, email));
+          setForm(initialStateForm);
+          handleClose();
+        } else {
+          dispatch(addPersonalExpense({ ...form, type: type! }, email));
+          setForm(initialStateForm);
+          handleClose();
+        }
+        // }
       } else {
-        dispatch(addExpense(form));
-        setForm(initialStateForm);
-        handleClose();
+        if (type === "negocio") {
+          dispatch(addCompanyIncome({ ...form, type: type! }, email));
+          setForm(initialStateForm);
+          handleClose();
+        } else {
+          await dispatch(addPersonalIncome(email, { ...form, type: type! }));
+          setForm(initialStateForm);
+          handleClose();
+        }
       }
-    } else {
-      dispatch(addIncome(form));
-      setForm(initialStateForm);
-      handleClose();
     }
   };
 
@@ -85,7 +116,7 @@ export function ModalAddRegister({ props }: PropsModal) {
       <Modal className="text-center" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title className="d-flex justify-content-center">
-            {props.title}
+            {props.title} {type}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center">

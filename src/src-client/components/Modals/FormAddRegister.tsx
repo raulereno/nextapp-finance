@@ -28,7 +28,7 @@ export default function FormRegister({ form, setForm }: FormProps) {
 
   return (
     <form action="" className="d-flex flex-column">
-      <div className="input-group mb-3 w-100">
+      {/* <div className="input-group mb-3 w-100">
         <label htmlFor="type" className="input-group-text">
           Tipo de ingreso
         </label>
@@ -36,7 +36,7 @@ export default function FormRegister({ form, setForm }: FormProps) {
           name="type"
           id=""
           onChange={handleChange}
-          value={form.type}
+          value={type}
           className="form-select"
           aria-describedby="Tipo"
           placeholder="Tipo de ingreso"
@@ -46,7 +46,7 @@ export default function FormRegister({ form, setForm }: FormProps) {
           <option value="negocio">Negocio</option>
           <option value="personales">Personal</option>
         </select>
-      </div>
+      </div> */}
 
       <div className="input-group mb-3 w-100">
         <label htmlFor="text" className="input-group-text">

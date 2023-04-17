@@ -1,13 +1,20 @@
-import { updateExpense } from "@/redux/slice/ExpenseSlice";
-import { updateIncome } from "@/redux/slice/IncomeSlice";
 import capitalize from "@/utils/capitalize";
+import Image from "next/image";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import icoEditar from "../../../../assets/pencil-svgrepo-com.svg";
-import Image from "next/image";
 import FormRegister from "./FormAddRegister";
-import { isValidExpense } from "@/utils/isValidExpense";
+
+import {
+  updateCompanyExpense,
+  updateCompanyIncome,
+} from "@/redux/slice/CompanySlice";
+
+import {
+  updatePersonalExpense,
+  updatePersonalIncome,
+} from "@/redux/slice/PersonalSlice";
 
 interface PropsModal {
   props: {
@@ -31,12 +38,6 @@ export function ModalEdit({ props }: PropsModal) {
   const [form, setForm] = useState(initialStateForm);
   const [show, setShow] = useState(false);
   const dispatch: Function = useDispatch();
-  const totalIncomes = useSelector(
-    (state: any) => state.IncomesReducer.totalIncomes
-  );
-  const totalExpenses = useSelector(
-    (state: any) => state.ExpensesReducer.totalExpenses
-  );
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -51,12 +52,18 @@ export function ModalEdit({ props }: PropsModal) {
 
   const sendForm = () => {
     if (props.table === "ingresos") {
-      dispatch(updateIncome(form, props.id));
+      props.type.toString() === "negocio"
+        ? dispatch(updateCompanyIncome(form, props.id))
+        : dispatch(updatePersonalIncome(form, props.id));
+      setForm(initialStateForm);
+      handleClose();
     } else {
       // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
       //TODO: cambiar esta logica para que te deje
+      props.type.toString() === "negocio"
+        ? dispatch(updateCompanyExpense(form, props.id))
+        : dispatch(updatePersonalExpense(form, props.id));
 
-      dispatch(updateExpense(form, props.id));
       setForm(initialStateForm);
       handleClose();
     }

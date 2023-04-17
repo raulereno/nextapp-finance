@@ -6,6 +6,5 @@ export default async function verifyUserCompany (user: String){
     const url = `http://localhost:3000/api/company/verify?email=${email}`
 
     const res = await axios.get(url)
-
-    return res
+    return res.data.msg
 }

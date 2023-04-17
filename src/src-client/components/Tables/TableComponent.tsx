@@ -1,53 +1,66 @@
 import { ExpenseType } from "@/models/expense.model";
 import { IncomeType } from "@/models/income.model";
-import { deleteExpenses } from "@/redux/slice/ExpenseSlice";
-import { deleteIncome } from "@/redux/slice/IncomeSlice";
-import { Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
-import icoBorrar from "../../../../assets/trash-bin-delete-svgrepo-com.svg";
-import Image from "next/image";
-import { ModalEdit } from "../Modals/ModalEditRegister";
+import capitalize from "@/utils/capitalize";
 import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
+import { ModalEdit } from "../Modals/ModalEditRegister";
+import DeleteRegister from "./DeleteRegister/DeleteRegister";
+import { exportData } from "./exportData";
+import { searchTable } from "./searchTable";
 
 export const TableComponent = ({ content, filters }: any) => {
-  const dispatch: Function = useDispatch();
-  let total = 0;
+  const [tableContent, setTableContent] = useState<
+    IncomeType[] | ExpenseType[]
+  >([]);
 
-  const [tableContent, setTableContent] = useState([]);
-
-  useEffect(() => setTableContent(content), [content]);
-
-  const deleteRegister = (id: String) => {
-    Swal.fire({
-      title: "Esta seguro que desea borrar el registro?",
-      showDenyButton: true,
-
-      denyButtonText: `Cancelar`,
-      confirmButtonText: "Borrar",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (filters.type === "ingresos") {
-          dispatch(deleteIncome(id));
-        } else {
-          dispatch(deleteExpenses(id));
+  useEffect(() => {
+    const filterData = (content: IncomeType[] | ExpenseType[]) => {
+      const aux = content.filter((ele: IncomeType | ExpenseType) => {
+        if (ele.type[0] === filters.slice) {
+          return ele;
         }
-        Swal.fire("Borrado!", "", "success");
+      });
+      setTableContent(aux);
+    };
+    filterData(content);
+  }, [content, filters]);
+
+  const downloadExcel = () => {
+    const data = content.filter((ele: IncomeType | ExpenseType) => {
+      if (ele.type[0] === filters.slice) {
+        return ele;
       }
     });
+    exportData(data);
   };
 
-  if (!filters.type) {
+  if ((!filters.slice && !filters.type) || !content.length) {
     return <></>;
   }
 
   return (
     <div className="col-12 text-white">
       <h1>Tablas {filters.type}</h1>
-      <Table>
-        <thead className="text-white">
-          <tr>
+      <div className="row">
+        <div className="col-lg-12">
+          <form>
+            <div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Buscar"
+                onKeyUp={searchTable}
+                id="searchInput"
+              ></input>
+            </div>
+          </form>
+          <button onClick={downloadExcel}>Descargar excel</button>
+        </div>
+      </div>
+
+      <Table className="table table-hover table-active mt-3" id="tableRegister">
+        <thead className="table-head text-white">
+          <tr className="table-head-row">
             <th>Tipo</th>
             <th>Categoria</th>
             <th>Value</th>
@@ -55,64 +68,33 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody className="text-white">
-          {tableContent!
-            ?.filter((ele: IncomeType | ExpenseType) => {
-              if (ele.type[0] === filters.slice) {
-                return ele;
-              }
-            })
-            .map((ele: IncomeType | ExpenseType) => {
-              total += ele.value;
-              return (
-                //TODO:Aqui no deja agregar el id como key
-                <tr key={Math.random()}>
-                  <td>{capitalize(ele.type[0])}</td>
-                  <td>{capitalize(ele.category)}</td>
-                  <td>${ele.value}</td>
-                  <td>{capitalize(ele.description)}</td>
-                  <td>
-                    <ModalEdit
-                      props={{
-                        type: ele.type[0],
-                        category: ele.category,
-                        description: ele.description,
-                        value: ele.value,
-                        id: ele._id!,
-                        table: filters.type,
-                      }}
-                    />
-
-                    <button
-                      onClick={() => {
-                        deleteRegister(ele._id!);
-                      }}
-                      className="border-0 rounded-1 m-1 text-white"
-                    >
-                      <Image
-                        src={icoBorrar}
-                        alt="Borrar"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td style={{ fontSize: "35px" }}>Total: ${total}</td>
-          </tr>
+        <tbody className="text-white table-body">
+          {tableContent.map((ele: IncomeType | ExpenseType) => {
+            return (
+              //TODO:Aqui no deja agregar el id como key
+              <tr key={Math.random()}>
+                <td>{capitalize(filters.type)}</td>
+                <td>{capitalize(ele.category)}</td>
+                <td>${ele.value}</td>
+                <td>{capitalize(ele.description)}</td>
+                <td>
+                  <ModalEdit
+                    props={{
+                      type: ele.type[0],
+                      category: ele.category,
+                      description: ele.description,
+                      value: ele.value,
+                      id: ele._id!,
+                      table: filters.type,
+                    }}
+                  />
+                  <DeleteRegister id={ele._id} filters={filters} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </div>
   );
-};
-
-const capitalize = (string: String) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 };

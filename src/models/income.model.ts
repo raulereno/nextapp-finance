@@ -4,7 +4,7 @@ export interface IncomeType {
   _id?: String;
   type: String;
   description: String;
-  category: String;
+  category: string;
   value: number;
 }
 

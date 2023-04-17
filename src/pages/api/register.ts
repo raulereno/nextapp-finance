@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import conn from "../../src-backend/db";
-import User from "../../models/user.model";
+import { User } from "../../models/user.model";
 import bcrypt from "bcrypt";
 
 interface ResponseData {
@@ -51,7 +51,7 @@ export default async function handler(
   }
 
   // traer y validar el body
-  const { username, email, password } = req.body;
+  const { username, email, password, role } = req.body;
 
   const errorMessage = await validateForm(username, email, password);
   if (errorMessage) {
@@ -66,6 +66,7 @@ export default async function handler(
     name: username,
     email,
     hashedPassword,
+    role,
   });
 
   newUser
