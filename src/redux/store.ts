@@ -4,15 +4,16 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import CompanyReducer from "./slice/CompanySlice";
 import PersonalReducer from "./slice/PersonalSlice";
-
+import AdminSlice from "./slice/AdminSlice";
 const persistConfig = {
-  key: "store",
+  key: "stOre",
   storage,
 };
 
 const myReducers = combineReducers({
   CompanyReducer,
   PersonalReducer,
+  AdminSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, myReducers);
