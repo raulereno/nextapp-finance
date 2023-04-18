@@ -1,8 +1,7 @@
 import { useState } from "react";
 import type { NextPage } from "next";
-import { signIn, getProviders } from "next-auth/react";
-import { Field, Form, Formik } from "formik";
-import axios from "axios";
+import { Field, Form, Formik} from 'formik'
+import { getProviders, signIn } from "next-auth/react";
 import Router from "next/router";
 import { Alert } from "react-bootstrap";
 import { log } from "console";
@@ -53,7 +52,7 @@ const Auth: NextPage = ({ providers }: any) => {
     const res = await axios
       .post(
         "/api/register",
-        { username, email, password },
+        { username, email, password, role: "user" },
         {
           headers: {
             Accept: "application/json",
@@ -61,11 +60,11 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async (res) => {
+      .then(async (res: any) => {
         await loginUser();
         redirectToHome();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -99,7 +98,7 @@ const Auth: NextPage = ({ providers }: any) => {
               email: "", 
               password: ""
             }} 
-            validate={(valor) =>{
+            validate={(valor:any) =>{
               let errores={
                /*  username:'',
                 email:'',
@@ -123,14 +122,14 @@ const Auth: NextPage = ({ providers }: any) => {
             }}
             /* validateOnChange={true}
             validateOnBlur={true}  */
-            onSubmit={(valores, {resetForm}) => {
+            onSubmit={(valores:any, {resetForm}:any) => {
               resetForm()
               console.log('formulario enviado con exito')
               setFormEnviado(true)
             }}
           >
 
-            {({handleChange, handleBlur, errors, values, touched}) => (
+            {({handleChange, handleBlur, errors, values, touched}:any) => (
               <Form 
               className="form" 
               style={{ width: "100%" }}
@@ -244,82 +243,10 @@ const Auth: NextPage = ({ providers }: any) => {
               {oppAuthType[authType]}
             </a>
           </p>
-
-        </div>
-
-        {/* 
-        <div className="d-flex flex-column justify-content-center  align-content-center">
-          <h1 className="display-3">{authType}</h1>
-          <p>
-            {authType === "Login"
-              ? "Not registered yet? "
-              : "Already have an account? "}
-            <button onClick={() => setAuthType(oppAuthType[authType])}>
-              <p>{oppAuthType[authType]}</p>
-            </button>
-          </p>
-
-          <ProvidersButtons providers={providers} />
-
-          <Formik
-            initialValues={{}} // { email: "", password: "" }
-            validateOnChange={false}
-            validateOnBlur={false}
-            onSubmit={(_, actions) => {
-              formSubmit(actions);
-            }}
-          >
-            {(props) => (
-              <Form style={{ width: "100%" }}>
-                <div className="d-flex flex-column w-100% margin-b-4">
-                  {authType === "Register" && (
-                    <Field name="username">
-                      {() => (
-                        <>
-                          <label htmlFor="username">Username:</label>
-                          <input
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </>
-                      )}
-                    </Field>
-                  )}
-                  <Field name="email">
-                    {() => (
-                      <>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Email Address"
-                          type="email"
-                        />
-                      </>
-                    )}
-                  </Field>
-                  <Field name="password">
-                    {() => (
-                      <>
-                        <label htmlFor="password">Password</label>
-                        <input
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          type="password"
-                          placeholder="Password"
-                        />
-                      </>
-                    )}
-                  </Field>
-                  <button type="submit">{authType}</button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div> */}
-      </div>
+        </div>                  
+            <button type="submit" className="btn-general mt-3">{authType}</button>
+                </div>          
+                       
     </>
   );
 };
