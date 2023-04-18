@@ -19,7 +19,7 @@ export default async function Admin (req: NextApiRequest, res: NextApiResponse) 
                         const user = await User.findOne({_id: id})
                         .populate('incomes')
                         .populate('expenses')
-                        .populate('companies');
+                        .populate('company');
             
                         res.status(200).json({msg: 'success', payload: user});
                     }

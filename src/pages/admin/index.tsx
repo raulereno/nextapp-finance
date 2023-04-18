@@ -22,7 +22,7 @@ const Admin = () => {
   return (
     <div>
       <button onClick={() => changeType()}>{type === 'negocio'? 'usuarios' : 'negocios'}</button>
-      <AdminTable list={type === 'negocio' ? companies : users} />
+      <AdminTable list={type === 'negocio' ? companies : users} type={type} />
     </div>
   )
 }
