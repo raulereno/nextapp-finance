@@ -7,19 +7,35 @@ import axios from "axios";
 interface state {
     users: UserType[],
     companies: CompanType[],
-    selectedCompany: CompanType | undefined,
-    selectedUser: UserType | undefined,
+    selectedCompany: CompanType,
+    selectedUser: UserType ,
 }
 
 
 const initialState = {
     users: [],
     companies: [],
-    selectedUser: undefined,
-    selectedCompany: undefined,
+    selectedUser: {
+        role: '',
+        _id: '',
+        name: '',
+        email: '',
+        hashedPassword: '',
+        image: '',
+        company: [],
+        incomes: [],
+        expenses: [],
+    },
+    selectedCompany: {
+        _id:'',
+        name: '',
+        incomes: [],
+        expenses: [],
+        users: [],
+    },
 }
 
-const url = `${process.env.NEXT_PUBLIC_BASE_URL}api/admin`
+const url = `${process.env.NEXT_PUBLIC_BASE_URL}api/`
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -36,13 +52,57 @@ const adminSlice = createSlice({
         },
         companyDetails: (state, action) => {
             state.selectedCompany = action.payload
-        }
+        },
+        updateCompanyExpenses: (state, action) => {
+            if(state.selectedCompany.expenses){
+                const update = state.selectedCompany?.expenses.map((ele : any) => {
+                    if(ele._id === action.payload._id) return action.payload;
+                    return ele;
+                })
+    
+                state.selectedCompany.expenses = update    
+            }
+            
+        },
+        updateCompanyIncomes: (state, action) => {
+            if(state.selectedCompany.incomes.length > 0){
+                const update = state.selectedCompany?.incomes.map((ele : any) => {
+                    if(ele._id === action.payload._id) return action.payload;
+                    return ele;
+                })
+    
+                state.selectedCompany.incomes = update    
+            }
+            
+        },
+        updateUserExpenses: (state, action) => {
+            if(state.selectedUser.expenses){
+                const update = state.selectedUser?.expenses.map((ele : any) => {
+                    if(ele._id === action.payload._id) return action.payload;
+                    return ele;
+                })
+    
+                state.selectedUser.expenses = update    
+            }
+            
+        },
+        updateUserIncomes: (state, action) => {
+            if(state.selectedUser.incomes){
+                const update = state.selectedUser?.incomes.map((ele : any) => {
+                    if(ele._id === action.payload._id) return action.payload;
+                    return ele;
+                })
+    
+                state.selectedUser.incomes = update    
+            }
+            
+        },
     }
 
 })
 
 export const getList = (type: string) => async (dispatch: Function) => {
-    const urlGet = url + `?type=${type}`
+    const urlGet = url + `admin?type=${type}`
     const list = await axios.get(urlGet)
     type === 'negocio'? 
     dispatch(adminSlice.actions.listCompanies(list.data.payload))
@@ -50,12 +110,62 @@ export const getList = (type: string) => async (dispatch: Function) => {
 }
 
 export const getDetails = (type: string, id: string) => async (dispatch : Function) => {
-    const getUrl = url + `?type=${type}&id=${id}`;
+    const getUrl = url + `admin?type=${type}&id=${id}`;
     const details = await axios.get(getUrl);
     type === 'negocio' ?
     dispatch(adminSlice.actions.companyDetails(details.data.payload))
     : dispatch(adminSlice.actions.userDetails(details.data.payload));
 }
+
+export const updateAdminCompanyExpense = (expense : any, id : String) => async (dispatch : Function) => {
+    const companyUrl = url + `company/expense?id=${id}`;
+    const update = await axios.put(companyUrl, expense);
+    
+    dispatch(adminSlice.actions.updateCompanyExpenses(update.data.payload))
+}
+export const updateAdminUserExpense = (expense : any, id : String) => async (dispatch : Function) => {
+    const personalUrl = url + `personal/expense/${id}`;
+    const update = await axios.put(personalUrl, expense);
+    
+    dispatch(adminSlice.actions.updateUserExpenses(update.data.payload))
+}
+export const updateAdminCompanyIncome = (income : any, id : String) => async (dispatch : Function) => {
+    const companyUrl = url + `company/income?id=${id}`;
+    const update = await axios.put(companyUrl, income);
+    
+    dispatch(adminSlice.actions.updateCompanyIncomes(update.data.payload))
+}
+export const updateAdminUserIncome = (income : any, id : String) => async (dispatch : Function) => {
+    const personalUrl = url + `personal/income/${id}`;
+    const update = await axios.put(personalUrl, income);
+    
+    dispatch(adminSlice.actions.updateUserIncomes(update.data.payload))
+}
+export const deleteAdminCompanyExpense = (id : String) => async (dispatch : Function) => {
+    const companyUrl = url + `company/expense?id=${id}`;
+    const update = await axios.delete(companyUrl);
+    
+    dispatch(adminSlice.actions.updateCompanyIncomes(update.data.payload))
+}
+export const deleteAdminUserExpense = (id: String) => async (dispatch : Function) => {
+    const personalUrl = url + `personal/expense?id=${id}`;
+    const update = await axios.delete(personalUrl);
+    
+    dispatch(adminSlice.actions.updateUserIncomes(update.data.payload))
+}
+export const deleteAdminCompanyIncome = (id : String) => async (dispatch : Function) => {
+    const companyUrl = url + `company/income?id=${id}`;
+    const update = await axios.delete(companyUrl);
+    
+    dispatch(adminSlice.actions.updateCompanyIncomes(update.data.payload))
+}
+export const deleteAdminUserIncome = (id : String) => async (dispatch : Function) => {
+    const personalUrl = url + `personal/income?id=${id}`;
+    const update = await axios.delete(personalUrl);
+    
+    dispatch(adminSlice.actions.updateUserIncomes(update.data.payload))
+}
+
 
 
 
