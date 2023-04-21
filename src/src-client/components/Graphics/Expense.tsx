@@ -18,6 +18,7 @@ export function Expense({
   setTableContent,
   totalDataIncomes,
   totalDataExpenses,
+  openModalTable,
 }: any) {
   const propsModal = {
     title: "Agregar egreso",
@@ -32,6 +33,7 @@ export function Expense({
         type: "gastos",
         slice: type,
       };
+      openModalTable(true)
       setTableContent(slice);
     },
   };
