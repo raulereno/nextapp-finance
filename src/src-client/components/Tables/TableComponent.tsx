@@ -85,7 +85,7 @@ export const TableComponent = ({ content, filters }: any) => {
       </div>
 
       <Table className="table table-hover table-active mt-3" id="tableRegister">
-        <thead className="table-head text-white">
+        <thead className="table-head table-dark">
           <tr className="table-head-row">
             <th>Tipo</th>
             <th>Categoria</th>
@@ -94,7 +94,7 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody className="text-white table-body">
+        <tbody className=" table-body">
           {tableContent.map((ele: IncomeType | ExpenseType) => {
             console.log("object", ele);
             return (
