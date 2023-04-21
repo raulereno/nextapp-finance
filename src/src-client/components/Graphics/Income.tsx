@@ -2,6 +2,10 @@ import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Doughnut } from "react-chartjs-2";
 import { ModalAddRegister } from "../Modals/ModalAddRegister";
+import { useState } from "react";
+import { Modal } from 'react-bootstrap'
+import { TableComponent } from "../../components/Tables/TableComponent";
+import Table from 'react-bootstrap/Table';
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -18,6 +22,7 @@ export function Income({
   setTableContent,
   totalDataIncomes,
   totalDataExpenses,
+  openModalTable,
 }: any) {
 
   const propsModal = {
@@ -25,6 +30,7 @@ export function Income({
     buttonText: "Agregar ingresos",
     type: "income",
   };
+
   const optionsPlus = {
     ...options,
     onClick: function (event: any, elements: any) {
@@ -32,10 +38,11 @@ export function Income({
         type: "ingresos",
         slice: type,
       };
-
+      openModalTable(true)
       setTableContent(slice);
     },
   };
+
 
   return (
     <div
@@ -61,6 +68,8 @@ export function Income({
         dataIncomes={totalDataIncomes}
         dataExpenses={totalDataExpenses}
       />
+
+
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { NextPage } from "next";
-import { signIn, getProviders } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
-import axios from "axios";
+import type { NextPage } from "next";
+import { getProviders, signIn } from "next-auth/react";
 import Router from "next/router";
 import { Alert } from "react-bootstrap";
 import { log } from "console";
+import axios from 'axios'
 
 
 const Auth: NextPage = ({ providers }: any) => {
@@ -53,7 +53,7 @@ const Auth: NextPage = ({ providers }: any) => {
     const res = await axios
       .post(
         "/api/register",
-        { username, email, password },
+        { username, email, password, role: "user" },
         {
           headers: {
             Accept: "application/json",
@@ -61,11 +61,11 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async (res) => {
+      .then(async (res: any) => {
         await loginUser();
         redirectToHome();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -93,24 +93,24 @@ const Auth: NextPage = ({ providers }: any) => {
         <div className="form-container">
           <p className="title">{authType}</p>
 
-      <Formik
+          <Formik
             initialValues={{
-              username:"",
-              email: "", 
+              username: "",
+              email: "",
               password: ""
-            }} 
-            validate={(valor) =>{
-              let errores={
-               /*  username:'',
-                email:'',
-                password:'' */
+            }}
+            validate={(valor) => {
+              let errores: any = {
+                /*  username:'',
+                 email:'',
+                 password:'' */
               };
 
-            //validacion username
-              if (!valor.username){
-                errores.username='Ingresa un usuario valido'
-              }else if(!/^[a-zA-ZÀ-ÿ\s]{1,8}$/.test(valor.username)){
-                  errores.username='El nombre solo puede contener letras y un maximo de 8 caracteres'
+              //validacion username
+              if (!valor.username) {
+                errores.username = 'Ingresa un usuario valido'
+              } else if (!/^[a-zA-ZÀ-ÿ\s]{1,8}$/.test(valor.username)) {
+                errores.username = 'El nombre solo puede contener letras y un maximo de 8 caracteres'
               }
 
               //validacion email
@@ -123,25 +123,25 @@ const Auth: NextPage = ({ providers }: any) => {
             }}
             /* validateOnChange={true}
             validateOnBlur={true}  */
-            onSubmit={(valores, {resetForm}) => {
+            onSubmit={(valores, { resetForm }) => {
               resetForm()
               console.log('formulario enviado con exito')
               setFormEnviado(true)
             }}
           >
 
-            {({handleChange, handleBlur, errors, values, touched}) => (
-              <Form 
-              className="form" 
-              style={{ width: "100%" }}
-              
+            {({ handleChange, handleBlur, errors, values, touched }) => (
+              <Form
+                className="form"
+                style={{ width: "100%" }}
+
               >
-                
+
                 <div className="d-flex flex-column w-100% margin-b-4 input-group">
                   {authType === "Register" && (
-                   
-                   <Field 
-                    name="username">
+
+                    <Field
+                      name="username">
                       {() => (
                         <>
                           <label htmlFor="username">Username:</label>
@@ -154,7 +154,7 @@ const Auth: NextPage = ({ providers }: any) => {
                             onBlur={handleBlur}
                           />
                           {touched.username && errors.username && <div className="error"
-                          style={{ color:'green' }}
+                            style={{ color: 'green' }}
                           >{errors.username}</div>}
                         </>
                       )}
@@ -173,8 +173,8 @@ const Auth: NextPage = ({ providers }: any) => {
                           onBlur={handleBlur}
                         />
                         {touched.email && errors.email && <div className="error"
-                          style={{ color:'green' }}
-                          >{errors.email}</div>}
+                          style={{ color: 'green' }}
+                        >{errors.email}</div>}
                       </>
                     )}
                   </Field>
@@ -192,8 +192,8 @@ const Auth: NextPage = ({ providers }: any) => {
                           required
                         />
                         {touched.password && errors.password && <div className="error"
-                          style={{ color:'green' }}
-                          >{errors.password}</div>}
+                          style={{ color: 'green' }}
+                        >{errors.password}</div>}
                       </>
                     )}
                   </Field>
@@ -201,14 +201,14 @@ const Auth: NextPage = ({ providers }: any) => {
                     <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                   </div> */}
                   <button type="submit" className="btn-general mt-3">{authType}</button>
-                  { formEnviado && <p 
-                  style={{color:'green'}}
-                  className="exito">Usuario creado con Exito!</p>}
+                  {formEnviado && <p
+                    style={{ color: 'green' }}
+                    className="exito">Usuario creado con Exito!</p>}
                 </div>
               </Form>
             )}
 
-      </Formik>
+          </Formik>
           <div className="social-message">
             <div className="line"></div>
             <p className="message">Login with social accounts</p>
@@ -246,8 +246,13 @@ const Auth: NextPage = ({ providers }: any) => {
           </p>
 
         </div>
+      </div>
 
-        {/* 
+    </>
+  )
+}
+
+{/* 
         <div className="d-flex flex-column justify-content-center  align-content-center">
           <h1 className="display-3">{authType}</h1>
           <p>
@@ -270,8 +275,8 @@ const Auth: NextPage = ({ providers }: any) => {
             }}
           >
             {(props) => (
-              <Form style={{ width: "100%" }}>
-                <div className="d-flex flex-column w-100% margin-b-4">
+              <Form className="form" style={{ width: "100%" }}>
+                <div className="d-flex flex-column w-100% margin-b-4 input-group">
                   {authType === "Register" && (
                     <Field name="username">
                       {() => (
@@ -290,7 +295,7 @@ const Auth: NextPage = ({ providers }: any) => {
                   <Field name="email">
                     {() => (
                       <>
-                        <label htmlFor="email">Email:</label>
+                        <label htmlFor="email">Email</label>
                         <input
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -313,16 +318,21 @@ const Auth: NextPage = ({ providers }: any) => {
                       </>
                     )}
                   </Field>
-                  <button type="submit">{authType}</button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div> */}
-      </div>
-    </>
-  );
-};
+                  {/* <div className="forgot">
+                    <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
+                  </div> */}
+//   <button type="submit" className="btn-general mt-3">
+//     {authType}
+//   </button>
+//     </div >
+//     </Form >
+//             )}
+//           </Formik >
+//         </div > * /}
+//       </div >
+//     </>
+//   );
+// };
 
 export default Auth;
 
