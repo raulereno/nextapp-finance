@@ -119,6 +119,12 @@ const Auth: NextPage = ({ providers }: any) => {
               } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(valor.email)) {
                 errores.email = 'Correo incorrecto';
               }
+              //validacion password
+              if (!valor.password) {
+                errores.password = 'Ingrese una contraseña';
+              } else if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{5,10}$/.test(valor.password)) {
+                errores.password = 'debe tener entre 5 y 10 caracteres, al menos una minúscula y una mayúscula.';
+              }
               return errores;
             }}
             /* validateOnChange={true}
@@ -155,7 +161,8 @@ const Auth: NextPage = ({ providers }: any) => {
                           />
                           {touched.username && errors.username && <div className="error"
                             style={{ color: 'green' }}
-                          >{errors.username}</div>}
+                          >{errors.username}
+                          </div>}
                         </>
                       )}
                     </Field>
@@ -189,7 +196,7 @@ const Auth: NextPage = ({ providers }: any) => {
                           type="password"
                           placeholder="Password"
                           onBlur={handleBlur}
-                          required
+                          
                         />
                         {touched.password && errors.password && <div className="error"
                           style={{ color: 'green' }}
