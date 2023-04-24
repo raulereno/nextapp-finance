@@ -200,7 +200,7 @@ const Auth: NextPage = ({ providers }: any) => {
                   {/* <div className="forgot">
                     <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                   </div> */}
-                  <button type="submit" className="btn-general mt-3">{authType}</button>
+                  <button type="submit" className="btn-general mt-3" >{authType}</button>
                   {formEnviado && <p
                     style={{ color: 'green' }}
                     className="exito">Usuario creado con Exito!</p>}

@@ -14,6 +14,7 @@ export interface UserType {
   incomes?: [IncomeType];
   expenses?: [ExpenseType];
   role: String;
+  status: String;
 }
 
 const userSchema = new Schema<UserType, Model<UserType>>(
@@ -40,6 +41,10 @@ const userSchema = new Schema<UserType, Model<UserType>>(
     role:{
       type: String,
       default: 'User'
+    },
+    status:{
+      type: String,
+      default: 'disabled'
     },
     company: [
       {

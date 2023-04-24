@@ -22,7 +22,7 @@ const LogButton = () => {
 
         </div>
         <div className="d-flex flex-column gap-4">
-          <span className="text-light">¡Hola, {session?.user.name}!</span>
+          <span className="text-light">¡Hola, Juancho!</span>
           <button className="btn-general mt-1" onClick={() => signOut()}>
             <span className=" text-light my-2">Sign out</span>
           </button>
