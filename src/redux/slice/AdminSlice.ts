@@ -12,19 +12,15 @@ interface state {
 }
 
 
-const initialState = {
+const initialState: state = {
     users: [],
     companies: [],
     selectedUser: {
-        role: '',
-        _id: '',
         name: '',
         email: '',
-        hashedPassword: '',
         image: '',
-        company: [],
-        incomes: [],
-        expenses: [],
+        role: '',
+        status: '',
     },
     selectedCompany: {
         _id:'',
@@ -97,6 +93,12 @@ const adminSlice = createSlice({
             }
             
         },
+        updateUserStatus: (state, action) => {
+            const update = state.users.map((user : any) => {
+                user._id === action.payload._id ? action.payload : user
+            })
+            state.users = update
+        },
     }
 
 })
@@ -164,6 +166,13 @@ export const deleteAdminUserIncome = (id : String) => async (dispatch : Function
     const update = await axios.delete(personalUrl);
     
     dispatch(adminSlice.actions.updateUserIncomes(update.data.payload))
+}
+
+export const updateUserStatus = (type : String ,id : String) => async (dispatch: Function) => {
+    const updateUrl = url + `admin?type=${type}&id=${id}`
+    const update = await axios.put(updateUrl)
+
+    dispatch(adminSlice.actions.updateUserStatus(update.data.payload))
 }
 
 
