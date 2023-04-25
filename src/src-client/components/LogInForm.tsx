@@ -61,7 +61,7 @@ const Auth: NextPage = ({ providers }: any) => {
           },
         }
       )
-      .then(async (res: any) => {
+      .then(async () => {
         await loginUser();
         redirectToHome();
       })
@@ -81,9 +81,8 @@ const Auth: NextPage = ({ providers }: any) => {
     res.error ? console.log(res.error) : redirectToHome();
   };
 
-  const formSubmit = (actions: any) => {
-    actions.setSubmitting(false);
-
+  const formSubmit = () => {
+    console.log('toy')
     authType === "Login" ? loginUser() : registerUser();
   };
 
@@ -95,42 +94,42 @@ const Auth: NextPage = ({ providers }: any) => {
 
           <Formik
             initialValues={{
-              username: "",
-              email: "",
-              password: ""
+              username: username,
+              email: email,
+              password: password,
             }}
             validate={(valor) => {
               let errores: any = {
-                /*  username:'',
+                 username:'',
                  email:'',
-                 password:'' */
+                 password:'' 
               };
-
+              console.log(valor)
               //validacion username
-              if (!valor.username) {
+              if (!username) {
                 errores.username = 'Ingresa un usuario valido'
-              } else if (!/^[a-zA-ZÀ-ÿ\s]{1,8}$/.test(valor.username)) {
+              } else if (!/^[a-zA-ZÀ-ÿ\s]{1,8}$/.test(username)) {
                 errores.username = 'El nombre solo puede contener letras y un maximo de 8 caracteres'
               }
 
               //validacion email
-              if (!valor.email) {
+              if (!email) {
                 errores.email = 'Ingrese un correo';
-              } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(valor.email)) {
+              } else if (!/^[a-z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
                 errores.email = 'Correo incorrecto';
               }
               return errores;
             }}
-            /* validateOnChange={true}
-            validateOnBlur={true}  */
-            onSubmit={(valores, { resetForm }) => {
-              resetForm()
-              console.log('formulario enviado con exito')
+            validateOnChange={false}
+            validateOnBlur={false} 
+            onSubmit={(_, actions) => {
+              console.log('estoy')
+              formSubmit()
               setFormEnviado(true)
             }}
           >
-
-            {({ handleChange, handleBlur, errors, values, touched }) => (
+            {/* { handleChange, handleBlur, errors, values, touched } */}
+            {(props) => (
               <Form
                 className="form"
                 style={{ width: "100%" }}
@@ -146,16 +145,18 @@ const Auth: NextPage = ({ providers }: any) => {
                         <>
                           <label htmlFor="username">Username:</label>
                           <input
-                            value={values.username}
+                            value={username}
                             name='username'
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              setUsername(e.target.value)
+                            }}
                             placeholder="Username"
                             type="text"
-                            onBlur={handleBlur}
+                            onBlur={props.handleBlur}
                           />
-                          {touched.username && errors.username && <div className="error"
+                          {props.touched.username && props.errors.username && <div className="error"
                             style={{ color: 'green' }}
-                          >{errors.username}</div>}
+                          >{props.errors.username}</div>}
                         </>
                       )}
                     </Field>
@@ -166,15 +167,17 @@ const Auth: NextPage = ({ providers }: any) => {
                         <label htmlFor="email">Email</label>
                         <input
                           name='email'
-                          value={values.email}
-                          onChange={handleChange}
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value)
+                          }}
                           placeholder="Email Address"
                           type="email"
-                          onBlur={handleBlur}
+                          onBlur={props.handleBlur}
                         />
-                        {touched.email && errors.email && <div className="error"
+                        {props.touched.email && props.errors.email && <div className="error"
                           style={{ color: 'green' }}
-                        >{errors.email}</div>}
+                        >{props.errors.email}</div>}
                       </>
                     )}
                   </Field>
@@ -184,23 +187,25 @@ const Auth: NextPage = ({ providers }: any) => {
                         <label htmlFor="password">Password</label>
                         <input
                           name='password'
-                          value={values.password}
-                          onChange={handleChange}
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value)
+                          }}
                           type="password"
                           placeholder="Password"
-                          onBlur={handleBlur}
+                          onBlur={props.handleBlur}
                           required
                         />
-                        {touched.password && errors.password && <div className="error"
+                        {props.touched.password && props.errors.password && <div className="error"
                           style={{ color: 'green' }}
-                        >{errors.password}</div>}
+                        >{props.errors.password}</div>}
                       </>
                     )}
                   </Field>
+                  <button type="submit" className="btn-general mt-3" onClick={formSubmit}>{authType}</button>
                   {/* <div className="forgot">
                     <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                   </div> */}
-                  <button type="submit" className="btn-general mt-3" >{authType}</button>
                   {formEnviado && <p
                     style={{ color: 'green' }}
                     className="exito">Usuario creado con Exito!</p>}

@@ -33,6 +33,14 @@ export default async function Admin (req: NextApiRequest, res: NextApiResponse) 
                     }
                 }
             break;
+            case 'PUT':
+                if(id){
+                    const user = await User.findOneAndUpdate({_id: id},
+                         {status: type}
+                        )
+                    res.status(200).json({msg: 'success', payload: user})
+                }
+            break;
             default:
                 res.status(400).json({msg: "Invalid method"})
         }
