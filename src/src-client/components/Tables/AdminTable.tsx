@@ -20,6 +20,10 @@ const AdminTable = ({list, type} : List) => {
     setShow(true)
   }
 
+  const deleteHandler = async (id: string) => {
+    
+  }
+
   return (
     <div>
       {!list && <span className='loader'></span>}
@@ -32,6 +36,7 @@ const AdminTable = ({list, type} : List) => {
           </div>
           <div>
             <button onClick={() => {showHandler(ele._id)}}>Abrir detalles</button>
+            <button onClick={()=> deleteHandler(ele._id)}>Deshabilitar</button>
           </div>
         </li>
         </>
