@@ -36,7 +36,8 @@ export default async function Admin (req: NextApiRequest, res: NextApiResponse) 
             case 'PUT':
                 if(id){
                     const user = await User.findOneAndUpdate({_id: id},
-                         {status: type}
+                         {status: type},
+                         {new: true}
                         )
                     res.status(200).json({msg: 'success', payload: user})
                 }
