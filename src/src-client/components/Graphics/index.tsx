@@ -136,7 +136,13 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
 
           <div className="row mt-5">
 
-            <Modal fullscreen={true} show={showModalIncome} onHide={handleCloseModal} >
+            <Modal
+              className="custom-container"
+              size="xl"
+              // fullscreen={true}
+              show={showModalIncome}
+              onHide={handleCloseModal}
+            >
               <TableComponent
                 content={tableContent.type === "ingresos" ? incomes : expenses}
                 filters={tableContent}

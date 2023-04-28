@@ -17,33 +17,33 @@ export const TableComponent = ({ content, filters }: any) => {
   console.log("Filters", filters);
   console.log("tableContent", tableContent);
 
-  useEffect(() => {
-    const filterData = (content: IncomeType[] | ExpenseType[]) => {
-      const aux = content.filter((ele: IncomeType | ExpenseType) => {
-        if (ele.type[0] === filters.slice) {
-          return ele;
-        }
-      });
-      setTableContent(aux);
-    };
-    filterData(content);
-  }, [content, filters]);
-
   // useEffect(() => {
   //   const filterData = (content: IncomeType[] | ExpenseType[]) => {
-  //     const aux: IncomeType[] | ExpenseType[] = []; // Definir como array vacío
-  //     const filteredData = content.filter((ele: IncomeType | ExpenseType) => {
+  //     const aux = content.filter((ele: IncomeType | ExpenseType) => {
   //       if (ele.type[0] === filters.slice) {
   //         return ele;
   //       }
   //     });
-  //     aux.push(...filteredData); // Agregar elementos al array auxiliar
   //     setTableContent(aux);
   //   };
-  //   if (content) { // Verificar que content esté definido antes de pasarlo a filterData()
-  //     filterData(content);
-  //   }
+  //   filterData(content);
   // }, [content, filters]);
+
+  useEffect(() => {
+    const filterData = (content: IncomeType[] | ExpenseType[]) => {
+      const aux: IncomeType[] | ExpenseType[] = []; // Definir como array vacío
+      const filteredData = content.filter((ele: IncomeType | ExpenseType) => {
+        if (ele.type[0] === filters.slice) {
+          return ele;
+        }
+      });
+      aux.push(...filteredData); // Agregar elementos al array auxiliar
+      setTableContent(aux);
+    };
+    if (content) { // Verificar que content esté definido antes de pasarlo a filterData()
+      filterData(content);
+    }
+  }, [content, filters]);
 
 
   const downloadExcel = () => {
