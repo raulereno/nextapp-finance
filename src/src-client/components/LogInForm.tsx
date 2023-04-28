@@ -100,9 +100,9 @@ const Auth: NextPage = ({ providers }: any) => {
             }}
             validate={(valor) => {
               let errores: any = {
-                 username:'',
-                 email:'',
-                 password:'' 
+                username: '',
+                email: '',
+                password: ''
               };
               console.log(valor)
               //validacion username
@@ -121,7 +121,7 @@ const Auth: NextPage = ({ providers }: any) => {
               return errores;
             }}
             validateOnChange={false}
-            validateOnBlur={false} 
+            validateOnBlur={false}
             onSubmit={(_, actions) => {
               console.log('estoy')
               formSubmit()
@@ -202,11 +202,10 @@ const Auth: NextPage = ({ providers }: any) => {
                       </>
                     )}
                   </Field>
-                  <button type="submit" className="btn-general mt-3" onClick={formSubmit}>{authType}</button>
+                  <button type="submit" className="btn-login-auth mt-3" onClick={formSubmit}>{authType}</button>
                   {/* <div className="forgot">
                     <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                   </div> */}
-                  <button type="submit" className="btn-general mt-3">{authType}</button>
                   {formEnviado && <p
                     style={{ color: 'green' }}
                     className="exito">Usuario creado con Exito!</p>}
