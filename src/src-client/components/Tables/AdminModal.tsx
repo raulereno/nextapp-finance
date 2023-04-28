@@ -27,7 +27,7 @@ const AdminModal = ({props}: any) => {
         <ul>
             {props.type === 'negocio' &&  companyDetail.incomes.map((ele : any) => {
                 return(
-                  <li>
+                  <li key={ele._id}>
                   <div>
                     {ele.category}
                   </div>

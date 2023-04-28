@@ -41,6 +41,7 @@ const adminSlice = createSlice({
             state.companies = action.payload
         },
         listUsers: (state, action) => {
+            console.log(action.payload)
             state.users = action.payload
         },
         userDetails: (state, action) => {
@@ -78,7 +79,7 @@ const adminSlice = createSlice({
                     return ele;
                 })
     
-                state.selectedUser.expenses = update    
+                state.selectedUser['expenses'] = update    
             }
             
         },
@@ -95,7 +96,7 @@ const adminSlice = createSlice({
         },
         updateUserStatus: (state, action) => {
             const update = state.users.map((user : any) => {
-                user._id === action.payload._id ? action.payload : user
+               if(user._id === action.payload._id){ return action.payload} else {return user} 
             })
             state.users = update
         },
@@ -171,7 +172,6 @@ export const deleteAdminUserIncome = (id : String) => async (dispatch : Function
 export const updateUserStatus = (type : String ,id : String) => async (dispatch: Function) => {
     const updateUrl = url + `admin?type=${type}&id=${id}`
     const update = await axios.put(updateUrl)
-
     dispatch(adminSlice.actions.updateUserStatus(update.data.payload))
 }
 
