@@ -10,81 +10,105 @@ import { Schema } from "mongoose";
 const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company`;
 
 interface Company {
-  expenses: ExpenseType[];
-  incomes: IncomeType[];
-  users: Schema.Types.ObjectId[];
-  name: string;
+  selectedCompany: CompanType;
+  names: string[];
 }
 interface formCompany {
   name: string;
   user: string;
 }
 const initialState: Company = {
-  expenses: [],
-  incomes: [],
-  users: [],
-  name: "",
+  selectedCompany: {
+    _id: '',
+    name: '',
+    expenses: [],
+    incomes: [],
+    users: [],
+  },
+  names: [],
 };
 const companySlice = createSlice({
   name: "company",
   initialState,
   reducers: {
     getTransactions: (state, action) => {
-      state.expenses = action.payload.expenses;
-      state.incomes = action.payload.incomes;
-      state.users = action.payload.users;
-      state.name = action.payload.name;
+      state.selectedCompany.expenses = action.payload.expenses;
+      state.selectedCompany.incomes = action.payload.incomes;
+      state.selectedCompany.users = action.payload.users;
+      state.selectedCompany.name = action.payload.name;
+      state.selectedCompany._id = action.payload._id;
     },
     addCompanyIncome: (state, action) => {
-      state.incomes.includes(action.payload)
-        ? state.incomes
-        : state.incomes.push(action.payload);
+      state.selectedCompany.incomes.includes(action.payload)
+        ? state.selectedCompany.incomes
+        : state.selectedCompany.incomes.push(action.payload);
     },
     addCompanyExpense: (state, action) => {
-      state.expenses.includes(action.payload)
-        ? state.expenses
-        : state.expenses.push(action.payload);
+      state.selectedCompany.expenses.includes(action.payload)
+        ? state.selectedCompany.expenses
+        : state.selectedCompany.expenses.push(action.payload);
     },
     updateCompanyExpense: (state, action) => {
-      const update = state.expenses.map((exp) => {
+      const update = state.selectedCompany.expenses.map((exp) => {
         if (exp._id === action.payload._id) {
           return action.payload;
         } else {
           return exp;
         }
       });
-      state.expenses = update;
+      state.selectedCompany.expenses = update;
     },
     updateCompanyIncome: (state, action) => {
-      const update = state.incomes.map((inc) => {
+      const update = state.selectedCompany.incomes.map((inc) => {
         if (inc._id === action.payload._id) {
           return action.payload;
         } else {
           return inc;
         }
       });
-      state.incomes = update;
+      state.selectedCompany.incomes = update;
     },
     deleteCompanyExpense: (state, action) => {
-      const update = state.expenses.filter((exp) => {
+      const update = state.selectedCompany.expenses.filter((exp) => {
         if (exp._id !== action.payload) return exp;
       });
-      state.expenses = update;
+      state.selectedCompany.expenses = update;
     },
     deleteCompanyIncome: (state, action) => {
-      const update = state.incomes.filter((inc) => {
+      const update = state.selectedCompany.incomes.filter((inc) => {
         if (inc._id !== action.payload) return inc;
       });
-      state.incomes = update;
+      state.selectedCompany.incomes = update;
+    },
+    getNames: (state, action) => {
+      console.log(action.payload);
+      if(state.names.length > 0 && action.payload.name){
+        state.names.push(action.payload);
+      } else {
+      state.names = action.payload;
+      }
     },
   },
 });
 
+
+export const getNames = (id : string[]) => async (dispatch : Function) => {
+  let urlName = ''
+  id.forEach((id : string) => { urlName = urlName + id + '%20'})
+  const urlRequest = url + '?id=' + urlName
+  const names = await axios.get(urlRequest)
+  dispatch(companySlice.actions.getNames(names.data.names))
+}
+
 export const createCompany =
   (company: formCompany) => async (dispatch: Function) => {
     const newCompany = await axios.post(url, company);
-    const companyData = await getCompany(newCompany.data._id, dispatch);
-    dispatch(companySlice.actions.getTransactions(companyData?.data.payload));
+    console.log(newCompany)
+    const companyData = {
+      name: newCompany.data.name,
+      id: newCompany.data._id
+    }
+    dispatch(companySlice.actions.getNames(companyData));
   };
 
 export const getTransactions =
@@ -93,16 +117,16 @@ export const getTransactions =
   };
 export const addCompanyIncome =
   (income: IncomeType, id: string) => async (dispatch: Function) => {
-    const company = await verifyUserCompany(id);
-    const urlIncome = `${url}/income?Id=${company}`;
+    // const company = await verifyUserCompany(id);
+    const urlIncome = `${url}/income?Id=${id}`;
     const newIncome = await axios.post(urlIncome, income);
     dispatch(companySlice.actions.addCompanyIncome(newIncome.data.payload));
   };
 
 export const addCompanyExpense =
   (expense: ExpenseType, id: string) => async (dispatch: Function) => {
-    const company = await verifyUserCompany(id);
-    const urlExpense = `${url}/expense?Id=${company}`;
+    // const company = await verifyUserCompany(id);
+    const urlExpense = `${url}/expense?Id=${id}`;
     const newExpense = await axios.post(urlExpense, expense);
     dispatch(companySlice.actions.addCompanyExpense(newExpense.data.payload));
   };
