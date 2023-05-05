@@ -1,33 +1,33 @@
 export const colores = [
-    "#FF8003", // rojo
-    "#00FF00", // verde
-    "#0000FF", // azul
-    "#FFFF00", // amarillo
-    "#FF00FF", // magenta
-    "#00FFFF", // cian
-    "#800000", // marrón oscuro
-    "#008000", // verde oscuro
-    "#000080", // azul oscuro
-    "#808000", // verde oliva
-    "#800080", // púrpura
-    "#008080", // verde azulado
-    "#C0C0C0", // plata
-    "#808080", // gris
-    "#FFA500", // naranja
-    "#FFC0CB", // rosa
-    "#800517", // granate
-    "#003153", // azul marino
-    "#FA8072", // salmón
-    "#FF7373", // rosa claro
-    "#00CED1", // turquesa
-    "#FFD700", // oro
-    "#E6E6FA", // lavanda
-    "#8A2BE2", // violeta
-    "#4B0082", // índigo
-    "#DC143C", // carmesí
-    "#B0E0E6", // celeste
-    "#F0E68C", // khaki
-    "#90EE90", // verde claro
-    "#ADD8E6"  // azul claro
-  ];
+  "#FFB6C1", // rosa claro
+  "#FFA07A", // naranja claro
+  "#FFDAB9", // melocotón claro
+  "#FFE4E1", // rosa claro pálido
+  "#98FB98", // verde pálido
+  "#ADD8E6", // azul claro
+  "#FFEBCD", // beige claro
+  "#F0E68C", // amarillo claro
+  "#B0C4DE", // azul grisáceo
+  "#FFC0CB", // rosa
+  "#87CEEB", // azul cielo
+  "#FFD700", // amarillo
+  "#7FFFD4", // turquesa pálido
+  "#AFEEEE", // turquesa claro
+  "#CD5C5C", // rojo coral
+  "#F5DEB3", // beige oscuro
+  "#FF6347", // rojo anaranjado
+  "#FF69B4", // rosa oscuro
+  "#40E0D0", // turquesa
+  "#DB7093", // rosa oscuro grisáceo
+  "#F0FFF0", // verde blanco
+  "#FFA500", // naranja oscuro
+  "#00FFFF", // cian
+  "#9370DB", // lila
+  "#F08080", // coral claro
+  "#C0C0C0", // gris claro
+  "#FF4500", // naranja rojizo
+  "#D3D3D3", // gris claro
+  "#FF1493"  // rosa oscuro intenso
+];
+
   

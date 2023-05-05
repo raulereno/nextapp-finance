@@ -53,6 +53,10 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
         data: IncomesResult.totals,
         backgroundColor: IncomesResult.colors,
         hoverOffset: 4,
+        borderColor: 'transparent',
+        datalabels: {
+          display: false,
+        },
       },
     ],
   };
@@ -65,6 +69,10 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
         data: ExpensesResult.totals,
         backgroundColor: ExpensesResult.colors,
         hoverOffset: 4,
+        borderColor: 'transparent',
+        datalabels: {
+          display: false,
+        },
       },
     ],
   };
