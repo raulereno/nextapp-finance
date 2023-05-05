@@ -21,6 +21,7 @@ const ModalRegister = () => {
         if(session && session.user !== undefined && session.user.email !== undefined && session.user.email){
             setForm({...form, user: session.user.email})
             dispatch(createCompany({...form, user: session.user.email}))
+            setShow(false)
         }   
     }
     const handleChange = (e : any) => {

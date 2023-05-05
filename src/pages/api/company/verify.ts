@@ -15,7 +15,7 @@ export default async function verifyCompany(
 
       const verification = await User.find({ email: emailTransformed });
       if (verification[0].company.length !== 0) {
-        res.status(200).json({ msg: `${verification[0].company}` });
+        res.status(200).json({ msg: verification[0].company });
       } else {
         res.status(200).json({ msg: "Not found" });
       }
