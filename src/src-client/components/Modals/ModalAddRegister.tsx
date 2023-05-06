@@ -9,7 +9,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormRegister from "./FormAddRegister";
 
 interface PropsModal {
@@ -39,7 +39,7 @@ export function ModalAddRegister({
   const handleShow = () => setShow(true);
   const [form, setForm] = useState(initialStateForm);
   const { data: session } = useSession();
-
+  const id = useSelector((state : any) => state.CompanyReducer.selectedCompany._id)
   const dispatch: Function = useDispatch();
   const email = session?.user?.email;
 
@@ -80,7 +80,7 @@ export function ModalAddRegister({
         //   });
         // } else {
         if (type === "negocio") {
-          dispatch(addCompanyExpense({ ...form, type: type! }, email));
+          dispatch(addCompanyExpense({ ...form, type: type! }, id));
           setForm(initialStateForm);
           handleClose();
         } else {
@@ -91,7 +91,7 @@ export function ModalAddRegister({
         // }
       } else {
         if (type === "negocio") {
-          dispatch(addCompanyIncome({ ...form, type: type! }, email));
+          dispatch(addCompanyIncome({ ...form, type: type! }, id));
           setForm(initialStateForm);
           handleClose();
         } else {

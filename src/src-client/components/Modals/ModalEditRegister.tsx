@@ -15,6 +15,7 @@ import {
   updatePersonalExpense,
   updatePersonalIncome,
 } from "@/redux/slice/PersonalSlice";
+import { updateAdminCompanyExpense, updateAdminCompanyIncome, updateAdminUserExpense, updateAdminUserIncome } from "@/redux/slice/AdminSlice";
 
 interface PropsModal {
   props: {
@@ -51,13 +52,15 @@ export function ModalEdit({ props }: PropsModal) {
   };
 
   const sendForm = () => {
-    if (props.table === "ingresos") {
+    switch (props.table) {
+      case 'ingresos':
       props.type.toString() === "negocio"
         ? dispatch(updateCompanyIncome(form, props.id))
         : dispatch(updatePersonalIncome(form, props.id));
       setForm(initialStateForm);
       handleClose();
-    } else {
+      break;
+      case 'expenses':
       // const validExpense = isValidExpense(totalIncomes, totalExpenses, form);
       //TODO: cambiar esta logica para que te deje
       props.type.toString() === "negocio"
@@ -66,6 +69,21 @@ export function ModalEdit({ props }: PropsModal) {
 
       setForm(initialStateForm);
       handleClose();
+      break;
+      case 'admin expenses':
+      props.type.toString() === 'negocio'
+        ? dispatch(updateAdminCompanyExpense(form, props.id))
+        : dispatch(updateAdminUserExpense(form, props.id))
+      setForm(initialStateForm);
+      handleClose();
+      break;
+      case 'admin incomes':
+      props.type.toString() === 'negocio'
+        ? dispatch(updateAdminCompanyIncome(form, props.id))
+        : dispatch(updateAdminUserIncome(form, props.id))
+        setForm(initialStateForm);
+      handleClose();
+      break;
     }
   };
 

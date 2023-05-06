@@ -13,19 +13,45 @@ export const TableComponent = ({ content, filters }: any) => {
     IncomeType[] | ExpenseType[]
   >([]);
 
+  console.log("Content", content);
+  console.log("Filters", filters);
+  console.log("tableContent", tableContent);
+
+  // useEffect(() => {
+  //   const filterData = (content: IncomeType[] | ExpenseType[]) => {
+  //     const aux = content.filter((ele: IncomeType | ExpenseType) => {
+  //       if (ele.type[0] === filters.slice) {
+  //         return ele;
+  //       }
+  //     });
+  //     setTableContent(aux);
+  //   };
+  //   filterData(content);
+  // }, [content, filters]);
+
   useEffect(() => {
     const filterData = (content: IncomeType[] | ExpenseType[]) => {
-      const aux = content.filter((ele: IncomeType | ExpenseType) => {
+      const aux: IncomeType[] | ExpenseType[] = []; // Definir como array vacío
+      const filteredData = content.filter((ele: IncomeType | ExpenseType) => {
         if (ele.type[0] === filters.slice) {
           return ele;
         }
       });
+      aux.push(...filteredData); // Agregar elementos al array auxiliar
       setTableContent(aux);
     };
-    filterData(content);
+    if (content) { // Verificar que content esté definido antes de pasarlo a filterData()
+      filterData(content);
+    }
   }, [content, filters]);
 
+
   const downloadExcel = () => {
+    if (!filters || !filters.slice) {
+      console.log("Error: no se puede descargar Excel, falta información de filtro");
+      return;
+    }
+
     const data = content.filter((ele: IncomeType | ExpenseType) => {
       if (ele.type[0] === filters.slice) {
         return ele;
@@ -34,7 +60,7 @@ export const TableComponent = ({ content, filters }: any) => {
     exportData(data);
   };
 
-  if ((!filters.slice && !filters.type) || !content.length) {
+  if (!filters || (!filters.slice && !filters.type) || !content.length) {
     return <></>;
   }
 
@@ -59,7 +85,7 @@ export const TableComponent = ({ content, filters }: any) => {
       </div>
 
       <Table className="table table-hover table-active mt-3" id="tableRegister">
-        <thead className="table-head text-white">
+        <thead className="table-head table-dark">
           <tr className="table-head-row">
             <th>Tipo</th>
             <th>Categoria</th>
@@ -68,8 +94,9 @@ export const TableComponent = ({ content, filters }: any) => {
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody className="text-white table-body">
+        <tbody className=" table-body">
           {tableContent.map((ele: IncomeType | ExpenseType) => {
+            console.log("object", ele);
             return (
               //TODO:Aqui no deja agregar el id como key
               <tr key={Math.random()}>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {useSession} from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Logo from "../../../assets/logo.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
@@ -11,17 +11,72 @@ interface Ipage {
 }
 
 function NavBar({ page }: Ipage) {
-  const {data : session} = useSession()
+  const { data: session } = useSession()
   const [admin, setAdmin] = useState(false)
   const email = session?.user?.email
-  
+
   useEffect(() => {
-    if(!admin && session && session.user ) getRole(email, setAdmin)
+    if (!admin && session && session.user) getRole(email, setAdmin)
   }, [admin, session])
 
   return (
-    <div className="navBar-Container">
-      <nav>
+    <div className="" style={{ width: "319px", background: "#2A2A2A" }}>
+      <div className="container">
+        <div className="row container-barra-lateral">
+          <div className="col-md-12 justify-content-center first-div">
+            <nav className="">
+              <ul className="d-flex flex-column list-unstyled" style={{ height: "775px" }}>
+                <li>
+                  <div className="d-flex justify-content-center" style={{ marginTop: "49px", marginLeft: "20px", width: "177px", background: "#D9D9D9" }}>
+                    <Link href={"/"}>
+                      <Image src={Logo} alt="logo" width={80} height={40} className="mx-auto img-fluid" />
+                    </Link>
+                  </div>
+                  <div className="d-flex justify-content-center text-dark" style={{ marginTop: "13px", marginLeft: "20px", width: "127px", height: "33px", background: "#D9D9D9", fontFamily: "Montserrat" }}>
+                    {/* //TODO:espacio sin usar */}
+                  </div>
+                </li>
+                <li className=" d-flex justify-content-center">
+                  <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                    <Link className="" href="/">
+                      Personales
+                    </Link>
+                  </div>
+                </li>
+                <li className=" d-flex justify-content-center">
+                  <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                    <Link className="" href="/company">
+                      Compañias
+                    </Link>
+                  </div>
+                </li>
+
+                {admin &&
+                  <li className=" d-flex justify-content-center">
+                    <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                      <Link className="btn-general mt-3" href="/admin">
+                        Admin
+                      </Link>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </nav>
+          </div>
+          <div className="col-md-12 text-center second-div d-flex justify-content-center">
+            <LogButton />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default NavBar;
+
+
+
+{/* <nav>
         <ul className="d-flex flex-column">
           <li>
             <Link href={"/"}>
@@ -39,23 +94,19 @@ function NavBar({ page }: Ipage) {
               Compañias
             </Link>
           </li>
-          {admin && 
+          {admin &&
             <li>
               <Link className="btn-general mt-3" href="/admin">
                 Admin
               </Link>
             </li>
-            }
+          }
           <li style={{ position: "absolute", bottom: "0" }}>
             <LogButton />
           </li>
         </ul>
-      </nav>
-    </div>
-  );
-}
+      </nav> */}
 
-export default NavBar;
 {
   /* <Button className=" border-0" onClick={handleShow}>
         <svg
