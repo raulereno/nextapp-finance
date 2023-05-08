@@ -34,11 +34,10 @@ interface graphsProp {
 export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
   const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
 
-  const totalExcess =
-    IncomesResult.totals.reduce((acc, ele) => acc + ele, 0) -
-    ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
-  const ExcessColor = totalExcess < 0 ? "#FF0000" : "#00FF00";
-
+  const totalIncomes =  IncomesResult.totals.reduce((acc, ele) => acc + ele, 0)
+  const totalExpenses =  ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
+  const totalExcess = [totalIncomes, totalExpenses]
+  console.log(totalExcess)
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",
@@ -78,12 +77,18 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
   };
 
   const dataExcess = {
-    labels: [capitalize(type)],
+    labels: ['Excess'],
     datasets: [
       {
-        label: "",
-        data: [totalExcess],
-        backgroundColor: [ExcessColor],
+        label: "Income",
+        data: [totalExcess[0]],
+        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+        hoverOffset: 4,
+      },
+      {
+        label: "Expense",
+        data: [totalExcess[1]],
+        backgroundColor:  'rgba(255, 99, 132, 0.8)',
         hoverOffset: 4,
       },
     ],
