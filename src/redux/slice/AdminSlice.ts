@@ -1,4 +1,5 @@
 import { CompanType } from "@/models/company.model";
+import { ExpenseType } from "@/models/expense.model";
 import { UserType } from "@/models/user.model";
 import verifyUserCompany from "@/src-client/utilities/verifyCompany";
 import { createSlice } from "@reduxjs/toolkit";
@@ -74,7 +75,7 @@ const adminSlice = createSlice({
         },
         updateUserExpenses: (state, action) => {
             if(state.selectedUser.expenses){
-                const update = state.selectedUser?.expenses.map((ele : any) => {
+                const update = state.selectedUser.expenses.map((ele : ExpenseType) => {
                     if(ele._id === action.payload._id) return action.payload;
                     return ele;
                 })

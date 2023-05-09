@@ -61,7 +61,7 @@ const Company = () => {
               expenses={companyData.expenses}
             /> */}
             <ul>
-              {companyNames.map((company)=> {
+              {companyNames.map((company : any)=> {
                 return <li key={company.id}><button onClick={() => handleSelect(company.id)}>{company.name}</button></li>
               })}
             </ul>

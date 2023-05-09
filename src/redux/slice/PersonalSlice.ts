@@ -20,7 +20,8 @@ const initialState: PersonalFinance = {
     name: "",
     email: "",
     image: "",
-    role: ""
+    role: "",
+    status: "",
   },
   incomes: [],
   expenses: [],
