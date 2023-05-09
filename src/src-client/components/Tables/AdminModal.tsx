@@ -47,7 +47,7 @@ const AdminModal = ({props}: any) => {
             })}
             {props.type === 'usuarios' &&  userDetail.incomes.map((ele : any) => {
                 return(
-                  <li>
+                  <li key={ele._id}>
                   <div>
                     {ele.category}
                   </div>
@@ -70,7 +70,7 @@ const AdminModal = ({props}: any) => {
         <ul>
             {props.type === 'negocio' &&  companyDetail.expenses.map((ele : any) => {
                 return(
-                  <li>
+                  <li key={ele._id}>
                     <div>
                       {ele.category}
                     </div>
@@ -90,7 +90,7 @@ const AdminModal = ({props}: any) => {
             })}
             {props.type === 'usuarios' &&  userDetail.expenses.map((ele : any) => {
                 return(
-                  <li>
+                  <li key={ele._id}>
                   <div>
                     {ele.category}
                   </div>
@@ -114,7 +114,7 @@ const AdminModal = ({props}: any) => {
         <ul>
             {companyDetail.users.map((ele : any) => {
                 return(
-                    <li>{ele.name}</li>
+                    <li key={`${ele.name}1`}>{ele.name}</li>
                 )
             })}
         </ul>
@@ -124,7 +124,7 @@ const AdminModal = ({props}: any) => {
         <ul>
             {userDetail.company.map((ele : any) => {
                 return(
-                    <li>{ele.name}</li>
+                    <li key={`${ele.name}2`}>{ele.name}</li>
                 )
             })}
         </ul>
