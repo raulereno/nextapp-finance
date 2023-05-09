@@ -16,6 +16,21 @@ export default async function income(
   let result;
 
   switch (method) {
+    case 'GET':
+      try {
+        const idString = query.id?.split(' ');
+        const listCompanies = await Company.find({})
+        const names : any[]= [];
+        listCompanies.forEach((company) => {
+          if(idString.includes(company._id.toString())){
+            names.push({name: company.name, id: company._id.toString()});
+          }
+        })
+        res.status(200).json({names: names})
+      } catch (error) {
+        res.status(400).json({message: error})
+      }
+    break;
     case "POST":
       try {
         const objUser = await User.findOne({ email: body.user });
