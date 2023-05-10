@@ -83,6 +83,12 @@ $theme-colors: (
   align-items: center;
 }
 
+.containerCuentas {
+  -webkit-box-shadow: 6px 6px 4px -1px rgba(204, 204, 204, 1);
+  -moz-box-shadow: 6px 6px 4px -1px rgba(204, 204, 204, 1);
+  box-shadow: 6px 6px 4px -1px rgba(19, 19, 19, 0.474);
+}
+
 .containerGraphicosDivExc {
   -webkit-box-shadow: 6px 6px 4px -1px rgba(204, 204, 204, 1);
   -moz-box-shadow: 6px 6px 4px -1px rgba(204, 204, 204, 1);

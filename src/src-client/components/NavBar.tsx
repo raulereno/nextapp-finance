@@ -54,7 +54,7 @@ function NavBar({ page }: Ipage) {
                 {admin &&
                   <li className=" d-flex justify-content-center">
                     <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
-                      <Link className="btn-general mt-3" href="/admin">
+                      <Link className="text-center" href="/admin">
                         Admin
                       </Link>
                     </div>

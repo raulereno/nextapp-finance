@@ -28,20 +28,20 @@ const Company = () => {
   if (company === "loadingCompany" || companyNames.length === 0) {
     if (company === "loadingCompany") verification();
     if (company !== "loadingCompany" && company !== "Not found")
-       dispatch(getNames(company));
+      dispatch(getNames(company));
   }
 
-  const handleSelect = (id : string) => {
-    if(id !== companySelect) {
+  const handleSelect = (id: string) => {
+    if (id !== companySelect) {
       getCompany(id, dispatch)
       setCompanySelect(id)
     }
   }
 
-  useEffect(() => {}, [company]);
+  useEffect(() => { }, [company]);
 
   return (
-    <div className="background-general">
+    <div className="container-graphics w-100 gap-2">
       {company === "loadingCompany" && companyData.name !== "" && (
         <span className="loader"></span>
       )}
@@ -53,31 +53,37 @@ const Company = () => {
       )}
       {companyNames && (
         <>
-          <h1>Seleccionar compañía</h1>
-          <div>
+          <h1 className="w-100  text-center">Seleccionar compañía</h1>
+          <div className="d-flex list-unstyled">
             {/* <Graphics
               type="negocio"
               incomes={companyData.incomes}
               expenses={companyData.expenses}
             /> */}
-            <ul>
-              {companyNames.map((company)=> {
-                return <li key={company.id}><button onClick={() => handleSelect(company.id)}>{company.name}</button></li>
+            <ul className="list-unstyled d-flex flex-row gap-4">
+              {companyNames.map((company: any) => {
+                return (
+                  <li key={company.id} className="flex-row">
+                    <button className="btn-general" onClick={() => handleSelect(company.id)}>
+                      <span className="text-light">{company.name}</span>
+                    </button>
+                  </li>
+                )
               })}
             </ul>
-            <ModalRegister />
           </div>
+          <ModalRegister />
         </>
       )}
       {companySelect && companyData &&
-      <> 
-        <h2>{companyData.name}</h2>
-        <Graphics
+        <>
+          <h2 className="mt-5">{companyData.name}</h2>
+          <Graphics
             type="negocio"
             incomes={companyData.incomes}
             expenses={companyData.expenses}
-        />
-       </>  
+          />
+        </>
       }
     </div>
   );
