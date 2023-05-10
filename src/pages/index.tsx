@@ -2,11 +2,12 @@ import Head from "next/head";
 import PersonalFinances from "./personal";
 import { useSession } from "next-auth/react";
 import { useSelector } from "react-redux";
+import LogButton from "@/src-client/components/LogIn/button";
 
 export default function Home() {
   const {data: session} = useSession({required: true})
   const user = useSelector((state : any) => state.PersonalReducer.user)
-  if(session && session.user && session.user && user.status !== 'disabled'){
+  if(session && session.user && user.status !== 'disabled'){
 
     return (
       <>
@@ -23,11 +24,17 @@ export default function Home() {
         </main>
       </>
     );
-  } else {
+  } else if(session && session.user && user.status === 'disabled') {
     return (
       <>
       <h1>Tu cuenta aun no ha sido activada.</h1>
+      <h3>Para activarla podes enviar un correo a .........@gmail.com</h3>
       </>
     )
+  } else {
+    <>
+    <h1>Aun no has iniciado sesion</h1>
+    <LogButton />
+    </>
   }
 }

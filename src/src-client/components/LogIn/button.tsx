@@ -72,6 +72,7 @@ const LogButton = () => {
             <div className="d-flex justify-content-center flex-md-grow-1">
               <button
                 className="btn-general h-xxs-75 w-100 mb-xs-4 mb-4"
+                onClick={() => signIn('credentials')}
               >
                 <span className="text-light">Iniciar sesión</span>
               </button>

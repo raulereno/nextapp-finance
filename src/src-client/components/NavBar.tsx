@@ -33,7 +33,7 @@ function NavBar({ page }: Ipage) {
                     </Link>
                   </div>
                   <div className="d-flex justify-content-center text-dark" style={{ marginTop: "13px", marginLeft: "20px", width: "127px", height: "33px", background: "#D9D9D9", fontFamily: "Montserrat" }}>
-                    {/* //TODO:espacio sin usar */}
+                    {/* //TODO:espacio sin usar */} hola
                   </div>
                 </li>
                 <li className=" d-flex justify-content-center">
@@ -54,7 +54,7 @@ function NavBar({ page }: Ipage) {
                 {admin &&
                   <li className=" d-flex justify-content-center">
                     <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
-                      <Link className="btn-general mt-3" href="/admin">
+                      <Link className="text-center" href="/admin">
                         Admin
                       </Link>
                     </div>
@@ -69,8 +69,10 @@ function NavBar({ page }: Ipage) {
         </div>
       </div>
     </div>
+
   );
 }
+
 
 export default NavBar;
 

@@ -34,8 +34,8 @@ interface graphsProp {
 export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
   const { IncomesResult, ExpensesResult } = totalGenerate(incomes, expenses);
 
-  const totalIncomes =  IncomesResult.totals.reduce((acc, ele) => acc + ele, 0)
-  const totalExpenses =  ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
+  const totalIncomes = IncomesResult.totals.reduce((acc, ele) => acc + ele, 0)
+  const totalExpenses = ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
   const totalExcess = [totalIncomes, totalExpenses]
   console.log(totalExcess)
   const [tableContent, setTableContent] = useState({
@@ -88,7 +88,7 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
       {
         label: "Expense",
         data: [totalExcess[1]],
-        backgroundColor:  'rgba(255, 99, 132, 0.8)',
+        backgroundColor: 'rgba(255, 99, 132, 0.8)',
         hoverOffset: 4,
       },
     ],
@@ -127,6 +127,7 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
               totalDataIncomes={IncomesResult.totals}
               totalDataExpenses={ExpensesResult.totals}
               openModalTable={handleIncomeClick}
+              className="m-1"
             />
 
             <Expense
@@ -137,12 +138,14 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
               totalDataIncomes={IncomesResult.totals}
               totalDataExpenses={ExpensesResult.totals}
               openModalTable={handleIncomeClick}
+              className="m-1"
             />
 
             <Excess
               options={options}
               data={dataExcess}
               setTableContent={setTableContent}
+              className="m-1"
             />
 
           </div>

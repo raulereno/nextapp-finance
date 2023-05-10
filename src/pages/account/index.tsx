@@ -8,9 +8,52 @@ const Account = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="">
-      <Container className="mt-4">
-        <h1>ACCOUNT</h1>
+    <div className="bg-Blue w-100 d-flex justify-content-center align-items-center">
+      <aside className="card bg-light w-50 h-75 p-4 border-dark d-flex align-items-center">
+        <div className=" card-title">
+          <h1>Cuenta</h1>
+        </div>
+
+        {session && (
+          <div className="card-body flex-column align-items-center">
+            <Image
+              src={session.user?.image ?? LogoUser.toString()}
+              alt="img"
+              className="user-img rounded-circle mt-4"
+            ></Image>
+            <div className="d-flex flex-column align-content-start">
+              <p className="mt-5">
+                <strong>Usuario:</strong> {session.user?.name}
+              </p>
+              <p className="mt-4">
+                <strong>Email:</strong> {session.user?.email}
+              </p>
+            </div>
+          </div>
+        )}
+        <div className=" card-footer d-flex justify-content-center align-items-center border-0 w-100 bg-light">
+
+          <button
+            className="btn btn-warning btn-lg w-100"
+            // href="#"
+            role="button"
+          >
+            Editar
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+  );
+};
+
+export default Account;
+
+
+{/* <Container className="mt-4">
+        <h1>Cuenta</h1>
         <Row>
           {session && (
             <div className="jumbotron">
@@ -39,9 +82,4 @@ const Account = () => {
             </div>
           )}
         </Row>
-      </Container>
-    </div>
-  );
-};
-
-export default Account;
+      </Container> */}
