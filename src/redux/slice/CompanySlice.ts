@@ -92,11 +92,17 @@ const companySlice = createSlice({
 });
 
 
-export const getNames = (id : string[]) => async (dispatch : Function) => {
+export const getNames = (id : string[] | string) => async (dispatch : Function) => {
   let urlName = ''
-  id.forEach((id : string) => { urlName = urlName + id + '%20'})
-  const urlRequest = url + '?id=' + urlName
-  const names = await axios.get(urlRequest)
+  let names
+  if(Array.isArray(id)){
+    id.forEach((id : string) => { urlName = urlName + id + '%20'})
+    const urlRequest = url + '?id=' + urlName
+    names = await axios.get(urlRequest)
+  } else {
+    const urlRequest = url + '?id=' + id
+    names = await axios.get(urlRequest)
+  }
   dispatch(companySlice.actions.getNames(names.data.names))
 }
 

@@ -10,9 +10,9 @@ export interface UserType {
   email: String;
   hashedPassword?: String;
   image: String;
-  company?: [CompanType] | [];
-  incomes?: [IncomeType] | [];
-  expenses?: [ExpenseType] | [];
+  company?: CompanType[] | [];
+  incomes?: IncomeType[] | [];
+  expenses?: ExpenseType[] | [];
   role: String;
   status: String;
 }

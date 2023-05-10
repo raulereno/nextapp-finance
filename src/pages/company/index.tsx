@@ -60,6 +60,7 @@ const Company = () => {
               incomes={companyData.incomes}
               expenses={companyData.expenses}
             /> */}
+
             <ul className="list-unstyled d-flex flex-row gap-4">
               {companyNames.map((company: any) => {
                 return (
@@ -69,6 +70,7 @@ const Company = () => {
                     </button>
                   </li>
                 )
+
               })}
             </ul>
           </div>

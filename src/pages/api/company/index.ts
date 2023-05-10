@@ -18,15 +18,18 @@ export default async function income(
   switch (method) {
     case 'GET':
       try {
-        const idString = query.id?.split(' ');
+        if(typeof query.id === 'string') {
+        const idString : string = query.id?? '';
+        const arrayQuery : string[] = idString.split(' ')
         const listCompanies = await Company.find({})
         const names : any[]= [];
         listCompanies.forEach((company) => {
-          if(idString.includes(company._id.toString())){
+          if(arrayQuery.includes(company._id.toString())){
             names.push({name: company.name, id: company._id.toString()});
           }
         })
         res.status(200).json({names: names})
+      }
       } catch (error) {
         res.status(400).json({message: error})
       }
