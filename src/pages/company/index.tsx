@@ -41,7 +41,7 @@ const Company = () => {
   useEffect(() => { }, [company]);
 
   return (
-    <div className="container-graphics w-100 gap-2">
+    <div className="container-graphics w-50 gap-2">
       {company === "loadingCompany" && companyData.name !== "" && (
         <span className="loader"></span>
       )}
@@ -61,8 +61,8 @@ const Company = () => {
               expenses={companyData.expenses}
             /> */}
 
-            <ul className="list-unstyled d-flex flex-row gap-4">
-              {companyNames.map((company: any) => {
+            <ul className="list-unstyled d-flex flex-row gap-4 w-100 overflow-scroll overflow-hidden">
+              {companyNames?.map((company: any) => {
                 return (
                   <li key={company.id} className="flex-row">
                     <button className="btn-general" onClick={() => handleSelect(company.id)}>

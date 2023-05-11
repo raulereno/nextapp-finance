@@ -13,9 +13,6 @@ export const TableComponent = ({ content, filters }: any) => {
     IncomeType[] | ExpenseType[]
   >([]);
 
-  console.log("Content", content);
-  console.log("Filters", filters);
-  console.log("tableContent", tableContent);
 
   // useEffect(() => {
   //   const filterData = (content: IncomeType[] | ExpenseType[]) => {
@@ -96,7 +93,6 @@ export const TableComponent = ({ content, filters }: any) => {
         </thead>
         <tbody className=" table-body">
           {tableContent.map((ele: IncomeType | ExpenseType) => {
-            console.log("object", ele);
             return (
               //TODO:Aqui no deja agregar el id como key
               <tr key={Math.random()}>
