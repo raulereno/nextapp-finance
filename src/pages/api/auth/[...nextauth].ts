@@ -62,6 +62,7 @@ export const authOptions: NextAuthOptions = {
         return user;
       },
     }),
+    
   ],
 
   theme: {

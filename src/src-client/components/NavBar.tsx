@@ -44,7 +44,7 @@ function NavBar({ page }: Ipage) {
                   </div>
                 </li>
                 <li className=" d-flex justify-content-center">
-                  <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                  <div className="btn-general d-flex justify-content-center align-items-center " style={{ marginTop: "63px", }}>
                     <Link className="" href="/company">
                       Compañias
                     </Link>

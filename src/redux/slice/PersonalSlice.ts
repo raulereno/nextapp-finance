@@ -5,7 +5,7 @@ import { calculateTotal } from "@/utils/calculateTotal";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}api/personal`;
+const BASE_URL = `${process.env.URL}api/personal`;
 
 interface PersonalFinance {
   user?: UserType;
