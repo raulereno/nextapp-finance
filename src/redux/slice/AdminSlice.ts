@@ -32,7 +32,7 @@ const initialState: state = {
     },
 }
 
-const url = `${process.env.NEXT_PUBLIC_BASE_URL}api/`
+const url = `${process.env.URL}api/`
 
 const adminSlice = createSlice({
     name: 'admin',
