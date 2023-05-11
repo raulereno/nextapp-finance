@@ -37,7 +37,6 @@ export const Graphics = ({ type, incomes, expenses }: graphsProp) => {
   const totalIncomes = IncomesResult.totals.reduce((acc, ele) => acc + ele, 0)
   const totalExpenses = ExpensesResult.totals.reduce((acc, ele) => acc + ele, 0);
   const totalExcess = [totalIncomes, totalExpenses]
-  console.log(totalExcess)
   const [tableContent, setTableContent] = useState({
     type: "",
     slice: "",

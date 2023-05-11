@@ -82,7 +82,6 @@ const Auth: NextPage = ({ providers }: any) => {
   };
 
   const formSubmit = () => {
-    console.log('toy')
     authType === "Login" ? loginUser() : registerUser();
   };
 
@@ -104,7 +103,6 @@ const Auth: NextPage = ({ providers }: any) => {
                 email: '',
                 password: ''
               };
-              console.log(valor)
               //validacion username
               if (!username) {
                 errores.username = 'Ingresa un usuario valido'
@@ -123,7 +121,6 @@ const Auth: NextPage = ({ providers }: any) => {
             validateOnChange={false}
             validateOnBlur={false}
             onSubmit={(_, actions) => {
-              console.log('estoy')
               formSubmit()
               setFormEnviado(true)
             }}

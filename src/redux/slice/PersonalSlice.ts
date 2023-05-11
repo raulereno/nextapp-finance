@@ -37,7 +37,6 @@ const personalSlice = createSlice({
     getUser: (state, action) => {
       const expenses = action.payload?.expenses;
       const incomes = action.payload?.incomes;
-
       state.user = action.payload;
       state.expenses = expenses;
       state.incomes = incomes;
@@ -87,6 +86,11 @@ const personalSlice = createSlice({
       state.totalIncomes = calculateTotal(filter);
       state.expenses = filter;
     },
+    updateUserStatus : (state, action) => {
+      if(state.user?.email === action.payload.email ){
+        state.user?.status ?  state.user.status = action.payload.status : null
+      }
+    }
   },
 });
 
@@ -151,4 +155,7 @@ export const deletePersonalExpense =
     }
   };
 
+export const updateUserStatusP = (user : UserType) => async (dispatch : Function) => {
+  dispatch(personalSlice.actions.updateUserStatus(user));
+}
 export default personalSlice.reducer;

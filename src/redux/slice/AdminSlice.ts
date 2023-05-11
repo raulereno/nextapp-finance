@@ -4,6 +4,7 @@ import { UserType } from "@/models/user.model";
 import verifyUserCompany from "@/src-client/utilities/verifyCompany";
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import PersonalSlice, { updateUserStatusP } from "./PersonalSlice";
 
 interface state {
     users: UserType[],
@@ -42,7 +43,6 @@ const adminSlice = createSlice({
             state.companies = action.payload
         },
         listUsers: (state, action) => {
-            console.log(action.payload)
             state.users = action.payload
         },
         userDetails: (state, action) => {
@@ -173,6 +173,7 @@ export const deleteAdminUserIncome = (id : String) => async (dispatch : Function
 export const updateUserStatus = (type : String ,id : String) => async (dispatch: Function) => {
     const updateUrl = url + `admin?type=${type}&id=${id}`
     const update = await axios.put(updateUrl)
+    await dispatch(updateUserStatusP(update.data.payload))
     dispatch(adminSlice.actions.updateUserStatus(update.data.payload))
 }
 
