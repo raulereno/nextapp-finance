@@ -8,7 +8,7 @@ const LogButton = () => {
   if (session && session.user) {
     return (
       <>
-        <div className="d-flex justify-content-center bg-light rounded py-4 mb-1 h-75 w-100">
+        <div className="d-flex justify-content-center bg-light rounded py-4 mb-1 h-50 w-100">
           <div className="row">
             <div className="col-md-4 m1">
               <div className="d-flex flex-column align-items-center justify-content-center">
