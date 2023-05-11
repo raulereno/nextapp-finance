@@ -7,7 +7,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Schema } from "mongoose";
 
-const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/company`;
+const url = `${process.env.URL}/api/company`;
 
 interface Company {
   selectedCompany: CompanType;
