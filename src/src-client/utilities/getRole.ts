@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const getRole = async (email: any, setAdmin: Function) => {
-  const url = `${process.env.URL}api/personal?email=${email}`;
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL}api/personal?email=${email}`;
+  console.log(url)
   const User = await axios.get(url);
   if (User.data.payload.role === "admin") {
     return setAdmin(true);
