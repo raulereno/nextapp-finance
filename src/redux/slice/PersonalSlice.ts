@@ -158,4 +158,21 @@ export const deletePersonalExpense =
 export const updateUserStatusP = (user : UserType) => async (dispatch : Function) => {
   dispatch(personalSlice.actions.updateUserStatus(user));
 }
+
+
+//CHANGE PASSWORD
+export const changePassword = async (email : string) => {
+  const response = await axios.post(`https://dev-xj1blxngfl10gkzm.us.auth0.com/passwordless/start`, {
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    connection: 'email',
+    email: email,
+    send: 'link',
+  })
+
+  console.log(response.data)
+}
+
+
+
 export default personalSlice.reducer;

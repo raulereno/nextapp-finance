@@ -43,13 +43,13 @@ function NavBar({ page }: Ipage) {
                     </Link>
                   </div>
                 </li>
-                <li className=" d-flex justify-content-center">
+                {session && <li className=" d-flex justify-content-center">
                   <div className="btn-general d-flex justify-content-center align-items-center " style={{ marginTop: "63px", }}>
-                    <Link className="" href="/company">
+                    <Link className="" href="/company" >
                       Compañias
                     </Link>
                   </div>
-                </li>
+                </li>}
 
                 {admin &&
                   <li className=" d-flex justify-content-center">
