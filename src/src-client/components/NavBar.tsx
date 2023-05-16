@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from 'next-auth/react'
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/ALDIA.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
 import Link from "next/link";
