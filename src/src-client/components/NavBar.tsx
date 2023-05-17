@@ -20,6 +20,7 @@ function NavBar({ page }: Ipage) {
   }, [admin, session])
 
   return (
+
     <div className="w-25 d-flex justify-content-center" style={{ background: "#2A2A2A" }}>
       <div className="row w-100">
         {/*  Div de los logos */}
@@ -55,14 +56,13 @@ function NavBar({ page }: Ipage) {
                 </Link>
               </div>
             </li>
-            <li className=" d-flex justify-content-center">
-              <div className="btn-general d-flex justify-content-center align-items-center " style={{ marginTop: "63px", }}>
-                <Link className="" href="/company">
-                  Compañias
-                </Link>
-              </div>
-            </li>
-
+            {session && <li className=" d-flex justify-content-center">
+                  <div className="btn-general d-flex justify-content-center align-items-center " style={{ marginTop: "63px", }}>
+                    <Link className="" href="/company" >
+                      Compañias
+                    </Link>
+                  </div>
+                </li>}
             {admin &&
               <li className=" d-flex justify-content-center">
                 <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
