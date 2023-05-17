@@ -25,9 +25,9 @@ function NavBar({ page }: Ipage) {
       <div className="row w-100">
         {/*  Div de los logos */}
         <div className=" h-25">
-          <div className="d-flex justify-content-center" style={{ marginTop: "49px", marginLeft: "20px", width: "177px", background: "#D9D9D9" }}>
+          <div className="d-flex justify-content-center" style={{ margin: 'auto', paddingTop: "49px", width: "177px" }}>
             <Link href={"/"}>
-              <Image src={Logo} alt="logo" width={80} height={40} className="mx-auto img-fluid" />
+              <Image src={Logo} alt="logo"  className="mx-auto img-fluid width-[150px] sm:width-[80px]" />
             </Link>
           </div>
           <div
@@ -38,7 +38,6 @@ function NavBar({ page }: Ipage) {
                 marginLeft: "20px",
                 width: "127px",
                 height: "33px",
-                background: "#D9D9D9",
                 fontFamily: "Montserrat"
               }
             }>
