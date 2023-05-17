@@ -20,6 +20,7 @@ const Auth: NextPage = ({ providers }: any) => {
   const [password, setPassword] = useState("");
   const [formEnviado, setFormEnviado] = useState(false)
   const [errors, setErrors] = useState('no_error')
+  const [RegError, setRegError] = useState('no_error')
   const [forgot, setForgot] = useState(false)
   const [changeEmail, setChangeEmail] = useState('')
   // const ProvidersButtons = ({ providers }: any) => (
@@ -69,7 +70,7 @@ const Auth: NextPage = ({ providers }: any) => {
         redirectToHome();
       })
       .catch((error: any) => {
-        console.log(error);
+        setRegError(error.response.data.error)
       });
   };
 
@@ -113,8 +114,8 @@ const Auth: NextPage = ({ providers }: any) => {
               //validacion username
               if (!username) {
                 errores.username = 'Ingresa un usuario valido'
-              } else if (!/^[a-zA-ZÀ-ÿ\s]{1,8}$/.test(username)) {
-                errores.username = 'El nombre solo puede contener letras y un maximo de 8 caracteres'
+              } else if (!/^[a-zA-ZÀ-ÿ\s]{8,20}$/.test(username)) {
+                errores.username = 'El nombre solo puede contener letras y un minimo de 8 caracteres'
               }
 
               //validacion email
@@ -178,11 +179,14 @@ const Auth: NextPage = ({ providers }: any) => {
                           placeholder="Email Address"
                           type="email"
                           onBlur={props.handleBlur}
-                          className={errors === 'Email is not registered' ? 'border border-color-red' : ''}
+                          className={errors === 'Email is not registered' ? 'border' : ''}
                         />
                         {errors === 'Email is not registered'&& <div className="error"
                           style={{ color: 'red' }}
                         >{errors}</div>}
+                        {RegError === 'Email already exists'&& <div className="error"
+                          style={{ color: 'red' }}
+                        >{RegError}</div>}
                       </>
                     )}
                   </Field>
@@ -209,9 +213,9 @@ const Auth: NextPage = ({ providers }: any) => {
                     )}
                   </Field>
                   <button type="submit" className="btn-login-auth mt-3" onClick={formSubmit}>{authType}</button>
-                  <div className="forgot">
+                  {/* <div className="forgot">
                     <button onClick={() => setForgot(!forgot)}>Forgot Password ?</button>
-                  </div>
+                  </div> */}
                   {formEnviado && <p
                     style={{ color: 'green' }}
                     className="exito">Usuario creado con Exito!</p>}
