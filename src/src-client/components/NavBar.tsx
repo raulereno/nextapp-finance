@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from 'next-auth/react'
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/ALDIA.png";
 import Image from "next/image";
 import LogButton from "./LogIn/button";
 import Link from "next/link";
@@ -20,50 +20,64 @@ function NavBar({ page }: Ipage) {
   }, [admin, session])
 
   return (
-    <div className="" style={{ width: "319px", background: "#2A2A2A" }}>
-      <div className="container">
-        <div className="row container-barra-lateral">
-          <div className="col-md-12 justify-content-center first-div">
-            <nav className="">
-              <ul className="d-flex flex-column list-unstyled" style={{ height: "775px" }}>
-                <li>
-                  <div className="d-flex justify-content-center" style={{ marginTop: "49px", marginLeft: "20px", width: "177px", background: "#D9D9D9" }}>
-                    <Link href={"/"}>
-                      <Image src={Logo} alt="logo" width={80} height={40} className="mx-auto img-fluid" />
-                    </Link>
-                  </div>
-                  <div className="d-flex justify-content-center text-dark" style={{ marginTop: "13px", marginLeft: "20px", width: "127px", height: "33px", background: "#D9D9D9", fontFamily: "Montserrat" }}>
-                    {/* //TODO:espacio sin usar */} hola
-                  </div>
-                </li>
-                <li className=" d-flex justify-content-center">
-                  <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
-                    <Link className="" href="/">
-                      Personales
-                    </Link>
-                  </div>
-                </li>
-                {session && <li className=" d-flex justify-content-center">
+
+    <div className="w-25 d-flex justify-content-center" style={{ background: "#2A2A2A" }}>
+      <div className="row w-100">
+        {/*  Div de los logos */}
+        <div className=" h-25">
+          <div className="d-flex justify-content-center" style={{ marginTop: "49px", marginLeft: "20px", width: "177px", background: "#D9D9D9" }}>
+            <Link href={"/"}>
+              <Image src={Logo} alt="logo" width={80} height={40} className="mx-auto img-fluid" />
+            </Link>
+          </div>
+          <div
+            className="d-flex justify-content-center text-dark"
+            style={
+              {
+                marginTop: "13px",
+                marginLeft: "20px",
+                width: "127px",
+                height: "33px",
+                background: "#D9D9D9",
+                fontFamily: "Montserrat"
+              }
+            }>
+            {/* //TODO:espacio sin usar */}
+          </div>
+        </div>
+
+        {/* Div de los botones Menu */}
+        <div className=" h-50">
+          <ul className="d-flex flex-column list-unstyled">
+            <li className=" d-flex justify-content-center">
+              <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                <Link className="" href="/">
+                  Personales
+                </Link>
+              </div>
+            </li>
+            {session && <li className=" d-flex justify-content-center">
                   <div className="btn-general d-flex justify-content-center align-items-center " style={{ marginTop: "63px", }}>
                     <Link className="" href="/company" >
                       Compañias
                     </Link>
                   </div>
                 </li>}
+            {admin &&
+              <li className=" d-flex justify-content-center">
+                <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
+                  <Link className="text-center" href="/admin">
+                    Admin
+                  </Link>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
 
-                {admin &&
-                  <li className=" d-flex justify-content-center">
-                    <div className="btn-general d-flex justify-content-center align-items-center" style={{ marginTop: "63px", }}>
-                      <Link className="text-center" href="/admin">
-                        Admin
-                      </Link>
-                    </div>
-                  </li>
-                }
-              </ul>
-            </nav>
-          </div>
-          <div className="col-md-12 text-center second-div d-flex justify-content-center">
+        {/* Div del perfil del usuario */}
+        <div className=" h-25 d-flex justify-content-center">
+          <div className="col-md-12 text-center d-flex align-items-center justify-content-center">
             <LogButton />
           </div>
         </div>
