@@ -1,15 +1,48 @@
 import NavBar from "@/src-client/components/NavBar";
 import React from "react";
 import { useSession } from "next-auth/react";
-import { Container, Row, Image } from "react-bootstrap";
+import { Container, Row, Image} from "react-bootstrap";
 import LogoUser from "../../../assets/UserDefault.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+
 
 const Account = () => {
   const { data: session } = useSession();
 
+  
+  /* const dispatch = useDispatch();
+    
+  const newUser = useSelector((state) => state.session.user.email)
+  
+  const [input, setInput] = useState({
+    email: newUser.session.user.email,
+    name: newUser.session.user.name,
+    
+    
+  });
+
+  function handleSubmit(e){
+    e.preventDefault()
+    dispatch((input))// falta ruta del put        
+    setInput({
+      email: "",
+      name: "",      
+    })
+           
+}
+function handleChange(e){
+  setInput({
+      ...input,
+      [e.target.name] : e.target.value
+  })      
+}
+ */
+
+
   return (
     <div className="bg-Blue w-100 d-flex justify-content-center align-items-center">
-      <aside className="card bg-light w-50 h-75 p-4 border-dark d-flex align-items-center">
+      <aside className="card bg-light w-50 h-90 p-4 border-dark d-flex align-items-center">
         <div className=" card-title">
           <h1>Cuenta</h1>
         </div>
@@ -19,29 +52,40 @@ const Account = () => {
             <Image
               src={session.user?.image ?? LogoUser.toString()}
               alt="img"
-              className="user-img rounded-circle mt-4"
+              className="user-img rounded-circle"
             ></Image>
             <div className="d-flex flex-column align-content-start">
-              <p className="mt-5">
-                <strong>Usuario:</strong> {session.user?.name}
-              </p>
-              <p className="mt-4">
+                                       
+              <p>
                 <strong>Email:</strong> {session.user?.email}
               </p>
+              <p >
+                <strong>Usuario: 
+                  <input 
+                  onChange={handleChange}
+                  type='text'></input>
+                </strong> 
+              </p>  
+              <p>
+                <strong>Nombre:
+                  <input 
+                  onChange={handleChange}
+                  type="text"></input>
+                </strong>
+              </p>        
             </div>
           </div>
-        )}
-        <div className=" card-footer d-flex justify-content-center align-items-center border-0 w-100 bg-light">
+        )}      
+
+
 
           <button
-            className="btn btn-warning btn-lg w-100"
-            // href="#"
-            role="button"
-          >
-            Editar
-          </button>
+            className="btn btn-primary mt-1" 
+            type='submit'
 
-        </div>
+          >Editar
+          </button>       
+       
 
       </aside>
 
