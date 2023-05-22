@@ -81,7 +81,6 @@ const companySlice = createSlice({
       state.selectedCompany.incomes = update;
     },
     getNames: (state, action) => {
-      console.log(action.payload);
       if(state.names.length > 0 && action.payload.name){
         state.names.push(action.payload);
       } else {
@@ -109,7 +108,6 @@ export const getNames = (id : string[] | string) => async (dispatch : Function) 
 export const createCompany =
   (company: formCompany) => async (dispatch: Function) => {
     const newCompany = await axios.post(url, company);
-    console.log(newCompany)
     const companyData = {
       name: newCompany.data.name,
       id: newCompany.data._id

@@ -49,7 +49,6 @@ export const searchTable = () => {
 };
 
 export const searchTable2 = (content: IncomeType[] | ExpenseType[]) => {
-  console.log(content);
 
   return [];
 };
